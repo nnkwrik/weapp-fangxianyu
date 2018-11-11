@@ -1,0 +1,15 @@
+**/target/
+!.mvn/wrapper/maven-wrapper.jar
+
+
+
+### IntelliJ IDEA ###
+**/.idea
+**/*.iws
+**/*.iml
+**/*.ipr
+
+
+# other
+dev/mysql/data/*
+user-service/src/main/resources/application-secret.yml
