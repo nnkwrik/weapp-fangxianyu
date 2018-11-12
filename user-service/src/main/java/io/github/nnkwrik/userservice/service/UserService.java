@@ -1,11 +1,12 @@
 package io.github.nnkwrik.userservice.service;
 
-import cn.binarywang.wx.miniapp.bean.WxMaUserInfo;
+import io.github.nnkwrik.userservice.model.User;
 
 /**
  * @author nnkwrik
  * @date 18/11/10 22:15
  */
 public interface UserService {
-    void register(WxMaUserInfo userInfo);
+
+    void register(User user);
 }

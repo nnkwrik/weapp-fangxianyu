@@ -1,4 +1,4 @@
-package io.github.nnkwrik.userservice.config;
+package io.github.nnkwrik.authservice.config;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

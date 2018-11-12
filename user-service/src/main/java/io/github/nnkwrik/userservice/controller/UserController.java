@@ -1,47 +1,76 @@
 package io.github.nnkwrik.userservice.controller;
 
-import cn.binarywang.wx.miniapp.api.WxMaService;
-import cn.binarywang.wx.miniapp.api.WxMaUserService;
-import cn.binarywang.wx.miniapp.api.impl.WxMaServiceImpl;
-import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
-import cn.binarywang.wx.miniapp.bean.WxMaUserInfo;
-import io.github.nnkwrik.userservice.config.WxMaConfiguration;
-import io.github.nnkwrik.userservice.entity.User;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.github.nnkwrik.common.dto.AuthDTO;
+import io.github.nnkwrik.userservice.client.AuthClient;
+import io.github.nnkwrik.userservice.model.User;
 import io.github.nnkwrik.userservice.service.UserService;
-import me.chanjar.weixin.common.error.WxErrorException;
-import org.apache.commons.lang.StringUtils;
+import io.github.nnkwrik.userservice.util.Response;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 /**
  * @author nnkwrik
  * @date 18/11/10 21:51
  */
 @RestController
-@RequestMapping("/wx/user")
 public class UserController {
 
-//    @Autowired
-//    private UserService userService;
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
+    @Autowired
+    private UserService userService;
 
-    @PostMapping("/login/{code}")
-    public String login(@PathVariable String code, @RequestBody User user) {
+    @Autowired
+    private AuthClient authClient;
 
-        WxMaUserService wxUserService = WxMaConfiguration.getMaServices().getUserService();
-        try {
-            WxMaJscode2SessionResult sessionInfo = wxUserService.getSessionInfo(code);
-
-            String openid = sessionInfo.getOpenid();
-            user.setOpenId(openid);
-
-            System.out.println(user);
-            return "ok";
-        } catch (WxErrorException e) {
-            e.printStackTrace();
-            return e.toString();
-        }
+    @GetMapping("/test")
+    public String test(){
+        return authClient.test();
     }
+
+
+    @PostMapping("/register")
+    public Response register(@RequestBody AuthDTO authDTO) {
+
+        Response response = authClient.login(authDTO);
+        if (!response.isSuccess()) {
+            log.info("认证失败,原因 ：{}", response.getMsg());
+            return response;
+        }
+
+        //rawData转User
+        ObjectMapper mapper = new ObjectMapper();
+        User user = null;
+        try {
+            user = mapper.readValue(authDTO.getRawData(), User.class);
+        } catch (IOException e) {
+            log.info("rawData转User失败 ： rawData = {}", authDTO.getRawData());
+            e.printStackTrace();
+            return Response.fail("rawData转User失败 ");
+        }
+        userService.register(user);
+
+        log.info("新用户：用户名 = [{}],城市 = [{}]", user.getNickName(), user.getCity());
+        return response;
+    }
+
+//    //TODO 如果这个步骤比较频繁的话，需要另外做成一个服务
+//    @PostMapping("/checkSession")
+//    public Response checkSession(@RequestBody UserDTO userDTO) {
+//        UserDTO cache = redisClient.get(userDTO.getSessionKey());
+//        if (cache.equals(userDTO)) return Response.ok();
+//        return Response.fail("无效的Session");
+//    }
+//
+//    @PostMapping("/updateUserInfo") //UserInfo 发生变化时sessionKey肯定会变
+//    public Response updateUserInfo(@RequestBody User user) {
+//
+//    }
+
 
 }

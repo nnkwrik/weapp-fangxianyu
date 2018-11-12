@@ -12,4 +12,6 @@
 
 # other
 dev/mysql/data/*
-user-service/src/main/resources/application-secret.yml
+auth-service/src/main/resources/application-secret.yml
+**/*.key
+**/*.pub

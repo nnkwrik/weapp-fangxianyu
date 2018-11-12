@@ -4,19 +4,15 @@ eureka:
       defaultZone: http://localhost:8801/eureka/
 #  instance:
 #    hostname: clientName
+
+
 spring:
   application:
-    name: User-service
-  profiles:
-    include: secret
-#出于安全原因application-secret.yml被纳入.gitignore中，
-#application-secret.yml包含以下信息。
-#wx:
-#  miniapp:
-#    appid: #微信小程序的appid
-#    secret: #微信小程序的Secret
-#    token: #微信小程序消息服务器配置的token
-#    aesKey: #微信小程序消息服务器配置的EncodingAESKey
-#    msgDataFormat: JSON
+    name: user-service
+  datasource:
+    url: jdbc:mysql://localhost:3306/user_service
+    username: root
+    password: 1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
 server:
   port: 8802
