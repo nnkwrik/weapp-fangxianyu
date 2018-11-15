@@ -59,18 +59,6 @@ public class UserController {
         return response;
     }
 
-//    //TODO 如果这个步骤比较频繁的话，需要另外做成一个服务
-//    @PostMapping("/checkSession")
-//    public Response checkSession(@RequestBody UserDTO userDTO) {
-//        UserDTO cache = redisClient.get(userDTO.getSessionKey());
-//        if (cache.equals(userDTO)) return Response.ok();
-//        return Response.fail("无效的Session");
-//    }
-//
-//    @PostMapping("/updateUserInfo") //UserInfo 发生变化时sessionKey肯定会变
-//    public Response updateUserInfo(@RequestBody User user) {
-//
-//    }
 
 
 }

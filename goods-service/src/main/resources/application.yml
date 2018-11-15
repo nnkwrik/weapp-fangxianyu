@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: goods-service
+  datasource:
+    url: jdbc:mysql://localhost:3306/goods_service
+    username: root
+    password: 1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
+server:
+  port: 8804
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
