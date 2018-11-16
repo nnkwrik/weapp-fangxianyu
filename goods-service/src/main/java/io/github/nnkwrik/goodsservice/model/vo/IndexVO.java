@@ -1,13 +1,11 @@
 package io.github.nnkwrik.goodsservice.model.vo;
 
-import io.github.nnkwrik.goodsservice.model.po.Channel;
+import io.github.nnkwrik.goodsservice.model.vo.inner.ChannelVo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.BeanUtils;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author nnkwrik
@@ -20,20 +18,6 @@ public class IndexVO {
     private List<GoodsSimpleVO> indexGoodsList;
     private List<BannerVo> banner;
     private List<ChannelVo> channel;
-
-
-    //todo
-    public static IndexVO createFromPo(List<Channel> channelPo) {
-        List<ChannelVo> channelVo = channelPo.stream()
-                .map(po -> {
-                    ChannelVo vo = new ChannelVo();
-                    BeanUtils.copyProperties(po, vo);
-                    vo.setIcon_url(po.getIconUrl());
-                    return vo;
-                }).collect(Collectors.toList());
-
-        return new IndexVO(null,null,channelVo);
-    }
 
 }
 
@@ -58,10 +42,3 @@ class BannerVo {
     private Integer enabled = 1;
 }
 
-@Data
-class ChannelVo {
-    private Integer id;
-    private String name;
-    private String url;
-    private String icon_url;
-}
