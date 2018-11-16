@@ -1,0 +1,26 @@
+package io.github.nnkwrik.goodsservice.model.po;
+
+import lombok.Data;
+
+import java.util.Date;
+
+/**
+ * @author nnkwrik
+ * @date 18/11/16 19:07
+ */
+@Data
+public class Goods {
+    private Integer id;
+    private Integer categoryId;
+    private Integer sellerId;
+    private String name;
+    private Double price;
+    private Double marketPrice;
+    private String primaryPicUrl;
+    private String desc;
+    private Integer wantCount;
+    private Integer browseCount;
+    private Boolean isOnSale;
+    private Boolean isDelete;
+    private Date lastEdit;
+}
