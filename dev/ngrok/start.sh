@@ -1,2 +1,3 @@
 #!/usr/bin/env bash
-./ngrok http 8804
+cur_dir=`pwd`
+${cur_dir}/ngrok http 8804

@@ -1,15 +1,10 @@
 package io.github.nnkwrik.goodsservice.util;
 
-import io.github.nnkwrik.goodsservice.model.po.Ad;
-import io.github.nnkwrik.goodsservice.model.po.Category;
-import io.github.nnkwrik.goodsservice.model.po.Channel;
-import io.github.nnkwrik.goodsservice.model.po.Goods;
-import io.github.nnkwrik.goodsservice.model.vo.inner.BannerVo;
-import io.github.nnkwrik.goodsservice.model.vo.inner.CategoryVo;
-import io.github.nnkwrik.goodsservice.model.vo.inner.ChannelVo;
-import io.github.nnkwrik.goodsservice.model.vo.inner.GoodsSimpleVo;
+import io.github.nnkwrik.goodsservice.model.po.*;
+import io.github.nnkwrik.goodsservice.model.vo.inner.*;
 import org.springframework.beans.BeanUtils;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -20,7 +15,7 @@ import java.util.stream.Collectors;
  */
 public class PO2VO {
 
-    public static Function<Category, CategoryVo> Category =
+    public static Function<Category, CategoryVo> category =
             po -> {
                 CategoryVo vo = new CategoryVo();
                 BeanUtils.copyProperties(po, vo);
@@ -29,7 +24,7 @@ public class PO2VO {
                 return vo;
             };
 
-    public static Function<Channel, ChannelVo> Channel =
+    public static Function<Channel, ChannelVo> channel =
             po -> {
                 ChannelVo vo = new ChannelVo();
                 BeanUtils.copyProperties(po, vo);
@@ -37,7 +32,15 @@ public class PO2VO {
                 return vo;
             };
 
-    public static Function<Goods, GoodsSimpleVo> GoodsSimple =
+    public static Function<Ad, BannerVo> banner =
+            po -> {
+                BannerVo vo = new BannerVo();
+                BeanUtils.copyProperties(po, vo);
+                vo.setImage_url(po.getImageUrl());
+                return vo;
+            };
+
+    public static Function<Goods, GoodsSimpleVo> goodsSimple =
             po -> {
                 GoodsSimpleVo vo = new GoodsSimpleVo();
                 BeanUtils.copyProperties(po, vo);
@@ -45,11 +48,26 @@ public class PO2VO {
                 return vo;
             };
 
-    public static Function<Ad, BannerVo> Banner =
+    public static Function<Goods, GoodsDetailVo> goodsDetail =
             po -> {
-                BannerVo vo = new BannerVo();
+                GoodsSimpleVo simpleVo = convert(goodsSimple, po);
+                GoodsDetailVo vo = new GoodsDetailVo();
+                BeanUtils.copyProperties(simpleVo, vo);
+                vo.setGoods_brief(po.getDesc());
+                vo.setMarket_price(po.getMarketPrice());
+                vo.setWant_count(po.getWantCount());
+                vo.setBrowse_count(po.getBrowseCount());
+                //Date转String
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                vo.setLast_edit(formatter.format(po.getLastEdit()));
+                return vo;
+            };
+
+    public static Function<GoodsGallery,GalleryVo > gallery =
+            po -> {
+                GalleryVo vo = new GalleryVo();
                 BeanUtils.copyProperties(po, vo);
-                vo.setImage_url(po.getImageUrl());
+                vo.setImg_url(po.getImgUrl());
                 return vo;
             };
 

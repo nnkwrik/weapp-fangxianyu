@@ -23,4 +23,10 @@ public interface CategoryMapper {
     @Select("select id,name from category where id = #{id}")
     Category findCategoryById(@Param("id") int id);
 
+    @Select("select id, name\n" +
+            "from category\n" +
+            "where parent_id = (select parent_id from category where id = #{id})\n" +
+            "order by sort_order asc;")
+    List<Category> findBrotherCategry(@Param("id") int id);
+
 }

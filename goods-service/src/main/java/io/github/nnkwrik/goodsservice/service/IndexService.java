@@ -7,7 +7,7 @@ import io.github.nnkwrik.goodsservice.model.vo.IndexVO;
  * @author nnkwrik
  * @date 18/11/16 15:22
  */
-public interface CatalogService {
+public interface IndexService {
 
     IndexVO getIndex();
 
