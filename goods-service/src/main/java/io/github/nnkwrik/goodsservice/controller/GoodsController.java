@@ -59,6 +59,7 @@ public class GoodsController {
 
     @GetMapping("/goods/detail/{goodsId}")
     public ResponseVO<GoodsDetailPageVo> getGoodsDetail(@PathVariable("goodsId") int goodsId) {
+        //更新浏览次数
         GoodsDetailVo goodsDetail = goodsService.getGoodsDetail(goodsId);
         List<GalleryVo> goodsGallery = goodsService.getGoodsGallery(goodsId);
         //TODO comment

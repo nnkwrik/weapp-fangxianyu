@@ -1,0 +1,80 @@
+<view class="container">
+  <view class="profile-info" bindtap="goLogin">
+    <image class="avatar" src="{{userInfo.avatar}}"></image>
+    <view class="info">
+      <text class="name">{{userInfo.nickname}}</text>
+      <!-- <text class="level">{{userInfo.username}}</text> -->
+    </view>
+  </view>
+
+  <view class="user-menu">
+    <view class="item">
+      <navigator url="/pages/ucenter/order/order" class="a">
+        <text class="icon coin"></text>
+        <text class="txt">我的订单</text>
+      </navigator>
+    </view>
+    <view class="item">
+      <navigator url="/pages/ucenter/coupon/coupon" class="a">
+        <text class="icon publish"></text>
+        <text class="txt">优惠券</text>
+      </navigator>
+    </view>
+    <view class="item no-border">
+      <navigator url="url" class="a">
+        <text class="icon upload"></text>
+        <text class="txt">礼品卡</text>
+      </navigator>
+    </view>
+    <view class="item">
+      <navigator url="/pages/ucenter/collect/collect" class="a">
+        <text class="icon download"></text>
+        <text class="txt">我的收藏</text>
+      </navigator>
+    </view>
+    <view class="item">
+      <navigator url="/pages/ucenter/footprint/footprint" class="a">
+        <text class="icon star"></text>
+        <text class="txt">我的足迹</text>
+      </navigator>
+    </view>
+    <view class="item no-border">
+      <navigator url="url" class="a">
+        <text class="icon support"></text>
+        <text class="txt">会员福利</text>
+      </navigator>
+    </view>
+    <view class="item">
+      <navigator url="../address/address" class="a">
+        <text class="icon donation"></text>
+        <text class="txt">地址管理</text>
+      </navigator>
+    </view>
+    <view class="item">
+      <navigator url="url" class="a">
+        <text class="icon map"></text>
+        <text class="txt">账号安全</text>
+      </navigator>
+    </view>
+    <view class="item no-border">
+      <navigator url="url" class="a">
+        <text class="icon question"></text>
+        <text class="txt">联系客服</text>
+      </navigator>
+    </view>
+    <view class="item item-bottom">
+      <navigator url="url" class="a">
+        <text class="icon embarrass"></text>
+        <text class="txt">帮助中心</text>
+      </navigator>
+    </view>
+    <view class="item item-bottom">
+      <navigator url="/pages/ucenter/feedback/feedback" class="a">
+        <text class="icon feedback"></text>
+        <text class="txt">意见反馈</text>
+      </navigator>
+    </view>
+  </view>
+
+  <!--<view class="logout" bindtap="exitLogin">退出登录</view>-->
+</view>

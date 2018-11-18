@@ -19,6 +19,5 @@ public class GoodsDetailPageVo {
     private GoodsDetailVo info;
     private List<GalleryVo> gallery;
     //TODO comment
-
-
+    //TODO userHasCollect
 }
