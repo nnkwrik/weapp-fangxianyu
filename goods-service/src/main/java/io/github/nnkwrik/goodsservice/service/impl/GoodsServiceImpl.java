@@ -7,6 +7,7 @@ import io.github.nnkwrik.goodsservice.model.po.Category;
 import io.github.nnkwrik.goodsservice.model.po.Goods;
 import io.github.nnkwrik.goodsservice.model.po.GoodsGallery;
 import io.github.nnkwrik.goodsservice.model.vo.CategoryPageVo;
+import io.github.nnkwrik.goodsservice.model.vo.GoodsRelatedVo;
 import io.github.nnkwrik.goodsservice.model.vo.inner.CategoryVo;
 import io.github.nnkwrik.goodsservice.model.vo.inner.GalleryVo;
 import io.github.nnkwrik.goodsservice.model.vo.inner.GoodsDetailVo;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author nnkwrik
@@ -35,7 +37,7 @@ public class GoodsServiceImpl implements GoodsService {
     @Override
     public CategoryPageVo getGoodsAndBrotherCateById(int id, int page, int size) {
 
-        List<Category> brotherCategory = categoryMapper.findBrotherCategry(id);
+        List<Category> brotherCategory = categoryMapper.findBrotherCategory(id);
         List<CategoryVo> brotherCategoryVo = PO2VO.convertList(PO2VO.category, brotherCategory);
         CategoryPageVo vo = getGoodsByCateId(id, page, size);
         vo.setBrotherCategory(brotherCategoryVo);
@@ -66,6 +68,24 @@ public class GoodsServiceImpl implements GoodsService {
         List<GalleryVo> galleryVo = PO2VO.convertList(PO2VO.gallery, gallery);
 
         return galleryVo;
+    }
+
+    @Override
+    public GoodsRelatedVo getGoodsRelated(int goodsId) {
+        //获取同一子分类下
+        int pageNum = 1;
+        int pageSize = 10;
+        PageHelper.startPage(pageNum, pageSize);
+        List<Goods> simpleGoods = goodsMapper.findSimpleGoodsInSameCate(goodsId);
+
+        //统一子分类下的数量少于10, 查找同一父分类下
+        if (simpleGoods.size() < 10) {
+            PageHelper.startPage(pageNum, pageSize);
+            simpleGoods = goodsMapper.findSimpleGoodsInSameParentCate(goodsId);
+        }
+
+        List<GoodsSimpleVo> goodsSimpleVo = PO2VO.convertList(PO2VO.goodsSimple, simpleGoods);
+        return new GoodsRelatedVo(goodsSimpleVo);
     }
 
 

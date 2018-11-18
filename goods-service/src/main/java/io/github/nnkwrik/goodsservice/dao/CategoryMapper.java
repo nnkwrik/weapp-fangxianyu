@@ -14,19 +14,40 @@ import java.util.List;
 @Mapper
 public interface CategoryMapper {
 
+    /**
+     * 查找所有主分类
+     * @return
+     */
     @Select("select id,name from category where parent_id = 0 order by sort_order asc")
     List<Category> findMainCategory();
 
+    /**
+     * 查找父分类下的所有子分类
+     * @param parentId
+     * @return
+     */
     @Select("select id,name,icon_url from category where parent_id = #{parentId} order by sort_order asc")
     List<Category> findSubCategory(@Param("parentId") int parentId);
 
+    /**
+     * 通过id查找分类名
+     * @param id
+     * @return
+     */
     @Select("select id,name from category where id = #{id}")
     Category findCategoryById(@Param("id") int id);
 
+    /**
+     * 查找同一父分类下的兄弟分类
+     * @param id
+     * @return
+     */
     @Select("select id, name\n" +
             "from category\n" +
             "where parent_id = (select parent_id from category where id = #{id})\n" +
-            "order by sort_order asc;")
-    List<Category> findBrotherCategry(@Param("id") int id);
+            "order by sort_order asc")
+    List<Category> findBrotherCategory(@Param("id") int id);
+
+
 
 }

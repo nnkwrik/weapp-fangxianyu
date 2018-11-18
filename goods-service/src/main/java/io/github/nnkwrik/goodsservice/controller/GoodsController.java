@@ -2,6 +2,7 @@ package io.github.nnkwrik.goodsservice.controller;
 
 import io.github.nnkwrik.goodsservice.model.vo.CategoryPageVo;
 import io.github.nnkwrik.goodsservice.model.vo.GoodsDetailPageVo;
+import io.github.nnkwrik.goodsservice.model.vo.GoodsRelatedVo;
 import io.github.nnkwrik.goodsservice.model.vo.ResponseVO;
 import io.github.nnkwrik.goodsservice.model.vo.inner.CategoryVo;
 import io.github.nnkwrik.goodsservice.model.vo.inner.GalleryVo;
@@ -64,6 +65,14 @@ public class GoodsController {
 
         GoodsDetailPageVo vo = new GoodsDetailPageVo(goodsDetail, goodsGallery);
         log.debug("浏览商品详情 : {}", vo);
+
+        return ResponseVO.ok(vo);
+    }
+
+    @GetMapping("/goods/related/{goodsId}")
+    public ResponseVO<GoodsRelatedVo> getGoodsRelated(@PathVariable("goodsId") int goodsId) {
+        GoodsRelatedVo vo = goodsService.getGoodsRelated(goodsId);
+        log.debug("与 goodsId=[] 相关的商品 : {}", goodsId, vo);
 
         return ResponseVO.ok(vo);
     }

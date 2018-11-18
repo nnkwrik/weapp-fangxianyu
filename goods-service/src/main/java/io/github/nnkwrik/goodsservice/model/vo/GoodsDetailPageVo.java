@@ -20,4 +20,5 @@ public class GoodsDetailPageVo {
     private List<GalleryVo> gallery;
     //TODO comment
 
+
 }

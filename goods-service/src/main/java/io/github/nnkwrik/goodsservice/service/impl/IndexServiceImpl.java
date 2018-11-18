@@ -45,7 +45,9 @@ public class IndexServiceImpl implements IndexService {
         List<ChannelVo> channelVoList = PO2VO.convertList(PO2VO.channel, channelList);
 
         //推荐商品
-        PageHelper.startPage(1, 10);
+        int pageNum = 1;
+        int pageSize = 10;
+        PageHelper.startPage(pageNum, pageSize);
         List<Goods> goodsList = goodsMapper.findSimpleGoods();
         List<GoodsSimpleVo> goodsSimpleVOList = PO2VO.convertList(PO2VO.goodsSimple, goodsList);
 
