@@ -27,6 +27,9 @@ public class TokenCreator {
     private String pvtFile;
 
     private RSAKeyProvider keyProvider = new RSAKeyProvider() {
+
+        RSAPrivateKey key;
+
         @Override
         public RSAPublicKey getPublicKeyById(String s) {
             return null;
@@ -34,7 +37,8 @@ public class TokenCreator {
 
         @Override
         public RSAPrivateKey getPrivateKey() {
-            return RSAKeysReader.readRsaPvt(pvtFile);
+            if (key == null) key = RSAKeysReader.readRsaPvt(pvtFile);
+            return key;
         }
 
         @Override
@@ -52,6 +56,21 @@ public class TokenCreator {
                 .withClaim("openId", jwtUser.getOpenId())
                 .withClaim("nickName", jwtUser.getNickName())
                 .withClaim("avatarUrl", jwtUser.getAvatarUrl())
+                .withExpiresAt(expire)
+                .sign(algorithm);
+
+        return "Bearer " + token;
+    }
+
+    public String create(String openId, String nickName, String avatarUrl) {
+        Algorithm algorithm = Algorithm.RSA256(keyProvider);
+        //一天后过期
+        Date expire = Date.from(Instant.now().plus(1, ChronoUnit.DAYS));
+
+        String token = JWT.create()
+                .withClaim("openId", openId)
+                .withClaim("nickName", nickName)
+                .withClaim("avatarUrl", avatarUrl)
                 .withExpiresAt(expire)
                 .sign(algorithm);
 

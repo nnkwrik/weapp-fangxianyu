@@ -22,9 +22,13 @@ public class TokenSolver {
     private String pubFile;
 
     private RSAKeyProvider keyProvider = new RSAKeyProvider() {
+
+        RSAPublicKey key;
+
         @Override
         public RSAPublicKey getPublicKeyById(String s) {
-            return RSAKeysReader.readRsaPub(pubFile);
+            if (key == null) key = RSAKeysReader.readRsaPub(pubFile);
+            return key;
         }
 
         @Override

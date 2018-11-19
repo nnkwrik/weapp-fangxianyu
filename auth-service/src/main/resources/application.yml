@@ -3,16 +3,30 @@ eureka:
     service-url:
       defaultZone: http://localhost:8801/eureka/
 
+
 spring:
   application:
     name: auth-service
   profiles:
     include: secret
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+  cloud:
+    stream:
+      bindings:
+        register-output:
+          destination: register
+          content-type: application/json
+
 
 server:
   port: 8803
 
-
 jwt:
   pvt-key-file-name: RSA.key
   pub-key-file-name: RSA.pub
+
+

@@ -13,11 +13,8 @@ import javax.validation.constraints.NotNull;
 public class User {
     private Integer id;
     private String openId;
-    @NotNull
     private String nickName;
-    @NotNull
     private String avatarUrl;
-    @NotNull
     private Integer gender;
     private String language;
     private String city;

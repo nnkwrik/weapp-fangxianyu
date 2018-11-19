@@ -14,5 +14,18 @@ spring:
     username: root
     password: 1234
     driver-class-name: com.mysql.cj.jdbc.Driver
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+  cloud:
+    stream:
+      bindings:
+        register-input:
+          destination: register
+          group: registerGroup
+
+
 server:
   port: 8802

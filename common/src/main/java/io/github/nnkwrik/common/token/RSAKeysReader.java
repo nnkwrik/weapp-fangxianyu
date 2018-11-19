@@ -72,7 +72,7 @@ public class RSAKeysReader {
         String data = "";
         try {
             File file = new ClassPathResource(fileName).getFile();
-            log.info("从[{}]试图读取秘钥文件",file.getPath());
+            log.info("试图读取秘钥文件, 文件路径 : [{}]",file.getPath());
             data = new String(Files.readAllBytes(file.toPath()));
         } catch (IOException e) {
             log.info("文件读取失败");
