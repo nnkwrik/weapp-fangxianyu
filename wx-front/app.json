@@ -13,9 +13,6 @@
     "pages/ucenter/feedback/feedback",
     "pages/ucenter/coupon/coupon",
     "pages/ucenter/collect/collect",
-    "pages/auth/login/login",
-    "pages/auth/register/register",
-    "pages/auth/reset/reset",
     "pages/pay/pay",
     "pages/payResult/payResult",
     "pages/ucenter/index/index",
@@ -32,7 +29,8 @@
     "pages/shopping/address/address",
     "pages/shopping/addressAdd/addressAdd",
     "pages/goods/goods",
-    "pages/topicDetail/topicDetail"
+    "pages/topicDetail/topicDetail",
+    "pages/auth/auth"
   ],
   "window": {
     "backgroundTextStyle": "dark",

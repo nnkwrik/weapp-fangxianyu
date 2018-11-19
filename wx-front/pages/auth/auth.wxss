@@ -56,14 +56,14 @@
     width: 44rpx;
 }
 
-.login-btn{
+.btn{
     margin: 60rpx 0 40rpx 0;
     height: 96rpx;
     line-height: 96rpx;
     color: #fff;
     font-size: 30rpx;
     width: 100%;
-    background: #b4282d;
+    background: #ef5a5a;
     border-radius: 6rpx;
 }
 
@@ -86,4 +86,21 @@
     float: right;
     font-size: 28rpx;
     color: #999;
+}
+
+.userinfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.userinfo-avatar {
+  width: 128rpx;
+  height: 128rpx;
+  margin: 20rpx;
+  border-radius: 50%;
+}
+
+.userinfo-nickname {
+  color: #aaa;
 }

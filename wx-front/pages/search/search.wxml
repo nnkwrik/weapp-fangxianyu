@@ -22,6 +22,8 @@
       <text class="title">热门搜索</text>
     </view>
     <view class="b">
+    <view class="item active" hover-class="navigator-hover">aa</view>
+    <view  class="item" hover-class="navigator-hover">aa</view>
       <view class="item {{item.is_hot === 1 ? 'active' : ''}}" hover-class="navigator-hover" bindtap="onKeywordTap" data-keyword="{{item.keyword}}" wx:for="{{hotKeyword}}">{{item.keyword}}</view>
     </view>
   </view>
