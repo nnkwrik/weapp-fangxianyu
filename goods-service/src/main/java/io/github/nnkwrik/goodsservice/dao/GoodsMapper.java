@@ -15,30 +15,40 @@ import java.util.List;
 @Mapper
 public interface GoodsMapper {
 
+    /**
+     * 热度算法
+     * Score = (1*click + 10 * want) /e^ (day/10)
+     * = (1*click + 10 * want) / e^((T(now) - T *  10^-7 )
+     */
+    String popular_score = "(1 * browse_count + 10 * want_count) / exp((now() - last_edit) * POW(10, -7))";
+
 
     /**
      * 列出所有简单商品信息
+     *
      * @return
      */
     @Select("select id, `name`, primary_pic_url, price\n" +
             "from goods\n" +
             "where is_on_sale = 1 and is_delete = 0\n" +
-            "order by browse_count desc, last_edit desc")
+            "order by " + popular_score + " desc")
     List<Goods> findSimpleGoods();
 
     /**
      * 根据分类id列出分类下的所有简单商品信息
+     *
      * @return
      */
     @Select("select id, `name`, primary_pic_url, price\n" +
             "from goods\n" +
             "where category_id = #{cateId}\n" +
             "and is_on_sale = 1 and is_delete = 0\n" +
-            "order by browse_count desc, last_edit desc")
+            "order by " + popular_score + " desc")
     List<Goods> findSimpleGoodsByCateId(@Param("cateId") int cateId);
 
     /**
      * 通过商品id查找商品的详细信息
+     *
      * @param goodsId
      * @return
      */
@@ -58,6 +68,7 @@ public interface GoodsMapper {
 
     /**
      * 通过商品id查找该商品关联的图片
+     *
      * @param goodsId
      * @return
      */
@@ -69,6 +80,7 @@ public interface GoodsMapper {
 
     /**
      * 查找与该商品位于同一个子分类的简单商品信息
+     *
      * @param goodsId
      * @return
      */
@@ -78,12 +90,13 @@ public interface GoodsMapper {
             "  and id != #{goodsId}\n" +
             "  and is_on_sale = 1\n" +
             "  and is_delete = 0\n" +
-            "order by browse_count desc, last_edit desc")
+            "order by " + popular_score + " desc")
     List<Goods> findSimpleGoodsInSameCate(@Param("goodsId") int goodsId);
 
 
     /**
      * 查找与该商品位于同一个父分类的简单商品信息
+     *
      * @param goodsId
      * @return
      */
@@ -97,7 +110,7 @@ public interface GoodsMapper {
             "  and id != #{goodsId}\n" +
             "  and is_on_sale = 1\n" +
             "  and is_delete = 0\n" +
-            "order by browse_count desc, last_edit desc")
+            "order by " + popular_score + " desc")
     List<Goods> findSimpleGoodsInSameParentCate(@Param("goodsId") int goodsId);
 
 }
