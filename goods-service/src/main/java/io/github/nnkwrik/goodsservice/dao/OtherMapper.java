@@ -2,6 +2,7 @@ package io.github.nnkwrik.goodsservice.dao;
 
 import io.github.nnkwrik.goodsservice.model.po.Ad;
 import io.github.nnkwrik.goodsservice.model.po.Channel;
+import io.github.nnkwrik.goodsservice.model.po.SearchHistory;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -26,6 +27,4 @@ public interface OtherMapper {
             "limit 5")
     List<Ad> findAd();
 
-    @Update("update goods set browse_count = browse_count + #{add} where id = #{goodsId}")
-    void addBrowseCount(@Param("goodsId") int id, @Param("add") int add);
 }

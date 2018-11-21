@@ -1,7 +1,10 @@
 package io.github.nnkwrik.goodsservice.cache;
 
-import com.google.common.cache.*;
-import io.github.nnkwrik.goodsservice.dao.OtherMapper;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.RemovalListener;
+import com.google.common.cache.RemovalListeners;
+import io.github.nnkwrik.goodsservice.dao.GoodsMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -22,9 +25,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class BrowseCache {
 
     @Autowired
-    private OtherMapper otherMapper;
-
-    private static BrowseCache browseCache = new BrowseCache(); //单例
+    private GoodsMapper goodsMapper;
 
 
     //过期(1天)/超出缓存队列大小(1000)/缓存超过10个时 会触发
@@ -32,7 +33,7 @@ public class BrowseCache {
             notification -> {
                 log.info("BrowseCache缓存刷入数据库，原因 ：【{}】,数据 ：【key={} , value={}】",
                         notification.getCause(), notification.getKey(), notification.getValue().get());
-                otherMapper.addBrowseCount(notification.getKey(), notification.getValue().get());
+                goodsMapper.addBrowseCount(notification.getKey(), notification.getValue().get());
             };
 
 
@@ -49,22 +50,23 @@ public class BrowseCache {
                     .build();
 
 
-    public static void add(Integer goodsId) {
-        Cache<Integer, AtomicInteger> singleCache =  browseCache.cache;
-        AtomicInteger browseCount = singleCache.getIfPresent(goodsId);
+    public void add(Integer goodsId) {
+        int count = 0;
+        AtomicInteger browseCount = cache.getIfPresent(goodsId);
         if (browseCount != null) {
-            int count = browseCount.incrementAndGet();
+            count = browseCount.incrementAndGet();
             if (count > 10) {
                 //手动移除缓存，让他触发removalListener，刷新数据库
-                singleCache.invalidate(goodsId);
+                cache.invalidate(goodsId);
             }
         } else {
-            singleCache.put(goodsId, new AtomicInteger(1));
+            count = 1;
+            cache.put(goodsId, new AtomicInteger(1));
         }
-
+        log.debug("BrowseCache更新商品id【{}】的浏览次数为【{}】", goodsId, count);
         //检查过期的缓存,让他触发removalListener
         //必须执行这个cache才会去检查是否过期, 否则尽管过期他也不会触发removalListener
-        singleCache.cleanUp();
+        cache.cleanUp();
     }
 
 

@@ -5,6 +5,7 @@ import io.github.nnkwrik.goodsservice.model.po.GoodsGallery;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -112,5 +113,9 @@ public interface GoodsMapper {
             "  and is_delete = 0\n" +
             "order by " + popular_score + " desc")
     List<Goods> findSimpleGoodsInSameParentCate(@Param("goodsId") int goodsId);
+
+    @Update("update goods set browse_count = browse_count + #{add} where id = #{goodsId}")
+    void addBrowseCount(@Param("goodsId") int id, @Param("add") int add);
+
 
 }

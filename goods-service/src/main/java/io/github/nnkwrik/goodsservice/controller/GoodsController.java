@@ -3,7 +3,7 @@ package io.github.nnkwrik.goodsservice.controller;
 import io.github.nnkwrik.goodsservice.model.vo.CategoryPageVo;
 import io.github.nnkwrik.goodsservice.model.vo.GoodsDetailPageVo;
 import io.github.nnkwrik.goodsservice.model.vo.GoodsRelatedVo;
-import io.github.nnkwrik.goodsservice.model.vo.ResponseVO;
+import io.github.nnkwrik.common.dto.Response;
 import io.github.nnkwrik.goodsservice.model.vo.inner.CategoryVo;
 import io.github.nnkwrik.goodsservice.model.vo.inner.GalleryVo;
 import io.github.nnkwrik.goodsservice.model.vo.inner.GoodsDetailVo;
@@ -36,29 +36,29 @@ public class GoodsController {
      */
     @GetMapping("/goods/category/{categoryId}")
 
-    public ResponseVO<CategoryVo> getCategoryPage(@PathVariable("categoryId") int categoryId,
-                                                  @RequestParam(value = "page", defaultValue = "1") int page,
-                                                  @RequestParam(value = "limit", defaultValue = "10") int size) {
+    public Response<CategoryVo> getCategoryPage(@PathVariable("categoryId") int categoryId,
+                                                @RequestParam(value = "page", defaultValue = "1") int page,
+                                                @RequestParam(value = "limit", defaultValue = "10") int size) {
 
 
         CategoryPageVo vo = goodsService.getGoodsAndBrotherCateById(categoryId, page, size);
         log.debug("通过分类浏览商品 : 商品={}", vo.getGoodsList());
 
-        return ResponseVO.ok(vo);
+        return Response.ok(vo);
     }
 
     @GetMapping("/goods/list/{categoryId}")
-    public ResponseVO<CategoryVo> getGoodsByCategory(@PathVariable("categoryId") int categoryId,
-                                                     @RequestParam(value = "page", defaultValue = "1") int page,
-                                                     @RequestParam(value = "limit", defaultValue = "10") int size) {
+    public Response<CategoryVo> getGoodsByCategory(@PathVariable("categoryId") int categoryId,
+                                                   @RequestParam(value = "page", defaultValue = "1") int page,
+                                                   @RequestParam(value = "limit", defaultValue = "10") int size) {
         CategoryPageVo vo = goodsService.getGoodsByCateId(categoryId, page, size);
         log.debug("通过分类浏览商品 : 商品={}", vo.getGoodsList());
-        return ResponseVO.ok(vo);
+        return Response.ok(vo);
 
     }
 
     @GetMapping("/goods/detail/{goodsId}")
-    public ResponseVO<GoodsDetailPageVo> getGoodsDetail(@PathVariable("goodsId") int goodsId) {
+    public Response<GoodsDetailPageVo> getGoodsDetail(@PathVariable("goodsId") int goodsId) {
         //更新浏览次数
         GoodsDetailVo goodsDetail = goodsService.getGoodsDetail(goodsId);
         List<GalleryVo> goodsGallery = goodsService.getGoodsGallery(goodsId);
@@ -67,15 +67,15 @@ public class GoodsController {
         GoodsDetailPageVo vo = new GoodsDetailPageVo(goodsDetail, goodsGallery);
         log.debug("浏览商品详情 : {}", vo);
 
-        return ResponseVO.ok(vo);
+        return Response.ok(vo);
     }
 
     @GetMapping("/goods/related/{goodsId}")
-    public ResponseVO<GoodsRelatedVo> getGoodsRelated(@PathVariable("goodsId") int goodsId) {
+    public Response<GoodsRelatedVo> getGoodsRelated(@PathVariable("goodsId") int goodsId) {
         GoodsRelatedVo vo = goodsService.getGoodsRelated(goodsId);
         log.debug("与 goodsId=[] 相关的商品 : {}", goodsId, vo);
 
-        return ResponseVO.ok(vo);
+        return Response.ok(vo);
     }
 
 
