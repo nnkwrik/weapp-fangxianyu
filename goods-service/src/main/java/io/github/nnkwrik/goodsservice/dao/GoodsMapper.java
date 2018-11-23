@@ -1,6 +1,7 @@
 package io.github.nnkwrik.goodsservice.dao;
 
 import io.github.nnkwrik.goodsservice.model.po.Goods;
+import io.github.nnkwrik.goodsservice.model.po.GoodsComment;
 import io.github.nnkwrik.goodsservice.model.po.GoodsGallery;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -116,6 +117,23 @@ public interface GoodsMapper {
 
     @Update("update goods set browse_count = browse_count + #{add} where id = #{goodsId}")
     void addBrowseCount(@Param("goodsId") int id, @Param("add") int add);
+
+
+    @Select("select id, user_id, content, create_time\n" +
+            "from goods_comment\n" +
+            "where reply_comment_id = 0\n" +
+            "  and is_delete = false\n" +
+            "  and goods_id = #{goodsId}\n" +
+            "order by create_time asc")
+    List<GoodsComment> findBaseComment(@Param("goodsId") int goodsId);
+
+
+    @Select("select id, user_id, reply_user_id, content, create_time\n" +
+            "from goods_comment\n" +
+            "where reply_comment_id = #{reply_comment_id}\n" +
+            "  and is_delete = false\n" +
+            "order by create_time asc")
+    List<GoodsComment> findReplyComment(@Param("reply_comment_id") int commentId);
 
 
 }

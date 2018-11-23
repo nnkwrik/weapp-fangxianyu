@@ -1,5 +1,7 @@
 package io.github.nnkwrik.goodsservice.model.vo;
 
+import io.github.nnkwrik.common.dto.SimpleUser;
+import io.github.nnkwrik.goodsservice.model.vo.inner.CommentVo;
 import io.github.nnkwrik.goodsservice.model.vo.inner.GalleryVo;
 import io.github.nnkwrik.goodsservice.model.vo.inner.GoodsDetailVo;
 import lombok.AllArgsConstructor;
@@ -18,6 +20,6 @@ import java.util.List;
 public class GoodsDetailPageVo {
     private GoodsDetailVo info;
     private List<GalleryVo> gallery;
-    //TODO comment
-    //TODO userHasCollect
+    private List<CommentVo> comment;
+    private Boolean userHasCollect;
 }

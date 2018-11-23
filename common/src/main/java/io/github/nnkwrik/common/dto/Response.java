@@ -9,13 +9,22 @@ import lombok.Data;
 @Data
 public class Response<T> {
 
+    //auth
     public static final int WRONG_JS_CODE = 3001;
     public static final int CHECK_USER_WITH_SESSION_FAIL = 3002;
+
+    //goods
+    public static final int OPEN_ID_IS_EMPTY = 4001;
+
+    //user
+    public static final int USER_IS_NOT_EXIST = 3001;
 
     private int errno;
     private String errmsg;
     private T data;
 
+    public Response() {
+    }
 
     public Response(T data) {
         this.data = data;
@@ -27,9 +36,13 @@ public class Response<T> {
     }
 
 
+    public static Response ok() {
+        return new Response();
+    }
     public static <T> Response ok(T data) {
         return new Response(data);
     }
+
 
     public static Response fail(int errno, String errmsg) {
         return new Response(errno, errmsg);

@@ -4,6 +4,7 @@ import lombok.Data;
 import org.apache.ibatis.annotations.Param;
 
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 /**
  * @author nnkwrik
@@ -20,6 +21,7 @@ public class User {
     private String city;
     private String province;
     private String country;
+    private Date registerTime;
     //address
     //phone
 }

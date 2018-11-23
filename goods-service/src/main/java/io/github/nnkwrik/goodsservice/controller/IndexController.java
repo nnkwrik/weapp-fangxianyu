@@ -1,8 +1,8 @@
 package io.github.nnkwrik.goodsservice.controller;
 
+import io.github.nnkwrik.common.dto.Response;
 import io.github.nnkwrik.goodsservice.model.vo.CatalogVo;
 import io.github.nnkwrik.goodsservice.model.vo.IndexVO;
-import io.github.nnkwrik.common.dto.Response;
 import io.github.nnkwrik.goodsservice.service.IndexService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

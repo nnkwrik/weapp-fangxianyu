@@ -10,6 +10,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
+ * TODO 后期前后端全改成camel
+ *
  * @author nnkwrik
  * @date 18/11/15 18:00
  */
@@ -58,16 +60,35 @@ public class PO2VO {
                 vo.setWant_count(po.getWantCount());
                 vo.setBrowse_count(po.getBrowseCount());
                 //Date转String
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-                vo.setLast_edit(formatter.format(po.getLastEdit()));
+                if (po.getLastEdit() != null) {
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                    vo.setLast_edit(formatter.format(po.getLastEdit()));
+                }
                 return vo;
             };
 
-    public static Function<GoodsGallery,GalleryVo > gallery =
+    public static Function<GoodsGallery, GalleryVo> gallery =
             po -> {
                 GalleryVo vo = new GalleryVo();
                 BeanUtils.copyProperties(po, vo);
                 vo.setImg_url(po.getImgUrl());
+                return vo;
+            };
+
+    public static Function<GoodsComment, CommentVo> comment =
+            po -> {
+                CommentVo vo = new CommentVo();
+                BeanUtils.copyProperties(po, vo);
+                vo.setGoods_id(po.getGoodsId());
+                vo.setUser_id(po.getUserId());
+                vo.setReply_comment_id(po.getReplyCommentId());
+                vo.setReply_user_id(po.getReplyUserId());
+                vo.set_delete(po.isDelete());
+                if (po.getCreateTime() != null) {
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                    vo.setCreate_time(formatter.format(po.getCreateTime()));
+                }
+
                 return vo;
             };
 

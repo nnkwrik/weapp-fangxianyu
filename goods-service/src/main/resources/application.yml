@@ -1,3 +1,7 @@
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8801/eureka/
 spring:
   application:
     name: goods-service

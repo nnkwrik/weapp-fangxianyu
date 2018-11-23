@@ -26,6 +26,15 @@ spring:
           destination: register
           group: registerGroup
 
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+
+logging:
+  level:
+    org.springframework.web: info
+    io.github.nnkwrik.userservice: debug
+
 
 server:
   port: 8802

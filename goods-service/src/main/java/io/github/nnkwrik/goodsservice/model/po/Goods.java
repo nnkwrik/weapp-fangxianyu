@@ -12,7 +12,7 @@ import java.util.Date;
 public class Goods {
     private Integer id;
     private Integer categoryId;
-    private Integer sellerId;
+    private String sellerId;
     private String name;
     private Double price;
     private Double marketPrice;

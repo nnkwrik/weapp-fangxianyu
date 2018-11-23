@@ -1,21 +1,20 @@
 package io.github.nnkwrik.goodsservice.controller;
 
+import io.github.nnkwrik.common.dto.Response;
 import io.github.nnkwrik.goodsservice.model.vo.CategoryPageVo;
 import io.github.nnkwrik.goodsservice.model.vo.GoodsDetailPageVo;
 import io.github.nnkwrik.goodsservice.model.vo.GoodsRelatedVo;
-import io.github.nnkwrik.common.dto.Response;
 import io.github.nnkwrik.goodsservice.model.vo.inner.CategoryVo;
+import io.github.nnkwrik.goodsservice.model.vo.inner.CommentVo;
 import io.github.nnkwrik.goodsservice.model.vo.inner.GalleryVo;
 import io.github.nnkwrik.goodsservice.model.vo.inner.GoodsDetailVo;
 import io.github.nnkwrik.goodsservice.service.GoodsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author nnkwrik
@@ -57,14 +56,22 @@ public class GoodsController {
 
     }
 
-    @GetMapping("/goods/detail/{goodsId}")
-    public Response<GoodsDetailPageVo> getGoodsDetail(@PathVariable("goodsId") int goodsId) {
+    @PostMapping("/goods/detail/{goodsId}")
+    public Response<GoodsDetailPageVo> getGoodsDetail(@PathVariable("goodsId") int goodsId,
+                                                      @RequestBody Map<String, String> json) {
         //更新浏览次数
         GoodsDetailVo goodsDetail = goodsService.getGoodsDetail(goodsId);
+        if (goodsDetail == null) {
+            log.info("搜索goodsId = 【{}】的详情时出错", goodsId);
+            return Response.fail(Response.USER_IS_NOT_EXIST, "无法搜索到商品卖家的信息");
+        }
         List<GalleryVo> goodsGallery = goodsService.getGoodsGallery(goodsId);
-        //TODO comment
+        List<CommentVo> comment = goodsService.getGoodsComment(goodsId);
 
-        GoodsDetailPageVo vo = new GoodsDetailPageVo(goodsDetail, goodsGallery);
+        boolean userHasCollect = false;
+        if (json.get("openId") != null)
+            userHasCollect = goodsService.userHasCollect(json.get("openId"), goodsId);
+        GoodsDetailPageVo vo = new GoodsDetailPageVo(goodsDetail, goodsGallery, comment, userHasCollect);
         log.debug("浏览商品详情 : {}", vo);
 
         return Response.ok(vo);

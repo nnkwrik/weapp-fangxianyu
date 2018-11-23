@@ -1,5 +1,6 @@
 package io.github.nnkwrik.goodsservice.model.vo.inner;
 
+import io.github.nnkwrik.common.dto.SimpleUser;
 import lombok.Data;
 
 /**
@@ -14,5 +15,5 @@ public class GoodsDetailVo extends GoodsSimpleVo {
     private Integer want_count;
     private Integer browse_count;
     private String last_edit;
-    //TODO seller
+    private SimpleUser seller;
 }
