@@ -119,7 +119,6 @@ public class GoodsServiceImpl implements GoodsService {
         Set<String> userIdSet = new HashSet<>();
         List<CommentVo> voList = baseComment.stream()
                 .map(base -> {
-                    System.out.println(base);
                     CommentVo baseVo = PO2VO.convert(PO2VO.comment, base);
                     userIdSet.add(baseVo.getUser_id());
                     return baseVo;

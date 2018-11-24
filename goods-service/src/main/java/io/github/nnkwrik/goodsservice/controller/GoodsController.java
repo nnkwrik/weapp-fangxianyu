@@ -1,6 +1,8 @@
 package io.github.nnkwrik.goodsservice.controller;
 
+import io.github.nnkwrik.common.dto.JWTUser;
 import io.github.nnkwrik.common.dto.Response;
+import io.github.nnkwrik.common.token.injection.JWT;
 import io.github.nnkwrik.goodsservice.model.vo.CategoryPageVo;
 import io.github.nnkwrik.goodsservice.model.vo.GoodsDetailPageVo;
 import io.github.nnkwrik.goodsservice.model.vo.GoodsRelatedVo;
@@ -56,9 +58,9 @@ public class GoodsController {
 
     }
 
-    @PostMapping("/goods/detail/{goodsId}")
+    @GetMapping("/goods/detail/{goodsId}")
     public Response<GoodsDetailPageVo> getGoodsDetail(@PathVariable("goodsId") int goodsId,
-                                                      @RequestBody Map<String, String> json) {
+                                                      @JWT JWTUser jwtUser) {
         //更新浏览次数
         GoodsDetailVo goodsDetail = goodsService.getGoodsDetail(goodsId);
         if (goodsDetail == null) {
@@ -69,10 +71,10 @@ public class GoodsController {
         List<CommentVo> comment = goodsService.getGoodsComment(goodsId);
 
         boolean userHasCollect = false;
-        if (json.get("openId") != null)
-            userHasCollect = goodsService.userHasCollect(json.get("openId"), goodsId);
+        if (jwtUser != null)
+            userHasCollect = goodsService.userHasCollect(jwtUser.getOpenId(), goodsId);
         GoodsDetailPageVo vo = new GoodsDetailPageVo(goodsDetail, goodsGallery, comment, userHasCollect);
-        log.debug("浏览商品详情 : {}", vo);
+        log.debug("浏览商品详情 : 商品id={}，商品名={}", vo.getInfo().getId(),vo.getInfo().getName());
 
         return Response.ok(vo);
     }

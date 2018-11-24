@@ -60,8 +60,7 @@ public class JWTResolver implements HandlerMethodArgumentResolver {
             }
         }
 
-        if (user == null &&
-                parameter.getParameterAnnotation(JWT.class).required()) {
+        if (user == null && parameter.getParameterAnnotation(JWT.class).required()) {
             if (isExpired) throw new JWTException(JWTException.TOKEN_IS_EXPIRED, "凭证已过期");
             throw new JWTException(JWTException.TOKEN_IS_EMPTY, "用户的Authorization头错误,无法获取jwt");
         }
