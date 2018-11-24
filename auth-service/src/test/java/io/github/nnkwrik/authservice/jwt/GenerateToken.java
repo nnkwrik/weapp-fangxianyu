@@ -23,9 +23,9 @@ public class GenerateToken {
      * 生产环境下可以用这个生成Token进行测试
      */
     @Test
-    public void generateToken(){
-        String openId = "1212";
-        String nickName = "nickname";
+    public void generateToken() throws IllegalAccessException {
+        String openId = "1";
+        String nickName = "测试用户";
         String avatarUrl = "https://avatars2.githubusercontent.com/u/29662114?s=460&v=4";
 
         JWTUser jwtUser = new JWTUser(openId,nickName,avatarUrl);

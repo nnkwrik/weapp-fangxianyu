@@ -14,8 +14,8 @@ import lombok.NoArgsConstructor;
 public class JWTUser {
 
     private String openId;
-    private String nickName;
-    private String avatarUrl;
+    private String nickname;
+    private String avatar;
 
 
 }

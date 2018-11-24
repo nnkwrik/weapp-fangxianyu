@@ -32,14 +32,14 @@ public class TestToken {
 
 
     @Test
-    public void testToken(){
+    public void testToken() throws Exception {
         //测试注入密钥文件名
         System.out.println(pubFile);
         System.out.println(pvtFile);
 
         JWTUser jwtUser = new JWTUser();
         jwtUser.setOpenId("1212");
-        jwtUser.setNickName("nickName");
+        jwtUser.setNickname("nickName");
 
 
         //找到resource目录下的私钥文件后生成Token
