@@ -45,8 +45,25 @@ public class TestController {
     }
 
 
+    /**
+     * jwt解析失败时会抛错
+     * @param jwt
+     * @return
+     */
     @GetMapping("/testInjection")
     public JWTUser testInject(@JWT JWTUser jwt) {
+
+        System.out.println("============" + jwt);
+        return jwt;
+    }
+
+    /**
+     * jwt解析失败时不会抛错
+     * @param jwt 解析失败时是null
+     * @return
+     */
+    @GetMapping("/testInjection2")
+    public JWTUser testInject2(@JWT(required = false) JWTUser jwt) {
 
         System.out.println("============" + jwt);
         return jwt;
