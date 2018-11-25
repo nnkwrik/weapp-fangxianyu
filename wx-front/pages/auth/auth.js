@@ -39,8 +39,7 @@ Page({
         //登录远程服务器
         util.request(api.AuthLoginByWeixin, {
           code: code,
-          detail: detail,
-          firstLogin: true
+          detail: detail
         }, 'POST').then(res => {
           if (res.errno === 0) {
             //存储用户信息

@@ -127,8 +127,8 @@ page{
 }
 
 .serach-keywords .item.active{
-    color: #b4282d;
-    border: 1px solid #b4282d;
+    color: #f94b4b;
+    border: 1px solid #f94b4b;
 }
 
 .shelper-list{
@@ -310,7 +310,7 @@ page{
   height: 30rpx;
   text-align: center;
   font-size: 30rpx;
-  color: #b4282d;
+  color: #f94b4b;
 }
 
 .search-result-empty{

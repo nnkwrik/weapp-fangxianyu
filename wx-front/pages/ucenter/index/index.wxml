@@ -1,9 +1,9 @@
 <view class="container">
 <!-- TODO 点击,查看个人主页 -->
   <view class="profile-info" op bindtap="goLogin">
-    <image class="avatar" src="{{userInfo.avatar}}"></image>
+    <image class="avatar" src="{{userInfo.avatarUrl}}"></image>
     <view class="info">
-      <text class="name">{{userInfo.nickname}}</text>
+      <text class="name">{{userInfo.nickName}}</text>
 
       <text  wx:if="{{isLogin}}" class="level">点击查看个人主页</text>
       <text wx:else  class="level">马上授权登录</text>

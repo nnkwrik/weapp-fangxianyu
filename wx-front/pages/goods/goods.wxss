@@ -294,7 +294,7 @@ font-weight:bold;
 }
 
 .comments .content {
-  width: 720rpx;
+  width: 630rpx;
   padding-right: 30rpx;
   line-height: 45.8rpx;
   font-size: 29rpx;
@@ -303,7 +303,8 @@ font-weight:bold;
 }
 
 .comments .reply-content {
-  width: 720rpx;
+  /* width: 720rpx; */
+  width: 600rpx;
   padding-right: 30rpx;
   line-height: 45.8rpx;
   font-size: 29rpx;

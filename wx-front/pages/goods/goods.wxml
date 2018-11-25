@@ -5,7 +5,7 @@
     </swiper-item>
   </swiper>
   <view class="location-time">
-    <view class="icon time">最后编辑 : 2018-10-30 19:12</view>
+    <view class="icon time">最后编辑 : {{goods.last_edit}}</view>
     <view class="icon location">地点 : 广东深圳</view>
   </view>
   <view class="goods-info">
@@ -45,11 +45,11 @@
   <!-- history -->
   <view class="seller-nav section-act">
     <view class="seller-t">
-      <image class="seller-avatar" src="https://avatars2.githubusercontent.com/u/29662114?s=460&v=4"></image>
+      <image class="seller-avatar" src="{{goods.seller.avatarUrl}}"></image>
     </view>
 
     <view class="seller-info">
-      <view class="name">测试用户</view>
+      <view class="name">{{goods.seller.nickName}}</view>
       <view class="history">加入平台第100天,出售过5件宝贝</view>
     </view>
 
@@ -85,37 +85,42 @@
     </view>
   </view> -->
 
-  <view class="comments">
+  <view class="comments" wx:if="{{comment.length > 0}}">
     <view class="h">
-        <text class="t">留言 (12)</text>
+      <text class="t">留言 ({{comment.length > 999 ? '999+' : comment.length}})</text>
     </view>
     <view class="b">
-    <!-- comment -->
-      <view class="item">
-        <view class="info">
-          <view class="user">
-            <image src="https://avatars2.githubusercontent.com/u/29662114?s=460&v=4"></image>
-            <text>nickname</text>
+      <view wx:for="{{comment}}" wx:for-index="index" wx:for-item="item" wx:key="{{item.id}}">
+        <!-- comment -->
+        <view class="item">
+          <view class="info">
+            <view class="user">
+              <image src="{{item.simpleUser.avatarUrl}}"></image>
+              <text>{{item.simpleUser.nickName}}</text>
+            </view>
+            <view class="time">{{item.create_time}}</view>
           </view>
-          <view class="time">2019-12-23 10:12</view>
-        </view>
-        <view class="content">
-          aaaaa
-        </view>
-        <!-- reply -->
-        <view class="reply-info">
-          <view class="reply-user">
-            <image src="https://avatars2.githubusercontent.com/u/29662114?s=460&v=4"></image>
-            <text>nickname</text>
+          <view class="content">
+            {{item.content}}
           </view>
-          <view class="time">2019-12-23 10:12</view>
+          <!-- reply -->
+          <view wx:for="{{item.replyList}}" wx:for-index="iindex" wx:for-item="iitem" wx:key="{{iitem.id}}">
+            <view class="reply-info">
+              <view class="reply-user">
+                <image src="{{iitem.simpleUser.avatarUrl}}"></image>
+                <text>{{iitem.simpleUser.nickName}}</text>
+              </view>
+              <view class="time">{{iitem.create_time}}</view>
+            </view>
+            <view class="reply-content">
+              回复@{{iitem.reply_user_name}}:{{item.content}}
+            </view>
+          </view>
+
+          <!-- reoly-end -->
         </view>
-        <view class="reply-content">
-          回复@nickname:aaaaa
-        </view>
-        <!-- reoly-end -->
+        <!-- comment-end -->
       </view>
-      <!-- comment-end -->
 
     </view>
 

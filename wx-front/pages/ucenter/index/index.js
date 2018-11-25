@@ -23,8 +23,8 @@ Page({
 
     // 页面显示
     if (userInfo && token) {
-      app.globalData.userInfo = userInfo;
-      app.globalData.token = token;
+      // app.globalData.userInfo = userInfo;
+      // app.globalData.token = token;
       this.setData({
         isLogin: true
       });

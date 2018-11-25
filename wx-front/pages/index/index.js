@@ -19,8 +19,8 @@ Page({
   },
   onShareAppMessage: function () {
     return {
-      title: 'NideShop',
-      desc: '仿网易严选微信小程序商城',
+      title: '古早交易平台',
+      desc: '一款开源仿闲鱼交易平台！',
       path: '/pages/index/index'
     }
   },

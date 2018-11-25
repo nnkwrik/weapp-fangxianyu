@@ -2,7 +2,7 @@
   <view class="search">
     <navigator url="/pages/search/search" class="input">
       <image class="icon"></image>
-      <text class="txt">商品搜索, 共{{goodsCount}}款好物</text>
+      <text class="txt">商品搜索,搜索关键字</text>
     </navigator>
   </view>
   <view class="catalog">
@@ -10,9 +10,9 @@
         <view class="item {{ currentCategory.id == item.id ? 'active' : ''}}" wx:for="{{navList}}"  data-id="{{item.id}}" data-index="{{index}}" bindtap="switchCate">{{item.name}}</view>
     </scroll-view>
     <scroll-view class="cate" scroll-y="true">
-        <navigator url="url" class="banner">
+        <view class="banner">
             <image class="image" src="https://image.flaticon.com/icons/svg/743/743007.svg"></image>
-        </navigator>
+        </view>
         <view class="hd">
             <text class="line"></text>
             <text class="txt">{{currentCategory.name}}分类</text>

@@ -29,38 +29,54 @@ function request(url, data = {}, method = "GET") {
       method: method,
       header: {
         'Content-Type': 'application/json',
-        'X-Nideshop-Token': wx.getStorageSync('token')
+        'Authorization': wx.getStorageSync('token')
       },
       success: function (res) {
         console.log("success");
 
         if (res.statusCode == 200) {
 
-          if (res.data.errno == 401) {
+          if (res.data.errno == 3003) {
+            //TOKEN_IS_EMPTY
             //需要登录后才可以操作
-
-            let code = null;
-            return login().then((res) => {
-              code = res.code;
-              return getUserInfo();
-            }).then((userInfo) => {
-              //登录远程服务器
-              request(api.AuthLoginByWeixin, { code: code, userInfo: userInfo }, 'POST').then(res => {
-                if (res.errno === 0) {
-                  //存储用户信息
-                  wx.setStorageSync('userInfo', res.data.userInfo);
-                  wx.setStorageSync('token', res.data.token);
-                  
-                  resolve(res);
-                } else {
-                  reject(res);
-                }
-              }).catch((err) => {
-                reject(err);
-              });
-            }).catch((err) => {
-              reject(err);
+            wx.navigateTo({
+              url: '/pages/auth/auth'
             })
+          } else if (res.data.errno == 3004){
+            // TOKEN_IS_EXPIRED
+            
+            let code = null;
+            return new Promise(function (resolve, reject) {
+              return util.login().then((res) => {
+                code = res.code;
+              }).then(() => {
+                //登录远程服务器
+                util.request(api.AuthLoginByWeixin, {
+                  code: code,
+                  detail: detail,
+                  expiredToken: wx.getStorageSync('token')
+                }, 'POST').then(res => {
+                  if (res.errno === 0) {
+                    //存储用户信息
+                    wx.setStorageSync('userInfo', res.data.userInfo);
+                    wx.setStorageSync('token', res.data.token);
+
+                    //反应到当前登录
+                    app.globalData.userInfo = res.data.userInfo;
+                    app.globalData.token = res.data.token;
+
+                    resolve(res.data.userInfo);
+                  } else {
+                    reject(res.data.userInfo);
+                  }
+                }).catch((err) => { //request
+                  reject(err);
+                });
+              }).catch((err) => {   //login
+                reject(err);
+              })
+            });
+
           } else {
             resolve(res.data);
           }
