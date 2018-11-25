@@ -12,10 +12,21 @@ import java.util.List;
 @Mapper
 public interface UserMapper {
 
-    @Insert("insert into user (open_id,nick_name,avatar_url,gender,language,city,province,country) " +
-            "values (#{openId},#{nickName},#{avatarUrl},#{gender}," +
-            "#{language},#{city},#{province},#{country})")
-//    @SelectKey(resultType = Integer.class, before = false, keyProperty = "id", statement = "SELECT LAST_INSERT_ID()")
+//    @Insert("insert into user (open_id,nick_name,avatar_url,gender,language,city,province,country) " +
+//            "values (#{openId},#{nickName},#{avatarUrl},#{gender}," +
+//            "#{language},#{city},#{province},#{country})")
+////    @SelectKey(resultType = Integer.class, before = false, keyProperty = "id", statement = "SELECT LAST_INSERT_ID()")
+//    void register(User user);
+
+    /**
+     * 注册用户：存在相同的openId时update，不存在则insert
+     * @param user
+     */
+    @Insert("insert into user (open_id, nick_name, avatar_url, gender, language, city, province, country)\n" +
+            "values (#{openId},#{nickName},#{avatarUrl},#{gender},#{language},#{city},#{province},#{country})\n" +
+            "on duplicate key update nick_name = #{nickName} , " +
+            "                                  avatar_url = #{avatarUrl} , gender = #{gender} , language = #{language} ,"+
+            "                                  city = #{city} , province = #{province} , country = #{country}")
     void register(User user);
 
 

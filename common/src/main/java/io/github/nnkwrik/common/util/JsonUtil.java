@@ -13,6 +13,9 @@ import java.util.Map;
 public class JsonUtil {
     private static ObjectMapper mapper = new ObjectMapper();
 
+    public static TypeReference<Map<String, String>> simpleJsonMap =
+            new TypeReference<Map<String, String>>(){};
+
     public static Map<String, String> fromJson(String rawData, TypeReference typeReference) {
         try {
             return mapper.readValue(rawData, typeReference);

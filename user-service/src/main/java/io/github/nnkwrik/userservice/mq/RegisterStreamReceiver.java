@@ -24,10 +24,12 @@ public class RegisterStreamReceiver {
 
     @StreamListener(target = UserRegisterStream.INPUT)
     public void receive(String userData){
+        if (userData == null) return;
         User user = JsonUtil.fromJson(userData, User.class);
 
         log.info("从 [ auth-service ] 收到 [ 用户注册 ]的消息");
         log.info("新用户：用户名 = [{}],城市 = [{}]", user.getNickName(), user.getCity());
+        //TODO 先确认用户是否存在
         userService.register(user);
     }
 }

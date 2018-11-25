@@ -1,0 +1,38 @@
+server:
+  port: 8080
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8801/eureka/
+spring:
+  application:
+    name: api-gateway
+
+zuul:
+  routes:
+    #auth-service
+    auth:
+      path: /auth/**
+      serviceId: auth-service
+      strip-prefix: false
+    #goods-service
+    goods:
+      path: /goods/**
+      serviceId: goods-service
+      strip-prefix: false
+    index:
+      path: /index/**
+      serviceId: goods-service
+      strip-prefix: false
+    catalog:
+      path: /catalog/**
+      serviceId: goods-service
+      strip-prefix: false
+    search:
+      path: /search/**
+      serviceId: goods-service
+      strip-prefix: false
+
+
+
+

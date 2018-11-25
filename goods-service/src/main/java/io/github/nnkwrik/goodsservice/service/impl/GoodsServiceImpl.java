@@ -161,6 +161,12 @@ public class GoodsServiceImpl implements GoodsService {
         } else {
             comment.setSimpleUser(userDTO);
         }
+        SimpleUser replyUserDTO = simpleUserMap.get(comment.getReply_user_id());
+        if (replyUserDTO == null){
+            comment.setReply_user_name("用户不存在");
+        }else {
+            comment.setReply_user_name(replyUserDTO.getNickName());
+        }
         return comment;
     }
 

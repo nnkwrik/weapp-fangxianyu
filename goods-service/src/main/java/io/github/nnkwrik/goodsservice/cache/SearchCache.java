@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 @Component
 public class SearchCache {
     /**
-     * @key 搜索关键字 TODO 分词
+     * @key 搜索关键字
      * @value 搜索次数
      */
     private Cache<String, AtomicInteger> cache =

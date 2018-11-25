@@ -1,5 +1,6 @@
 package io.github.nnkwrik.authservice.model.vo;
 
+import io.github.nnkwrik.common.dto.JWTUser;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,20 +11,8 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class AuthVo {
     private String token;
-    private UserInfo userInfo;
-
-    public AuthVo(String token, String nickname, String avatar) {
-        this.token = token;
-        this.userInfo = new UserInfo(nickname, avatar);
-    }
-
-
-}
-@Data
-@AllArgsConstructor
-class UserInfo {
-    private String nickname;
-    private String avatar;
+    private JWTUser userInfo;
 }

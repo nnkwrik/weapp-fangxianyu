@@ -17,9 +17,9 @@ public class CommentVo {
     private Integer reply_comment_id;
     private String reply_user_id;
     private String content;
-    private boolean is_delete;
     private String create_time;
 
-    SimpleUser simpleUser;
-    List<CommentVo> replyList;
+    private SimpleUser simpleUser;
+    private String reply_user_name;
+    private List<CommentVo> replyList;
 }

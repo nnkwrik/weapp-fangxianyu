@@ -24,7 +24,7 @@ public class TokenSolver {
     @Value("${jwt.pub-key-file-name}")
     private String pubFile;
 
-    private RSAKeyProvider keyProvider = new RSAKeyProvider() {
+    public RSAKeyProvider keyProvider = new RSAKeyProvider() {
 
         RSAPublicKey key;
 

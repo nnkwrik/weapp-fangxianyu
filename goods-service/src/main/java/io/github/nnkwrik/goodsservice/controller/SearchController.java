@@ -21,6 +21,7 @@ import java.util.List;
  */
 @Slf4j
 @RestController
+@RequestMapping("/search")
 public class SearchController {
 
 
@@ -32,7 +33,7 @@ public class SearchController {
     private SearchService searchService;
 
 
-    @GetMapping("/search/index")
+    @GetMapping("/index")
     public Response<SearchIndexPageVo> searchIndex(@JWT JWTUser jwtUser) {
         List<String> historyKeyword = null;
         if (jwtUser != null) {
@@ -46,7 +47,7 @@ public class SearchController {
         return Response.ok(vo);
     }
 
-    @GetMapping("/search/clearhistory")
+    @GetMapping("/clearhistory")
     public Response clearHistory(@JWT JWTUser jwtUser) {
         if (jwtUser == null) return Response.fail(Response.OPEN_ID_IS_EMPTY, "用户id为空,请登陆后再尝试");
         searchService.clearUserHistory(jwtUser.getOpenId());
@@ -54,9 +55,7 @@ public class SearchController {
         return Response.ok();
     }
 
-
-    //TODO 后期提供排序和地区和卖家信用的筛选功能
-    @GetMapping("search/result/{keyword}")
+    @GetMapping("/result/{keyword}")
     public Response<List<GoodsSimpleVo>> searchGoods(@PathVariable("keyword") String keyword,
                                                      @RequestParam(value = "page", defaultValue = "1") int page,
                                                      @RequestParam(value = "limit", defaultValue = "10") int size,

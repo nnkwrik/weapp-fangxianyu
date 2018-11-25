@@ -24,6 +24,7 @@ import java.util.Map;
  */
 @Slf4j
 @RestController
+@RequestMapping("/goods")
 public class GoodsController {
 
     @Autowired
@@ -35,7 +36,7 @@ public class GoodsController {
      * @param categoryId
      * @return
      */
-    @GetMapping("/goods/category/{categoryId}")
+    @GetMapping("/category/{categoryId}")
 
     public Response<CategoryVo> getCategoryPage(@PathVariable("categoryId") int categoryId,
                                                 @RequestParam(value = "page", defaultValue = "1") int page,
@@ -48,7 +49,7 @@ public class GoodsController {
         return Response.ok(vo);
     }
 
-    @GetMapping("/goods/list/{categoryId}")
+    @GetMapping("/list/{categoryId}")
     public Response<CategoryVo> getGoodsByCategory(@PathVariable("categoryId") int categoryId,
                                                    @RequestParam(value = "page", defaultValue = "1") int page,
                                                    @RequestParam(value = "limit", defaultValue = "10") int size) {
@@ -58,7 +59,7 @@ public class GoodsController {
 
     }
 
-    @GetMapping("/goods/detail/{goodsId}")
+    @GetMapping("/detail/{goodsId}")
     public Response<GoodsDetailPageVo> getGoodsDetail(@PathVariable("goodsId") int goodsId,
                                                       @JWT JWTUser jwtUser) {
         //更新浏览次数
@@ -79,7 +80,7 @@ public class GoodsController {
         return Response.ok(vo);
     }
 
-    @GetMapping("/goods/related/{goodsId}")
+    @GetMapping("/related/{goodsId}")
     public Response<GoodsRelatedVo> getGoodsRelated(@PathVariable("goodsId") int goodsId) {
         GoodsRelatedVo vo = goodsService.getGoodsRelated(goodsId);
         log.debug("与 goodsId=[] 相关的商品 : {}", goodsId, vo);

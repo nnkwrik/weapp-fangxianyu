@@ -10,5 +10,5 @@ import lombok.Data;
 public class AuthDTO {
     private String code;
     private DetailAuthDTO detail;
-    private Boolean firstLogin;
+    private String expiredToken;
 }

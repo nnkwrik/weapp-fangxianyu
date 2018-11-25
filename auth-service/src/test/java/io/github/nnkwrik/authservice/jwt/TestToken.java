@@ -39,7 +39,7 @@ public class TestToken {
 
         JWTUser jwtUser = new JWTUser();
         jwtUser.setOpenId("1212");
-        jwtUser.setNickname("nickName");
+        jwtUser.setNickName("nickName");
 
 
         //找到resource目录下的私钥文件后生成Token

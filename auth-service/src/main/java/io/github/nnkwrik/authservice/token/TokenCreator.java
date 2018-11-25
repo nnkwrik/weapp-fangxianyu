@@ -28,7 +28,7 @@ public class TokenCreator {
     @Value("${jwt.pvt-key-file-name}")
     private String pvtFile;
 
-    private RSAKeyProvider keyProvider = new RSAKeyProvider() {
+    public RSAKeyProvider keyProvider = new RSAKeyProvider() {
 
         RSAPrivateKey key;
 

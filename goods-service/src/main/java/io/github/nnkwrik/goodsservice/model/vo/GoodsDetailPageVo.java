@@ -1,6 +1,5 @@
 package io.github.nnkwrik.goodsservice.model.vo;
 
-import io.github.nnkwrik.common.dto.SimpleUser;
 import io.github.nnkwrik.goodsservice.model.vo.inner.CommentVo;
 import io.github.nnkwrik.goodsservice.model.vo.inner.GalleryVo;
 import io.github.nnkwrik.goodsservice.model.vo.inner.GoodsDetailVo;

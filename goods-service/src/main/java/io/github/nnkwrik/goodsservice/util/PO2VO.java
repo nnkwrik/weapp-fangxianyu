@@ -61,7 +61,7 @@ public class PO2VO {
                 vo.setBrowse_count(po.getBrowseCount());
                 //Date转String
                 if (po.getLastEdit() != null) {
-                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                     vo.setLast_edit(formatter.format(po.getLastEdit()));
                 }
                 return vo;
@@ -83,9 +83,8 @@ public class PO2VO {
                 vo.setUser_id(po.getUserId());
                 vo.setReply_comment_id(po.getReplyCommentId());
                 vo.setReply_user_id(po.getReplyUserId());
-                vo.set_delete(po.isDelete());
                 if (po.getCreateTime() != null) {
-                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                     vo.setCreate_time(formatter.format(po.getCreateTime()));
                 }
 

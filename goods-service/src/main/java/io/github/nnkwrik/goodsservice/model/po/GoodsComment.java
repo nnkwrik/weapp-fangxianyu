@@ -2,6 +2,8 @@ package io.github.nnkwrik.goodsservice.model.po;
 
 import lombok.Data;
 
+import java.util.Date;
+
 /**
  * @author nnkwrik
  * @date 18/11/23 16:05
@@ -15,5 +17,5 @@ public class GoodsComment {
     private String replyUserId;
     private String content;
     private boolean isDelete;
-    private Data createTime;
+    private Date createTime;
 }
