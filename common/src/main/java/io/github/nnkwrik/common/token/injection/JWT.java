@@ -14,4 +14,6 @@ import java.lang.annotation.Target;
 public @interface JWT {
 
     boolean required() default false;
+
+    boolean checkExpired() default true;
 }

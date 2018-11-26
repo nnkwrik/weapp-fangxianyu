@@ -22,46 +22,14 @@ Page({
 
   startLogin: function(e) {
     console.log(e);
-    this.login(e.detail).then((userInfo) => {
+    util.backendLogin(e.detail).then((userInfo) => {
       this.setData({
         userInfo: userInfo,
         hasUserInfo: true
       })
     });
   },
-
-  login: function (detail) {
-    let code = null;
-    return new Promise(function (resolve, reject) {
-      return util.login().then((res) => {
-        code = res.code;
-      }).then(() => {
-        //登录远程服务器
-        util.request(api.AuthLoginByWeixin, {
-          code: code,
-          detail: detail
-        }, 'POST').then(res => {
-          if (res.errno === 0) {
-            //存储用户信息
-            wx.setStorageSync('userInfo', res.data.userInfo);
-            wx.setStorageSync('token', res.data.token);
-
-            //反应到当前登录
-            app.globalData.userInfo = res.data.userInfo;
-            app.globalData.token = res.data.token;
-
-            resolve(res.data.userInfo);
-          } else {
-            reject(res.data.userInfo);
-          }
-        }).catch((err) => { //request
-          reject(err);
-        });
-      }).catch((err) => {   //login
-        reject(err);
-      })
-    });
-  },
+  
   goback: function () {
     wx.navigateBack({
       delta: 1

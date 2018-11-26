@@ -7,7 +7,6 @@ eureka:
 spring:
   application:
     name: api-gateway
-
 zuul:
   routes:
     #auth-service
@@ -15,23 +14,36 @@ zuul:
       path: /auth/**
       serviceId: auth-service
       strip-prefix: false
+      #过滤hearder的黑名单，默认为 sensitiveHeaders：Cookie，Set-Cookie，Authorization
+      #手动把它设置为空，否则包含JWT信息的Authorization头无法传递到下游服务
+      sensitiveHeaders:
     #goods-service
     goods:
       path: /goods/**
       serviceId: goods-service
       strip-prefix: false
+      sensitiveHeaders:
     index:
       path: /index/**
       serviceId: goods-service
       strip-prefix: false
+      sensitiveHeaders:
     catalog:
       path: /catalog/**
       serviceId: goods-service
       strip-prefix: false
+      sensitiveHeaders:
     search:
       path: /search/**
       serviceId: goods-service
       strip-prefix: false
+      sensitiveHeaders:
+    collect:
+      path: /collect/**
+      serviceId: goods-service
+      strip-prefix: false
+      sensitiveHeaders:
+
 
 
 

@@ -80,5 +80,14 @@ public class IndexServiceImpl implements IndexService {
         return new CatalogVo(null, currentCategoryVo);
     }
 
+    @Override
+    public void collectAddOrDelete(int goodsId, String userId, boolean hasCollect) {
+        if (hasCollect) {
+            otherMapper.deleteUserCollect(userId, goodsId);
+        } else {
+            otherMapper.setUserCollect(userId, goodsId);
+        }
+    }
+
 
 }

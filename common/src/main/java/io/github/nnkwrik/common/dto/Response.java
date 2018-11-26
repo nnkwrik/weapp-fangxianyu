@@ -14,6 +14,7 @@ public class Response<T> {
     public static final int CHECK_USER_WITH_SESSION_FAIL = 3002;
     public static final int TOKEN_IS_EMPTY = 3003;
     public static final int TOKEN_IS_EXPIRED = 3004;
+    public static final int TOKEN_IS_WRONG = 3005;
 
     //goods
     public static final int OPEN_ID_IS_EMPTY = 4001;

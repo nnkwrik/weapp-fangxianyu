@@ -235,6 +235,7 @@
   height: 67rpx;
   line-height: 67rpx;
   font-size: 0;
+  overflow:hidden;
 }
 
 .comments .reply-user {
@@ -244,6 +245,7 @@
   line-height: 67rpx;
   font-size: 0;
   margin-left: 50rpx;
+  overflow:hidden;
 }
 
 .comments .reply-user  image {

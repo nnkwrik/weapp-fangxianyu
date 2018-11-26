@@ -11,6 +11,7 @@ import lombok.Data;
 public class JWTException extends RuntimeException {
     public static final int TOKEN_IS_EMPTY = Response.TOKEN_IS_EMPTY;
     public static final int TOKEN_IS_EXPIRED = Response.TOKEN_IS_EXPIRED;
+    public static final int TOKEN_IS_WRONG = Response.TOKEN_IS_WRONG;
 
     private int errno;
     private String errmsg;

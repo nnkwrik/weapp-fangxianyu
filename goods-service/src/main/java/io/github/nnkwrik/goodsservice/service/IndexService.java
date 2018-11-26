@@ -15,5 +15,7 @@ public interface IndexService {
 
     CatalogVo getCatalogById(int id);
 
+    void collectAddOrDelete(int goodsId, String userId, boolean hasCollect);
+
 
 }

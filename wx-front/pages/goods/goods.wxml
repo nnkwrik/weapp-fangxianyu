@@ -113,7 +113,7 @@
               <view class="time">{{iitem.create_time}}</view>
             </view>
             <view class="reply-content">
-              回复@{{iitem.reply_user_name}}:{{item.content}}
+              回复@{{iitem.reply_user_name}}:{{iitem.content}}
             </view>
           </view>
 

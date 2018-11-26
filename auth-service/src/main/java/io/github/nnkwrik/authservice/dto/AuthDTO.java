@@ -10,5 +10,4 @@ import lombok.Data;
 public class AuthDTO {
     private String code;
     private DetailAuthDTO detail;
-    private String expiredToken;
 }

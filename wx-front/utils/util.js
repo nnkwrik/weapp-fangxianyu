@@ -22,6 +22,9 @@ function formatNumber(n) {
  * 封封微信的的request
  */
 function request(url, data = {}, method = "GET") {
+  let that = this
+  let token = wx.getStorageSync('token')
+  
   return new Promise(function (resolve, reject) {
     wx.request({
       url: url,
@@ -29,53 +32,34 @@ function request(url, data = {}, method = "GET") {
       method: method,
       header: {
         'Content-Type': 'application/json',
-        'Authorization': wx.getStorageSync('token')
+        'Authorization': token
       },
       success: function (res) {
         console.log("success");
 
         if (res.statusCode == 200) {
 
-          if (res.data.errno == 3003) {
+          if (res.data.errno == 3003 || res.data.errno == 3004 || res.data.errno == 3005) {
+            console.log(res.data.errmsg)
             //TOKEN_IS_EMPTY
             //需要登录后才可以操作
-            wx.navigateTo({
-              url: '/pages/auth/auth'
-            })
-          } else if (res.data.errno == 3004){
-            // TOKEN_IS_EXPIRED
-            
-            let code = null;
-            return new Promise(function (resolve, reject) {
-              return util.login().then((res) => {
-                code = res.code;
-              }).then(() => {
-                //登录远程服务器
-                util.request(api.AuthLoginByWeixin, {
-                  code: code,
-                  detail: detail,
-                  expiredToken: wx.getStorageSync('token')
-                }, 'POST').then(res => {
-                  if (res.errno === 0) {
-                    //存储用户信息
-                    wx.setStorageSync('userInfo', res.data.userInfo);
-                    wx.setStorageSync('token', res.data.token);
+            wx.getSetting({
+              success: res => {
+                if (res.authSetting['scope.userInfo']) {
+                  // // 已经授权，可以直接调用 getUserInfo 获取头像昵称，不会弹框
+                  that.getUserInfo().then((res) => {
+                    that.backendLogin(res).then(()=>{
+                      that.request(url,data,method)
+                    })
+                  })
 
-                    //反应到当前登录
-                    app.globalData.userInfo = res.data.userInfo;
-                    app.globalData.token = res.data.token;
-
-                    resolve(res.data.userInfo);
-                  } else {
-                    reject(res.data.userInfo);
-                  }
-                }).catch((err) => { //request
-                  reject(err);
-                });
-              }).catch((err) => {   //login
-                reject(err);
-              })
-            });
+                }else{
+                  wx.navigateTo({
+                    url: '/pages/auth/auth'
+                  })
+                }
+              }
+            })   
 
           } else {
             resolve(res.data);
@@ -93,6 +77,8 @@ function request(url, data = {}, method = "GET") {
   });
 }
 
+
+
 /**
  * 检查微信会话是否过期
  */
@@ -105,6 +91,40 @@ function checkSession() {
       fail: function () {
         reject(false);
       }
+    })
+  });
+}
+
+/**
+ * 在后端服务器进行登录
+ */
+function backendLogin(detail) {
+  console.log("在后端服务器进行登录" + detail)
+  let that = this;
+  let code = null;
+  return new Promise(function (resolve, reject) {
+    return that.login().then((res) => {
+      code = res.code;
+    }).then(() => {
+      //登录远程服务器
+      that.request(api.AuthLoginByWeixin, {
+        code: code,
+        detail: detail
+      }, 'POST').then(res => {
+        if (res.errno === 0) {
+          //存储用户信息
+          wx.setStorageSync('userInfo', res.data.userInfo);
+          wx.setStorageSync('token', res.data.token);
+
+            resolve(res.data.userInfo);
+          } else {
+            reject(res.data.userInfo);
+          }
+      }).catch((err) => { //request
+        reject(err);
+      });
+    }).catch((err) => {   //login
+      reject(err);
     })
   });
 }
@@ -130,6 +150,7 @@ function login() {
     });
   });
 }
+
 
 function getUserInfo() {
   return new Promise(function (resolve, reject) {
@@ -176,6 +197,7 @@ module.exports = {
   checkSession,
   login,
   getUserInfo,
+  backendLogin,
 }
 
 

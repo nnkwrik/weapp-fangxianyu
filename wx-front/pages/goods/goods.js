@@ -225,11 +225,16 @@ Page({
   addCannelCollect: function () {
     let that = this;
     //添加或是取消收藏
-    util.request(api.CollectAddOrDelete, { typeId: 0, valueId: this.data.id }, "POST")
+    util.request(api.CollectAddOrDelete + '/' + this.data.id + '/' + this.data.userHasCollect,{}, "POST")
       .then(function (res) {
         let _res = res;
+        let collectState = !that.data.userHasCollect;
         if (_res.errno == 0) {
-          if (_res.data.type == 'add') {
+          that.setData({
+            userHasCollect: collectState
+          });
+          
+          if (that.data.userHasCollect) {
             that.setData({
               'collectBackImage': that.data.hasCollectImage
             });

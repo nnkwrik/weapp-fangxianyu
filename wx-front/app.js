@@ -5,20 +5,20 @@ var user = require('./services/user.js');
 App({
   onLaunch: function () {
     //!!生产环境专用测试数据
-    wx.setStorageSync('userInfo', this.testData.userInfo);
-    wx.setStorageSync('token', this.testData.token);
+    // wx.setStorageSync('userInfo', this.testData.userInfo);
+    // wx.setStorageSync('token', this.testData.token);
 
     // wx.setStorageSync('userInfo', null);
     // wx.setStorageSync('token', null);
 
     //获取用户的登录信息
-    // user.checkLogin().then(res => {
-    //   console.log('app login')
+    user.checkLogin().then(res => {
+      console.log('app login')
       this.globalData.userInfo = wx.getStorageSync('userInfo');
       this.globalData.token = wx.getStorageSync('token');
-    // }).catch(() => {
+    }).catch(() => {
       
-    // });
+    });
   },
   
   globalData: {

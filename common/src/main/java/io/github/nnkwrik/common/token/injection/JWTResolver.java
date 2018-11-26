@@ -44,9 +44,9 @@ public class JWTResolver implements HandlerMethodArgumentResolver {
                                   WebDataBinderFactory binderFactory) {
         String token = webRequest.getHeader("Authorization");
         JWTUser user = null;
-        boolean isExpired = false;
-        if (token == null) {
+        if (token == null && parameter.getParameterAnnotation(JWT.class).required()) {
             log.info("用户的Authorization头为空,无法获取jwt");
+            throw new JWTException(JWTException.TOKEN_IS_EMPTY, "用户的Authorization头为空,无法获取jwt");
         } else if ((user = cache.getIfPresent(token)) == null) {   //试图从缓存获取
 
             try {
@@ -54,16 +54,17 @@ public class JWTResolver implements HandlerMethodArgumentResolver {
                 cache.put(token, user);
             } catch (TokenExpiredException e) {
                 log.info("jwt已过期，过期时间：{}", e.getMessage());
-                isExpired = true;
+                if (parameter.getParameterAnnotation(JWT.class).checkExpired()){
+                    throw new JWTException(JWTException.TOKEN_IS_EXPIRED, "凭证已过期");
+                }
             } catch (Exception e) {
                 log.info("jwt解析失败");
+                if (parameter.getParameterAnnotation(JWT.class).required()){
+                    throw new JWTException(JWTException.TOKEN_IS_WRONG, "用户的Authorization头错误,无法获取jwt");
+                }
             }
         }
 
-        if (user == null && parameter.getParameterAnnotation(JWT.class).required()) {
-            if (isExpired) throw new JWTException(JWTException.TOKEN_IS_EXPIRED, "凭证已过期");
-            throw new JWTException(JWTException.TOKEN_IS_EMPTY, "用户的Authorization头错误,无法获取jwt");
-        }
         log.info("jwt解析结果为：{}", user);
 
         return user;

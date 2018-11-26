@@ -48,12 +48,13 @@ function loginByWeixin() {
 function checkLogin() {
   return new Promise(function(resolve, reject) {
     if (wx.getStorageSync('userInfo') && wx.getStorageSync('token')) {
+      resolve(true);
 
-      util.checkSession().then(() => {
-        resolve(true);
-      }).catch(() => {
-        reject(false); //session过期
-      });
+      // util.checkSession().then(() => {
+      //   resolve(true);
+      // }).catch(() => {
+      //   reject(false); //session过期
+      // });
 
     } else {
       reject(false); //没有登陆过
