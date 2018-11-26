@@ -62,6 +62,19 @@ function checkLogin() {
   });
 }
 
+function checkLoginAndNav() {
+  return new Promise(function(resolve, reject) {
+    if (wx.getStorageSync('userInfo') && wx.getStorageSync('token')) {
+      resolve(true);
+    } else {
+      wx.navigateTo({
+        url: '/pages/auth/auth'
+      })
+      reject(false); //没有登陆过
+    }
+  });
+}
+
 /**
  * 判断用户是否已授权获取userInfo
  */
@@ -72,7 +85,7 @@ function checkUserAuth() {
         if (res.authSetting['scope.userInfo']) {
           // 已经授权，可以直接调用 getUserInfo 获取头像昵称，不会弹框
           resolve(true);
-        }else{
+        } else {
           reject(false);
         }
       }
@@ -85,4 +98,5 @@ module.exports = {
   loginByWeixin,
   checkLogin,
   checkUserAuth,
+  checkLoginAndNav,
 };

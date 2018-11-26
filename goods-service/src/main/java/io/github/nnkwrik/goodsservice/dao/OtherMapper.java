@@ -39,7 +39,6 @@ public interface OtherMapper {
     void deleteUserCollect(@Param("user_id") String userId, @Param("goods_id") int goodsId);
 
 
-
     @Select("SELECT EXISTS(SELECT 1 FROM user_preference WHERE type = 2 and user_id = #{user_id} and goods_id = #{goods_id})")
     Boolean userHasWant(@Param("user_id") String userId, @Param("goods_id") int goodsId);
 
@@ -53,5 +52,14 @@ public interface OtherMapper {
             "  and user_id = #{user_id}\n" +
             "  and type = 2;")
     void deleteUserWant(@Param("user_id") String userId, @Param("goods_id") int goodsId);
+
+
+    @Insert("insert into goods_comment (goods_id, user_id, reply_comment_id, reply_user_id, content)\n" +
+            "values (#{goods_id}, #{user_id}, #{reply_comment_id}, #{reply_user_id}, #{content});")
+    void addComment(@Param("goods_id") int goodsId,
+                    @Param("user_id") String userId,
+                    @Param("reply_comment_id") int replyCommentId,
+                    @Param("reply_user_id") String replyUserId,
+                    @Param("content") String content);
 
 }

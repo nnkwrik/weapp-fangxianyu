@@ -4,10 +4,7 @@ import com.github.pagehelper.PageHelper;
 import io.github.nnkwrik.goodsservice.dao.CategoryMapper;
 import io.github.nnkwrik.goodsservice.dao.GoodsMapper;
 import io.github.nnkwrik.goodsservice.dao.OtherMapper;
-import io.github.nnkwrik.goodsservice.model.po.Ad;
-import io.github.nnkwrik.goodsservice.model.po.Category;
-import io.github.nnkwrik.goodsservice.model.po.Channel;
-import io.github.nnkwrik.goodsservice.model.po.Goods;
+import io.github.nnkwrik.goodsservice.model.po.*;
 import io.github.nnkwrik.goodsservice.model.vo.CatalogVo;
 import io.github.nnkwrik.goodsservice.model.vo.IndexVO;
 import io.github.nnkwrik.goodsservice.model.vo.inner.BannerVo;
@@ -87,6 +84,11 @@ public class IndexServiceImpl implements IndexService {
         } else {
             otherMapper.setUserCollect(userId, goodsId);
         }
+    }
+
+    @Override
+    public void addComment(int goodsId, String userId, int replyCommentId, String replyUserId, String content) {
+        otherMapper.addComment(goodsId,userId,replyCommentId,replyUserId,content);
     }
 
 

@@ -5,13 +5,12 @@ import io.github.nnkwrik.common.dto.Response;
 import io.github.nnkwrik.common.token.injection.JWT;
 import io.github.nnkwrik.goodsservice.model.vo.CatalogVo;
 import io.github.nnkwrik.goodsservice.model.vo.IndexVO;
+import io.github.nnkwrik.goodsservice.model.vo.inner.CommentVo;
 import io.github.nnkwrik.goodsservice.service.IndexService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author nnkwrik
@@ -57,6 +56,26 @@ public class IndexController {
                                        @JWT(required = true) JWTUser user) {
         indexService.collectAddOrDelete(goodsId, user.getOpenId(), hasCollect);
         log.info("用户【{}】添加或删除收藏商品，商品id={}，是否是添加?{}", user.getNickName(), goodsId, !hasCollect);
+        return Response.ok();
+
+    }
+
+    @PostMapping("/comment/post/{goodsId}")
+    public Response postComment(@PathVariable("goodsId") int goodsId,
+                                @RequestBody CommentVo comment,
+                                @JWT(required = true) JWTUser user) {
+        if (StringUtils.isEmpty(user.getOpenId()) ||
+                StringUtils.isEmpty(comment.getReply_user_id()) ||
+                StringUtils.isEmpty(comment.getContent()) ||
+                comment.getReply_comment_id() == null) {
+            String msg = "用户发表评论失败，信息不完整";
+            log.info(msg);
+            return Response.fail(Response.COMMENT_INFO_INCOMPLETE,msg);
+        }
+
+        indexService.addComment(goodsId, user.getOpenId(), comment.getReply_comment_id(), comment.getReply_user_id(), comment.getContent());
+
+        log.info("用户添加评论：用户id=【{}】，回复评论id=【{}】，回复内容=【{}】", user.getOpenId(),comment.getReply_comment_id(),comment.getReply_user_name());
         return Response.ok();
 
     }

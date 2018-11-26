@@ -17,5 +17,6 @@ public interface IndexService {
 
     void collectAddOrDelete(int goodsId, String userId, boolean hasCollect);
 
+    void addComment(int goodsId, String userId, int replyCommentId, String replyUserId, String content);
 
 }

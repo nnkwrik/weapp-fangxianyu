@@ -36,13 +36,15 @@ public class SearchController {
     @GetMapping("/index")
     public Response<SearchIndexPageVo> searchIndex(@JWT JWTUser jwtUser) {
         List<String> historyKeyword = null;
+        String openId = null;
         if (jwtUser != null) {
-            historyKeyword = searchService.getUserHistory(jwtUser.getOpenId());
+            openId = jwtUser.getOpenId();
+            historyKeyword = searchService.getUserHistory(openId);
         }
 
         List<String> hotKeyword = searchCache.getHot(10);
         SearchIndexPageVo vo = new SearchIndexPageVo(historyKeyword, hotKeyword);
-        log.info("用户openId= 【{}】获取搜索历史和热门关键词，搜索历史 = 【{}】，热门关键词 = 【{}】", jwtUser.getOpenId(), historyKeyword, hotKeyword);
+        log.info("用户openId= 【{}】获取搜索历史和热门关键词，搜索历史 = 【{}】，热门关键词 = 【{}】", openId, historyKeyword, hotKeyword);
 
         return Response.ok(vo);
     }

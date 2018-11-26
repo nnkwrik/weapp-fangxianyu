@@ -87,12 +87,13 @@
 
   <view class="comments" wx:if="{{comment.length > 0}}">
     <view class="h">
-      <text class="t">留言 ({{comment.length > 999 ? '999+' : comment.length}})</text>
+      <text class="t">留言</text>
     </view>
     <view class="b">
-      <view wx:for="{{comment}}" wx:for-index="index" wx:for-item="item" wx:key="{{item.id}}">
+      <view wx:for="{{comment}}"  wx:for-index="index" wx:for-item="item" wx:key="{{item.id}}">
         <!-- comment -->
         <view class="item">
+        <view bindtap="switchCommentPop" data-reply-id="{{item.id}}" data-reply-user-id="{{item.simpleUser.openId}}" data-reply-user-name='{{item.simpleUser.nickName}}'>
           <view class="info">
             <view class="user">
               <image src="{{item.simpleUser.avatarUrl}}"></image>
@@ -103,8 +104,9 @@
           <view class="content">
             {{item.content}}
           </view>
+          </view>
           <!-- reply -->
-          <view wx:for="{{item.replyList}}" wx:for-index="iindex" wx:for-item="iitem" wx:key="{{iitem.id}}">
+          <view wx:for="{{item.replyList}}" wx:for-index="iindex" wx:for-item="iitem" wx:key="{{iitem.id}}" bindtap="switchCommentPop" data-reply-id="{{iitem.id}}" data-reply-user-id="{{iitem.simpleUser.openId}}" data-reply-user-name='{{iitem.simpleUser.nickName}}' >
             <view class="reply-info">
               <view class="reply-user">
                 <image src="{{iitem.simpleUser.avatarUrl}}"></image>
@@ -222,15 +224,41 @@
   </view>
 </view> -->
 
+<view class="attr-pop-box" hidden="{{!openComment}}">
+  <view class="attr-pop">
+    <!-- <view class="close" bindtap="closeComment">
+      <image class="icon" src="/static/images/clear_input.png"></image>
+    </view> -->
+    <view class="post-comment">
+      <view class="title" wx:if="{{replyUserName}}">
+      回复@{{replyUserName}}：
+      </view>
+      <view class="title" wx:else>
+      发表留言：
+      </view>
+
+      <view class="content">
+        <input id='comment-input' class='' focus='{{openComment}}' placeholder="输入文本" maxlength='100' bindblur='closeComment' bindconfirm='postComment' value='{{commentContent}}' />
+      </view>
+
+    </view>
+  </view>
+</view>
+
+
 <view class="bottom-btn">
   <view class="l" bindtap="addCannelCollect">
     <image class="icon" src="{{ collectBackImage }}"></image>
     收藏
   </view>
-  <view class="l" bindtap="addCannelCollect">
+  <view class="l" bindtap="switchCommentPop" data-reply-id="0" data-reply-user-name='' data-reply-user-id="0">
     <image class="icon" src="/static/images/ic_menu_chat_nor.png"></image>
     留言
   </view>
+  <!-- <view class="l" >
+    <image class="icon" src="/static/images/ic_menu_chat_nor.png"></image>
+    留言
+  </view> -->
   <!-- <view class="l l-cart">
     <view class="box">
       <text class="cart-count">{{cartGoodsCount}}</text>

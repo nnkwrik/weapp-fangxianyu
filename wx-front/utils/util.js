@@ -38,7 +38,6 @@ function request(url, data = {}, method = "GET") {
         console.log("success");
 
         if (res.statusCode == 200) {
-
           if (res.data.errno == 3003 || res.data.errno == 3004 || res.data.errno == 3005) {
             console.log(res.data.errmsg)
             //TOKEN_IS_EMPTY
@@ -118,7 +117,7 @@ function backendLogin(detail) {
 
             resolve(res.data.userInfo);
           } else {
-            reject(res.data.userInfo);
+            reject(res);
           }
       }).catch((err) => { //request
         reject(err);

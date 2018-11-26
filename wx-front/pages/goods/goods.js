@@ -2,6 +2,7 @@ var app = getApp();
 var WxParse = require('../../lib/wxParse/wxParse.js');
 var util = require('../../utils/util.js');
 var api = require('../../config/api.js');
+var user = require('../../services/user.js');
 
 Page({
   data: {
@@ -20,13 +21,19 @@ Page({
     number: 1,
     checkedSpecText: '请选择规格数量',
     openAttr: false,
+    openComment: false,
+    replyId: '',
+    replyUserId: '',
+    replyUserName: '',
+    commentContent:'',
+    onLoadOption: {},
     noCollectImage: "/static/images/detail_star.png",
     hasCollectImage: "/static/images/detail_star_checked.png",
     collectBackImage: "/static/images/detail_star.png"
   },
-  getGoodsInfo: function () {
+  getGoodsInfo: function() {
     let that = this;
-    util.request(api.GoodsDetail + '/' + that.data.id).then(function (res) {
+    util.request(api.GoodsDetail + '/' + that.data.id).then(function(res) {
       if (res.errno === 0) {
         that.setData({
           goods: res.data.info,
@@ -57,9 +64,9 @@ Page({
     });
 
   },
-  getGoodsRelated: function () {
+  getGoodsRelated: function() {
     let that = this;
-    util.request(api.GoodsRelated + '/' + that.data.id,).then(function (res) {
+    util.request(api.GoodsRelated + '/' + that.data.id, ).then(function(res) {
       if (res.errno === 0) {
         that.setData({
           relatedGoods: res.data.goodsList,
@@ -176,10 +183,13 @@ Page({
   //     }
   //   });
   // },
-  onLoad: function (options) {
+  onLoad: function(options) {
     // 页面初始化 options为页面跳转所带来的参数
     this.setData({
-      id: parseInt(options.id)
+      onLoadOption: options,
+      id: parseInt(options.id),
+      commentContent:''
+      
       // id: 1181000
     });
 
@@ -194,46 +204,94 @@ Page({
     //   }
     // });
   },
-  onReady: function () {
+  onReady: function() {
     // 页面渲染完成
 
   },
-  onShow: function () {
+  onShow: function() {
     // 页面显示
 
   },
-  onHide: function () {
+  onHide: function() {
     // 页面隐藏
 
   },
-  onUnload: function () {
+  onUnload: function() {
     // 页面关闭
 
   },
-  // switchAttrPop: function () {
-  //   if (this.data.openAttr == false) {
-  //     this.setData({
-  //       openAttr: !this.data.openAttr
-  //     });
-  //   }
-  // },
-  // closeAttr: function () {
-  //   this.setData({
-  //     openAttr: false,
-  //   });
-  // },
-  addCannelCollect: function () {
+
+  switchCommentPop: function(event) {
+    let that = this
+
+    this.setData({
+      replyId: event.currentTarget.dataset.replyId,
+      replyUserId: event.currentTarget.dataset.replyUserId,
+      replyUserName: event.currentTarget.dataset.replyUserName
+
+    })
+
+    user.checkLoginAndNav().then(() => {
+      if (this.data.openComment == false) {
+        this.setData({
+          openComment: !this.data.openComment
+        });
+      }
+    })
+
+  },
+
+
+  closeComment: function() {
+    this.setData({
+
+      openComment: false,
+    });
+  },
+
+  postComment: function(event) {
+    let that = this
+    if (!event.detail.value) {
+      util.showErrorToast('请填写内容')
+      return false;
+    }
+    util.request(api.CommentPost + '/' + this.data.id, {
+      reply_comment_id: this.data.replyId,
+      reply_user_id: this.data.replyUserId,
+      reply_user_name: this.data.replyUserName,
+      content: event.detail.value
+    }, "POST").then(function(res) {
+      if (res.errno === 0) {
+        that.setData({
+          commentContent:''
+        })
+        
+        wx.showToast({
+          title: '留言成功'
+        })
+        //刷新
+        that.onLoad(that.data.onLoadOption);
+        
+
+      }
+      console.log(res)
+    });
+
+  },
+
+  addCannelCollect: function() {
     let that = this;
+    that.checkLogin();
     //添加或是取消收藏
-    util.request(api.CollectAddOrDelete + '/' + this.data.id + '/' + this.data.userHasCollect,{}, "POST")
-      .then(function (res) {
+    util.request(api.CollectAddOrDelete + '/' + this.data.id + '/' + this.data.userHasCollect, {}, "POST")
+      .then(function(res) {
         let _res = res;
         let collectState = !that.data.userHasCollect;
         if (_res.errno == 0) {
           that.setData({
             userHasCollect: collectState
           });
-          
+
           if (that.data.userHasCollect) {
             that.setData({
               'collectBackImage': that.data.hasCollectImage

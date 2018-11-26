@@ -235,7 +235,7 @@
   height: 67rpx;
   line-height: 67rpx;
   font-size: 0;
-  overflow:hidden;
+  overflow: hidden;
 }
 
 .comments .reply-user {
@@ -245,7 +245,7 @@
   line-height: 67rpx;
   font-size: 0;
   margin-left: 50rpx;
-  overflow:hidden;
+  overflow: hidden;
 }
 
 .comments .reply-user  image {
@@ -256,14 +256,15 @@
   margin-top: 5rpx;
   border-radius: 50%;
 }
+
 .comments .reply-user text {
-  display:inline-block;
-width:auto;
-height:66rpx;
-overflow:hidden;
-font-size:29rpx;
-line-height:66rpx;
-font-weight:bold;
+  display: inline-block;
+  width: auto;
+  height: 66rpx;
+  overflow: hidden;
+  font-size: 29rpx;
+  line-height: 66rpx;
+  font-weight: bold;
 }
 
 .comments .user  image {
@@ -652,7 +653,7 @@ font-weight:bold;
   width: 100%;
   height: auto;
   max-height: 780rpx;
-  padding: 31.25rpx;
+  padding: 10rpx;
   background: #fff;
   position: fixed;
   z-index: 9;
@@ -875,4 +876,43 @@ font-weight:bold;
 .seller-nav .history {
   line-height: 30rpx;
   font-size: 27rpx;
+}
+
+.attr-pop-box .attr-pop .post-comment {
+  display: block;
+  background: #fff;
+  font-size: 29rpx;
+  color: #333;
+  height: auto;
+  /* width: 650rpx; */
+  padding: 20rpx;
+  /* margin:10px; */
+  overflow: hidden;
+}
+
+.attr-pop-box .attr-pop .title {
+  margin-bottom: 10rpx;
+}
+
+.attr-pop-box .attr-pop .content {
+  
+  border: 1rpx solid #eee;
+  border-radius: 20rpx;
+  padding: 10rpx;
+  background: #eee;
+  overflow:hidden;
+  height:65rpx;
+
+}
+.attr-pop-box .attr-pop input {
+display:block;
+height:1.4rem;
+text-overflow:clip;
+overflow:hidden;
+white-space:nowrap;
+font-family:UICTFontTextStyleBody;
+min-height:1.4rem;
+margin-bottom: 40rpx;
+
+
 }

@@ -47,7 +47,7 @@ public class JWTResolver implements HandlerMethodArgumentResolver {
         if (token == null && parameter.getParameterAnnotation(JWT.class).required()) {
             log.info("用户的Authorization头为空,无法获取jwt");
             throw new JWTException(JWTException.TOKEN_IS_EMPTY, "用户的Authorization头为空,无法获取jwt");
-        } else if ((user = cache.getIfPresent(token)) == null) {   //试图从缓存获取
+        } else if (token != null && (user = cache.getIfPresent(token)) == null) {   //试图从缓存获取
 
             try {
                 user = tokenSolver.solve(token);

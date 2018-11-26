@@ -43,6 +43,11 @@ zuul:
       serviceId: goods-service
       strip-prefix: false
       sensitiveHeaders:
+    comment:
+      path: /comment/**
+      serviceId: goods-service
+      strip-prefix: false
+      sensitiveHeaders:
 
 
 

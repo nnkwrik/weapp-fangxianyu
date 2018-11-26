@@ -18,6 +18,7 @@ public class Response<T> {
 
     //goods
     public static final int OPEN_ID_IS_EMPTY = 4001;
+    public static final int COMMENT_INFO_INCOMPLETE = 4002;
 
     //user
     public static final int USER_IS_NOT_EXIST = 3001;
