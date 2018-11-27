@@ -1,4 +1,3 @@
-
 <!--index.wxml-->
 <view class="container">
   <swiper class="banner" indicator-dots="true" autoplay="true" interval="3000" duration="1000">
@@ -7,14 +6,20 @@
         <image src="{{item.image_url}}" background-size="cover"></image>
       </navigator>
     </swiper-item>
+
   </swiper>
-  
+
   <!-- 首页分类 -->
   <view class="m-menu">
-    <navigator  class="item" url="{{item.url}}" wx:for="{{channel}}" wx:key="{{item.id}}">
+    <navigator class="item" url="{{item.url}}" wx:for="{{channel}}" wx:key="{{item.id}}">
       <image src="{{item.icon_url}}" background-size="cover"></image>
       <text>{{item.name}}</text>
     </navigator>
+    <navigator open-type="reLaunch" class="item" url="/pages/catalog/catalog">
+      <image src="https://i.postimg.cc/x17Z3PJd/visualization.png" background-size="cover"></image>
+      <text>全部分类</text>
+    </navigator>
+
   </view>
 
 
@@ -111,7 +116,7 @@
     </view>
   </view> -->
 
-<!-- floorGoods[0].goodList -->
+  <!-- floorGoods[0].goodList -->
   <!-- <view class="good-grid" wx:for="{{floorGoods}}" wx:key="{{item.id}}">
     <view class="h">
       <view>

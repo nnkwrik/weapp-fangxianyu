@@ -113,6 +113,11 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
+    public void postGoods(Goods goods) {
+        goodsMapper.addGoods(goods);
+    }
+
+    @Override
     public List<CommentVo> getGoodsComment(int goodsId) {
         List<GoodsComment> baseComment = goodsMapper.findBaseComment(goodsId);
         if (baseComment == null || baseComment.size() <= 0) return null;

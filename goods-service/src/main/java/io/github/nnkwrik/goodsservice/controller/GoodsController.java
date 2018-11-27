@@ -3,6 +3,7 @@ package io.github.nnkwrik.goodsservice.controller;
 import io.github.nnkwrik.common.dto.JWTUser;
 import io.github.nnkwrik.common.dto.Response;
 import io.github.nnkwrik.common.token.injection.JWT;
+import io.github.nnkwrik.goodsservice.model.po.Goods;
 import io.github.nnkwrik.goodsservice.model.vo.CategoryPageVo;
 import io.github.nnkwrik.goodsservice.model.vo.GoodsDetailPageVo;
 import io.github.nnkwrik.goodsservice.model.vo.GoodsRelatedVo;
@@ -13,6 +14,7 @@ import io.github.nnkwrik.goodsservice.model.vo.inner.GoodsDetailVo;
 import io.github.nnkwrik.goodsservice.service.GoodsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -75,7 +77,7 @@ public class GoodsController {
         if (jwtUser != null)
             userHasCollect = goodsService.userHasCollect(jwtUser.getOpenId(), goodsId);
         GoodsDetailPageVo vo = new GoodsDetailPageVo(goodsDetail, goodsGallery, comment, userHasCollect);
-        log.debug("浏览商品详情 : 商品id={}，商品名={}", vo.getInfo().getId(),vo.getInfo().getName());
+        log.debug("浏览商品详情 : 商品id={}，商品名={}", vo.getInfo().getId(), vo.getInfo().getName());
 
         return Response.ok(vo);
     }
@@ -86,6 +88,29 @@ public class GoodsController {
         log.debug("与 goodsId=[] 相关的商品 : {}", goodsId, vo);
 
         return Response.ok(vo);
+    }
+
+
+    @PostMapping("/post")
+    public Response PostGoods(@RequestBody Goods goods,
+                              @JWT(required = true) JWTUser user) {
+
+        if (StringUtils.isEmpty(goods.getName()) ||
+                StringUtils.isEmpty(goods.getDesc()) ||
+                StringUtils.isEmpty(goods.getRegion()) ||
+                goods.getCategoryId() == null ||
+//                goods.getPrimaryPicUrl() == null ||
+                goods.getRegionId() == null ||
+                goods.getPrice() == null) {
+            String msg = "用户发布商品失败，信息不完整";
+            log.info(msg);
+            return Response.fail(Response.POST_INFO_INCOMPLETE, msg);
+        }
+        goods.setSellerId(user.getOpenId());
+        goodsService.postGoods(goods);
+        log.info("用户发布商品：用户昵称=【{}】，商品名=【{}】，详情=【{}】", user.getNickName(),goods.getName(),goods);
+
+        return Response.ok();
     }
 
 

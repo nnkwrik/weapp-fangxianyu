@@ -136,4 +136,23 @@ public interface GoodsMapper {
     List<GoodsComment> findReplyComment(@Param("reply_comment_id") int commentId);
 
 
+    @Select("insert into goods (category_id,\n" +
+            "                   seller_id,\n" +
+            "                   name,\n" +
+            "                   price,\n" +
+            "                   market_price,\n" +
+            "                   postage,\n" +
+//            "                   primary_pic_url,\n" +
+            "                   `desc`,\n" +
+            "                   region_id,\n" +
+            "                   region,\n" +
+            "                   able_express,\n" +
+            "                   able_meet,\n" +
+            "                   able_self_take)\n" +
+            "values (#{categoryId},#{sellerId},#{name},#{price}," +
+            "#{marketPrice},#{postage}," +
+//            "#{primaryPicUrl}," +
+            "#{desc}," +
+            "#{regionId},#{region},#{ableExpress},#{ableMeet},#{ableSelfTake});")
+    void addGoods(Goods goods);
 }

@@ -30,7 +30,11 @@
     "pages/shopping/addressAdd/addressAdd",
     "pages/goods/goods",
     "pages/topicDetail/topicDetail",
-    "pages/auth/auth"
+    "pages/auth/auth",
+    "pages/post/post",
+    "pages/region/region",
+    "pages/nav2post/nav2post",
+    "pages/postCate/postCate"
   ],
   "window": {
     "backgroundTextStyle": "dark",
@@ -58,7 +62,7 @@
         "text": "分类"
       },
       {
-        "pagePath": "pages/topic/topic",
+        "pagePath": "pages/nav2post/nav2post",
         "iconPath": "static/images/ic_menu_add_nor.png",
         "selectedIconPath": "static/images/ic_menu_add_nor.png",
         "text": "发布"

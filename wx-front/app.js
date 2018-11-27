@@ -36,5 +36,17 @@ App({
       avatarUrl: 'https://avatars2.githubusercontent.com/u/29662114?s=460&v=4'
     },
     token: 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdmF0YXJVcmwiOiJodHRwczovL2F2YXRhcnMyLmdpdGh1YnVzZXJjb250ZW50LmNvbS91LzI5NjYyMTE0P3M9NDYwJnY9NCIsIm9wZW5JZCI6IjEiLCJuaWNrTmFtZSI6Iua1i-ivleeUqOaItyIsImV4cCI6MTU0MzEyNzQ4OH0.ObcfDrCIgtY6AuqKqwZd_r8HnmjzHH_GsLA7161nBzUJeg2gvJ9xhMNniOKu0BmMI4dXn8TYyBLkee9y1xphLHCyQZwqgsLYKZFTfbcmSbpDAXjknA8qIsVAGpp5srChB6LoM1GDWiIRetJ-kBn0WopypMNck8kLFe6gdw7NyoafP0Wzrryf7DWAL56TlSOZ_IcubavcF58wX2oOMdS8_Q9NSh9Jj5lWJKkqAm395wdbnurFjOF3PtM5OlrJt4hqKcv3Sd9C_MOFiA3svlmmYjNfhUl8E9HEJpm1b5DmwxgkzMLty1VtZliL9hn0Ius4YOXJlk7IuLgHgBfDA2OyXQ',
+  },
+  post:{
+    cate: {
+      id: 0,
+      name: ''
+    },
+    region: {
+      id: 0,
+      name: ''
+    }
   }
+
+
 })

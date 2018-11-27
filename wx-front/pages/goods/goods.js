@@ -251,7 +251,7 @@ Page({
 
   postComment: function(event) {
     let that = this
-    if (!event.detail.value) {
+    if (event.detail.value.trim()=='') {
       util.showErrorToast('请填写内容')
       return false;
     }
@@ -281,7 +281,9 @@ Page({
 
   addCannelCollect: function() {
     let that = this;
-    that.checkLogin();
+    user.checkLoginAndNav().then(()=>{
+
+    
     //添加或是取消收藏
     util.request(api.CollectAddOrDelete + '/' + this.data.id + '/' + this.data.userHasCollect, {}, "POST")
       .then(function(res) {
@@ -310,6 +312,7 @@ Page({
           });
         }
       });
+    })
   },
   // openCartPage: function () {
   //   wx.switchTab({

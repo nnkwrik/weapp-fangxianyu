@@ -23,4 +23,13 @@ public class Goods {
     private Boolean isOnSale;
     private Boolean isDelete;
     private Date lastEdit;
+
+    private Integer regionId;
+    private String region;
+
+    private Double postage;
+
+    private Boolean ableSelfTake;
+    private Boolean ableMeet;
+    private Boolean ableExpress;
 }

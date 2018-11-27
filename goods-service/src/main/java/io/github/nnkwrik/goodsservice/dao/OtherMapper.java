@@ -1,7 +1,9 @@
 package io.github.nnkwrik.goodsservice.dao;
 
 import io.github.nnkwrik.goodsservice.model.po.Ad;
+import io.github.nnkwrik.goodsservice.model.po.Category;
 import io.github.nnkwrik.goodsservice.model.po.Channel;
+import io.github.nnkwrik.goodsservice.model.po.Region;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -62,4 +64,9 @@ public interface OtherMapper {
                     @Param("reply_user_id") String replyUserId,
                     @Param("content") String content);
 
+    @Select("select id,name from region where parent_id=#{parent_id}")
+    List<Region> getRegionByParentId(@Param("parent_id") int parentId);
+
+    @Select("select id,name from category where parent_id=#{parent_id}")
+    List<Category> getCateByParentId(@Param("parent_id") int parentId);
 }

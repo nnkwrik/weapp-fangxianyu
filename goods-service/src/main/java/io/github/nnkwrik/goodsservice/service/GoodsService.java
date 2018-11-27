@@ -1,5 +1,6 @@
 package io.github.nnkwrik.goodsservice.service;
 
+import io.github.nnkwrik.goodsservice.model.po.Goods;
 import io.github.nnkwrik.goodsservice.model.vo.CategoryPageVo;
 import io.github.nnkwrik.goodsservice.model.vo.GoodsRelatedVo;
 import io.github.nnkwrik.goodsservice.model.vo.inner.CommentVo;
@@ -27,4 +28,6 @@ public interface GoodsService {
     List<CommentVo> getGoodsComment(int goodsId);
 
     Boolean userHasCollect(String userId, int goodsId);
+
+    void postGoods(Goods goods);
 }

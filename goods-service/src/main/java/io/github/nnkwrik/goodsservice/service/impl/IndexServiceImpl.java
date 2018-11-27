@@ -91,5 +91,15 @@ public class IndexServiceImpl implements IndexService {
         otherMapper.addComment(goodsId,userId,replyCommentId,replyUserId,content);
     }
 
+    @Override
+    public List<Region> getRegionList(int regionId) {
+        return otherMapper.getRegionByParentId(regionId);
+    }
+
+    @Override
+    public List<Category> getPostCateList(int cateId) {
+        return otherMapper.getCateByParentId(cateId);
+    }
+
 
 }

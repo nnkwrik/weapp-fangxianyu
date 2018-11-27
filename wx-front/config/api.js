@@ -1,5 +1,5 @@
-//const ApiRootUrl = 'https://23788fbf.ngrok.io/';
-const ApiRootUrl = 'http://127.0.0.1:8080/';
+const ApiRootUrl = 'http://8456bb23.ngrok.io/';
+// const ApiRootUrl = 'http://127.0.0.1:8080/';
 
 module.exports = {
   IndexUrl: ApiRootUrl + 'index/index', //首页数据接口
@@ -15,6 +15,9 @@ module.exports = {
   GoodsNew: ApiRootUrl + 'goods/new',  //新品
   GoodsHot: ApiRootUrl + 'goods/hot',  //热门
   GoodsRelated: ApiRootUrl + 'goods/related',  //商品详情页的关联商品（大家都在看）
+  GoodsPost: ApiRootUrl + 'goods/post', //发布商品
+
+  PostCateList: ApiRootUrl + 'category/post', //发布商品时选择分类
 
   BrandList: ApiRootUrl + 'brand/list',  //品牌列表
   BrandDetail: ApiRootUrl + 'brand/detail',  //品牌详情

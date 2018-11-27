@@ -7,7 +7,7 @@
   </view>
   <view class="catalog">
     <scroll-view class="nav" scroll-y="true">
-        <view class="item {{ currentCategory.id == item.id ? 'active' : ''}}" wx:for="{{navList}}"  data-id="{{item.id}}" data-index="{{index}}" bindtap="switchCate">{{item.name}}</view>
+        <view class="item {{ currentCategory.id == item.id ? 'active' : ''}}" wx:for="{{navList}}"  data-id="{{item.id}}" data-index="{{index}}" bindtap="switchCate"  wx:key="{{item.id}}">{{item.name}}</view>
     </scroll-view>
     <scroll-view class="cate" scroll-y="true">
         <view class="banner">
@@ -19,7 +19,7 @@
             <text class="line"></text>
         </view>
         <view class="bd">
-            <navigator url="/pages/category/category?id={{item.id}}" class="item {{(index+1) % 3 == 0 ? 'last' : ''}}" wx:for="{{currentCategory.subCategoryList}}">
+            <navigator url="/pages/category/category?id={{item.id}}" class="item {{(index+1) % 3 == 0 ? 'last' : ''}}" wx:for="{{currentCategory.subCategoryList}}" wx:key="{{item.id}}">
                 <image class="icon" src="{{item.wap_banner_url}}"></image>
                 <text class="txt">{{item.name}}</text>
             </navigator>

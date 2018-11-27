@@ -48,6 +48,16 @@ zuul:
       serviceId: goods-service
       strip-prefix: false
       sensitiveHeaders:
+    region:
+      path: /region/**
+      serviceId: goods-service
+      strip-prefix: false
+      sensitiveHeaders:
+    category:
+      path: /category/**
+      serviceId: goods-service
+      strip-prefix: false
+      sensitiveHeaders:
 
 
 
