@@ -18,7 +18,6 @@
     "pages/ucenter/index/index",
     "pages/topic/topic",
     "pages/comment/comment",
-    "pages/commentPost/commentPost",
     "pages/topicComment/topicComment",
     "pages/brand/brand",
     "pages/brandDetail/brandDetail",

@@ -15,6 +15,7 @@ Page({
     // brand: {},
     // specificationList: [],
     // productList: [],
+    sellerDates: 0,
     relatedGoods: [],
     cartGoodsCount: 0,
     userHasCollect: 0,
@@ -25,7 +26,7 @@ Page({
     replyId: '',
     replyUserId: '',
     replyUserName: '',
-    commentContent:'',
+    commentContent: '',
     onLoadOption: {},
     noCollectImage: "/static/images/detail_star.png",
     hasCollectImage: "/static/images/detail_star_checked.png",
@@ -35,9 +36,16 @@ Page({
     let that = this;
     util.request(api.GoodsDetail + '/' + that.data.id).then(function(res) {
       if (res.errno === 0) {
+        console.log(res.data.info.seller.registerTime)
+
+        //计算卖家来平台第几天
+        let registerTime = res.data.info.seller.registerTime
+        let duration = new Date().getTime() - new Date(registerTime).getTime() ;
+        let dates = parseInt(Math.floor(duration) / (1000 * 60 * 60 * 24));
         that.setData({
           goods: res.data.info,
           gallery: res.data.gallery,
+          sellerDates: dates,
           // attribute: res.data.attribute,
           // issueList: res.data.issue,
           comment: res.data.comment,
@@ -188,8 +196,8 @@ Page({
     this.setData({
       onLoadOption: options,
       id: parseInt(options.id),
-      commentContent:''
-      
+      commentContent: ''
+
       // id: 1181000
     });
 
@@ -251,7 +259,7 @@ Page({
 
   postComment: function(event) {
     let that = this
-    if (event.detail.value.trim()=='') {
+    if (event.detail.value.trim() == '') {
       util.showErrorToast('请填写内容')
       return false;
     }
@@ -263,15 +271,15 @@ Page({
     }, "POST").then(function(res) {
       if (res.errno === 0) {
         that.setData({
-          commentContent:''
+          commentContent: ''
         })
-        
+
         wx.showToast({
           title: '留言成功'
         })
         //刷新
         that.onLoad(that.data.onLoadOption);
-        
+
 
       }
       console.log(res)
@@ -281,37 +289,37 @@ Page({
 
   addCannelCollect: function() {
     let that = this;
-    user.checkLoginAndNav().then(()=>{
+    user.checkLoginAndNav().then(() => {
 
-    
-    //添加或是取消收藏
-    util.request(api.CollectAddOrDelete + '/' + this.data.id + '/' + this.data.userHasCollect, {}, "POST")
-      .then(function(res) {
-        let _res = res;
-        let collectState = !that.data.userHasCollect;
-        if (_res.errno == 0) {
-          that.setData({
-            userHasCollect: collectState
-          });
 
-          if (that.data.userHasCollect) {
+      //添加或是取消收藏
+      util.request(api.CollectAddOrDelete + '/' + this.data.id + '/' + this.data.userHasCollect, {}, "POST")
+        .then(function(res) {
+          let _res = res;
+          let collectState = !that.data.userHasCollect;
+          if (_res.errno == 0) {
             that.setData({
-              'collectBackImage': that.data.hasCollectImage
+              userHasCollect: collectState
             });
+
+            if (that.data.userHasCollect) {
+              that.setData({
+                'collectBackImage': that.data.hasCollectImage
+              });
+            } else {
+              that.setData({
+                'collectBackImage': that.data.noCollectImage
+              });
+            }
+
           } else {
-            that.setData({
-              'collectBackImage': that.data.noCollectImage
+            wx.showToast({
+              image: '/static/images/icon_error.png',
+              title: _res.errmsg,
+              mask: true
             });
           }
-
-        } else {
-          wx.showToast({
-            image: '/static/images/icon_error.png',
-            title: _res.errmsg,
-            mask: true
-          });
-        }
-      });
+        });
     })
   },
   // openCartPage: function () {

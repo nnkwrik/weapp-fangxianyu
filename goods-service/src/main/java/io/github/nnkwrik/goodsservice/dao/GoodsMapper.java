@@ -63,7 +63,12 @@ public interface GoodsMapper {
             "       `desc`,\n" +
             "       want_count,\n" +
             "       browse_count,\n" +
-            "       last_edit\n" +
+            "       last_edit,\n" +
+            "       postage,\n" +
+            "       region,\n" +
+            "       able_express,\n" +
+            "       able_meet,\n" +
+            "       able_self_take\n" +
             "from goods\n" +
             "where id = #{goodsId}")
     Goods findDetailGoodsByGoodsId(@Param("goodsId") int goodsId);
@@ -155,4 +160,11 @@ public interface GoodsMapper {
             "#{desc}," +
             "#{regionId},#{region},#{ableExpress},#{ableMeet},#{ableSelfTake});")
     void addGoods(Goods goods);
+
+    @Select("select COUNT(*)\n" +
+            "from goods\n" +
+            "where seller_id = #{seller_id}\n" +
+            "  and is_on_sale = false\n" +
+            "  and is_delete = false;")
+    Integer getGellerHistory(@Param("seller_id") String sellerId);
 }

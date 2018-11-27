@@ -64,6 +64,8 @@ public class PO2VO {
                     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                     vo.setLast_edit(formatter.format(po.getLastEdit()));
                 }
+
+                BeanUtils.copyProperties(po, vo);
                 return vo;
             };
 

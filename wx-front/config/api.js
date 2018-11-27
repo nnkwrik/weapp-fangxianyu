@@ -1,4 +1,4 @@
-const ApiRootUrl = 'http://8456bb23.ngrok.io/';
+const ApiRootUrl = 'https://5d876383.ngrok.io/';
 // const ApiRootUrl = 'http://127.0.0.1:8080/';
 
 module.exports = {

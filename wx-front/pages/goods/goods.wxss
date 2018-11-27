@@ -111,9 +111,10 @@
 
 .section-nav {
   width: 750rpx;
-  height: 108rpx;
   background: #fff;
   margin-bottom: 20rpx;
+  padding:5px;
+
 }
 
 .section-nav .t {
@@ -138,13 +139,13 @@
   float: left;
   display: flex;
   align-items: center;
-  width: 600rpx;
-  height: 108rpx;
   overflow: hidden;
   line-height: 108rpx;
   font-size: 29rpx;
   color: #999;
-  margin-left: 31.25rpx;
+  width: 700rpx;
+  height: 70rpx;
+  /* margin-left: 31.25rpx; */
 }
 
 .section-act .label {
@@ -158,11 +159,21 @@
   border-radius: 3px;
   height: 37rpx;
   width: auto;
-  color: #f48f18;
+  color: #999;
   overflow: hidden;
-  border: 1px solid #f48f18;
+  border: 1px solid #999;
   font-size: 25rpx;
   margin: 0 10rpx;
+}
+
+.section-act  .y{
+    color: #f48f18;
+  border: 1px solid #f48f18;
+}
+
+.section-act  .r{
+    color: #f94b4b;
+  border: 1px solid #f94b4b;
 }
 
 .section-act .text {
@@ -790,16 +801,19 @@
   align-items: center;
   font-size: 25rpx;
   color: #666;
+  overflow: hidden;
 }
 
 .location-time .icon.location {
   background: url(https://i.postimg.cc/Hkf6dJzv/placeholder-2.png) 0 center no-repeat;
   background-size: 25rpx;
+  /* width:370rpx; */
 }
 
 .location-time .icon.time {
   background: url(https://i.postimg.cc/nrck0qVr/clock.png) 0 center no-repeat;
   background-size: 25rpx;
+  /* width: 330rpx; */
 }
 
 .location-time {
@@ -811,6 +825,7 @@
   flex-flow: row nowrap;
   align-items: center;
   justify-content: space-between;
+  overflow: hidden;
 }
 
 .seller-avatar {
@@ -895,24 +910,21 @@
 }
 
 .attr-pop-box .attr-pop .content {
-  
   border: 1rpx solid #eee;
   border-radius: 20rpx;
   padding: 10rpx;
   background: #eee;
-  overflow:hidden;
-  height:65rpx;
-
+  overflow: hidden;
+  height: 65rpx;
 }
+
 .attr-pop-box .attr-pop input {
-display:block;
-height:1.4rem;
-text-overflow:clip;
-overflow:hidden;
-white-space:nowrap;
-font-family:UICTFontTextStyleBody;
-min-height:1.4rem;
-margin-bottom: 40rpx;
-
-
+  display: block;
+  height: 1.4rem;
+  text-overflow: clip;
+  overflow: hidden;
+  white-space: nowrap;
+  font-family: UICTFontTextStyleBody;
+  min-height: 1.4rem;
+  margin-bottom: 40rpx;
 }

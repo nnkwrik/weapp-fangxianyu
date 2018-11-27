@@ -78,6 +78,10 @@ public class GoodsServiceImpl implements GoodsService {
         }
         goodsDetailVo.setSeller(response.getData());
 
+        //卖家出售过的商品数
+        Integer sellerHistory = goodsMapper.getGellerHistory(detailGoods.getSellerId());
+        goodsDetailVo.setSellerHistory(sellerHistory);
+
         return goodsDetailVo;
     }
 
