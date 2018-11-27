@@ -47,6 +47,7 @@ public class PO2VO {
                 GoodsSimpleVo vo = new GoodsSimpleVo();
                 BeanUtils.copyProperties(po, vo);
                 vo.setList_pic_url(po.getPrimaryPicUrl());
+                vo.setIs_on_sale(po.getIsOnSale());
                 return vo;
             };
 

@@ -80,6 +80,23 @@
   text-align: center;
 }
 
+.goods-info .flex {
+  display: flex;
+}
+
+.goods-info .tag {
+  position: absolute;
+  align-items: center;
+  padding: 0 10rpx;
+  border-radius: 3px;
+  width: auto;
+  color: #f94b4b;
+  overflow: hidden;
+  border: 1px solid #f94b4b;
+  font-size: 30rpx;
+  right: 100rpx;
+}
+
 .goods-info .market-price {
   font-size: 29rpx;
   line-height: 35rpx;
@@ -113,8 +130,7 @@
   width: 750rpx;
   background: #fff;
   margin-bottom: 20rpx;
-  padding:5px;
-
+  padding: 5px;
 }
 
 .section-nav .t {
@@ -166,13 +182,13 @@
   margin: 0 10rpx;
 }
 
-.section-act  .y{
-    color: #f48f18;
+.section-act  .y {
+  color: #f48f18;
   border: 1px solid #f48f18;
 }
 
-.section-act  .r{
-    color: #f94b4b;
+.section-act  .r {
+  color: #f94b4b;
   border: 1px solid #f94b4b;
 }
 

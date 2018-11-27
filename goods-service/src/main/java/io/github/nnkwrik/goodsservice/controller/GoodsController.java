@@ -12,6 +12,7 @@ import io.github.nnkwrik.goodsservice.model.vo.inner.CommentVo;
 import io.github.nnkwrik.goodsservice.model.vo.inner.GalleryVo;
 import io.github.nnkwrik.goodsservice.model.vo.inner.GoodsDetailVo;
 import io.github.nnkwrik.goodsservice.service.GoodsService;
+import io.github.nnkwrik.goodsservice.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -31,6 +32,9 @@ public class GoodsController {
 
     @Autowired
     private GoodsService goodsService;
+
+    @Autowired
+    private UserService userService;
 
     /**
      * 获取选定的子目录下的商品列表和同一个父目录下的兄弟目录
@@ -75,7 +79,7 @@ public class GoodsController {
 
         boolean userHasCollect = false;
         if (jwtUser != null)
-            userHasCollect = goodsService.userHasCollect(jwtUser.getOpenId(), goodsId);
+            userHasCollect = userService.userHasCollect(jwtUser.getOpenId(), goodsId);
         GoodsDetailPageVo vo = new GoodsDetailPageVo(goodsDetail, goodsGallery, comment, userHasCollect);
         log.debug("浏览商品详情 : 商品id={}，商品名={}", vo.getInfo().getId(), vo.getInfo().getName());
 

@@ -36,7 +36,6 @@ Page({
     let that = this;
     util.request(api.GoodsDetail + '/' + that.data.id).then(function(res) {
       if (res.errno === 0) {
-        console.log(res.data.info.seller.registerTime)
 
         //计算卖家来平台第几天
         let registerTime = res.data.info.seller.registerTime

@@ -112,11 +112,6 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
-    public Boolean userHasCollect(String userId, int goodsId) {
-        return otherMapper.userHasCollect(userId, goodsId);
-    }
-
-    @Override
     public void postGoods(Goods goods) {
         goodsMapper.addGoods(goods);
     }

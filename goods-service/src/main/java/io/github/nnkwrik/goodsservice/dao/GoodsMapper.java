@@ -63,6 +63,7 @@ public interface GoodsMapper {
             "       `desc`,\n" +
             "       want_count,\n" +
             "       browse_count,\n" +
+            "       is_on_sale,\n" +
             "       last_edit,\n" +
             "       postage,\n" +
             "       region,\n" +

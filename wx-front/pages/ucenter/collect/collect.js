@@ -5,16 +5,15 @@ var app = getApp();
 
 Page({
   data: {
-    typeId: 0,
     collectList: []
   },
   getCollectList() {
     let that = this;
-    util.request(api.CollectList, { typeId: that.data.typeId}).then(function (res) {
+    util.request(api.CollectList).then(function (res) {
       if (res.errno === 0) {
         console.log(res.data);
         that.setData({
-          collectList: res.data.data
+          collectList: res.data
         });
       }
     });
@@ -38,8 +37,9 @@ Page({
   openGoods(event) {
     
     let that = this;
-    let goodsId = this.data.collectList[event.currentTarget.dataset.index].value_id;
+    let goodsId = this.data.collectList[event.currentTarget.dataset.index].id;
 
+    
     //触摸时间距离页面打开的毫秒数  
     var touchTime = that.data.touch_end - that.data.touch_start;
     console.log(touchTime);
@@ -51,7 +51,7 @@ Page({
         success: function (res) {
           if (res.confirm) {
             
-            util.request(api.CollectAddOrDelete, { typeId: that.data.typeId, valueId: goodsId}, 'POST').then(function (res) {
+            util.request(api.CollectAddOrDelete + '/' + goodsId + '/' + true, {}, "POST").then(function (res) {
               if (res.errno === 0) {
                 console.log(res.data);
                 wx.showToast({

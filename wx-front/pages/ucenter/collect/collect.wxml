@@ -1,12 +1,20 @@
 <view class="container">
-  <view class="collect-list">
-    <view class="item" bindtap="openGoods"  bindtouchstart="touchStart" bindtouchend="touchEnd" wx:for="{{collectList}}" wx:key="{{item.id}}" data-index="{{index}}">
+  <view class="collect-list" wx:if='{{collectList.length}}'>
+    <view class="item" bindtap="openGoods" bindtouchstart="touchStart" bindtouchend="touchEnd" wx:for="{{collectList}}" wx:key="{{item.id}}" data-index="{{index}}">
       <image class="img" src="{{item.list_pic_url}}"></image>
       <view class="info">
         <view class="name">{{item.name}}</view>
         <view class="subtitle">{{item.goods_brief}}</view>
-        <view class="price">￥{{item.retail_price}}</view>
+        <view class="flex">
+          <view class="price">￥{{item.price}}</view>
+          <view class='tag' wx:if='{{!item.is_on_sale}}'>已出售</view>
+        </view>
       </view>
     </view>
+  </view>
+
+  <view class="result-empty" wx:else>
+    <image class="icon" src="http://yanxuan.nosdn.127.net/hxm/yanxuan-wap/p/20161201/style/img/icon-normal/noSearchResult-7572a94f32.png"></image>
+    <text class="text">您还没有收藏宝贝</text>
   </view>
 </view>

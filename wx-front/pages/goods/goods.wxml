@@ -11,7 +11,10 @@
   <view class="goods-info">
     <view class="c">
       <text class="name">{{goods.name}}</text>
-      <text class="price">￥{{goods.price}}</text>
+      <view class='flex'>
+        <text class="price">￥{{goods.price}}</text>
+        <view wx:if='{{!goods.is_on_sale}}' class='tag'>已出售</view>
+      </view>
       <text wx:if="{{goods.market_price}}" class="market-price">原价 : ￥{{goods.market_price}}</text>
 
       <text class="desc">{{goods.goods_brief}}</text>
@@ -274,5 +277,6 @@
     </view>
   </view> -->
   <!-- <view class="c">立即购买</view> -->
-  <view class="r" bindtap="addToCart">想要</view>
+  <view class="r" wx:if='{{!goods.is_on_sale}}' bindtap="addToCart">该商品已出售</view>
+  <view class="r" wx:else bindtap="addToCart">想要</view>
 </view>

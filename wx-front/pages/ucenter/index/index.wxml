@@ -30,7 +30,8 @@
       </navigator>
     </view>
     <view class="item">
-      <navigator url="/pages/ucenter/collect/collect" class="a">
+      <navigator url="{{isLogin?'/pages/ucenter/collect/collect':'/pages/auth/auth'}}" class="a">
+
         <text class="icon download"></text>
         <text class="txt">我的收藏</text>
       </navigator>

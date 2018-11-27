@@ -27,7 +27,5 @@ public interface GoodsService {
 
     List<CommentVo> getGoodsComment(int goodsId);
 
-    Boolean userHasCollect(String userId, int goodsId);
-
     void postGoods(Goods goods);
 }

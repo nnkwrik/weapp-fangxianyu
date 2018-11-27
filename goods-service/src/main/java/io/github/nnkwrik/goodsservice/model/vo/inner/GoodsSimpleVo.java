@@ -12,4 +12,5 @@ public class GoodsSimpleVo {
     private String name;
     private String list_pic_url;
     private Double price;
+    private Boolean is_on_sale;
 }

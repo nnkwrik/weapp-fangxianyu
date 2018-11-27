@@ -54,16 +54,6 @@ public class IndexController {
         return Response.ok(vo);
     }
 
-    @PostMapping("/collect/addordelete/{goodsId}/{userHasCollect}")
-    public Response collectAddOrDelete(@PathVariable("goodsId") int goodsId,
-                                       @PathVariable("userHasCollect") boolean hasCollect,
-                                       @JWT(required = true) JWTUser user) {
-        indexService.collectAddOrDelete(goodsId, user.getOpenId(), hasCollect);
-        log.info("用户【{}】添加或删除收藏商品，商品id={}，是否是添加?{}", user.getNickName(), goodsId, !hasCollect);
-        return Response.ok();
-
-    }
-
     @PostMapping("/comment/post/{goodsId}")
     public Response postComment(@PathVariable("goodsId") int goodsId,
                                 @RequestBody CommentVo comment,

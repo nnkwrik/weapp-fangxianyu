@@ -78,15 +78,6 @@ public class IndexServiceImpl implements IndexService {
     }
 
     @Override
-    public void collectAddOrDelete(int goodsId, String userId, boolean hasCollect) {
-        if (hasCollect) {
-            otherMapper.deleteUserCollect(userId, goodsId);
-        } else {
-            otherMapper.setUserCollect(userId, goodsId);
-        }
-    }
-
-    @Override
     public void addComment(int goodsId, String userId, int replyCommentId, String replyUserId, String content) {
         otherMapper.addComment(goodsId,userId,replyCommentId,replyUserId,content);
     }
