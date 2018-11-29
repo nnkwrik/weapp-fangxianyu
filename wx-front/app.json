@@ -36,7 +36,8 @@
     "pages/postCate/postCate",
     "pages/ucenter/bought/bought",
     "pages/ucenter/sold/sold",
-    "pages/ucenter/posted/posted"
+    "pages/ucenter/posted/posted",
+    "pages/ucenter/about/about"
   ],
   "window": {
     "backgroundTextStyle": "dark",

@@ -67,9 +67,9 @@
       </navigator>
     </view>
     <view class="item item-bottom">
-      <navigator url="url" class="a">
+      <navigator url="/pages/ucenter/about/about" class="a">
         <text class="icon embarrass"></text>
-        <text class="txt">帮助中心</text>
+        <text class="txt">关于作者</text>
       </navigator>
     </view>
     <view class="item item-bottom">

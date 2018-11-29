@@ -1,0 +1,22 @@
+page {
+  background: #f4f4f4;
+  min-height: 100%;
+}
+
+.container {
+background:#fff;
+min-height:100%;
+margin:40rpx 30rpx;
+border-radius:20rpx;
+
+border:1rpx solid #ddd;
+padding: 40rpx
+}
+
+.i{
+  margin:30rpx 0
+}
+
+.txt{
+  padding:30rpx 0
+}
