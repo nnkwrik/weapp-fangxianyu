@@ -29,7 +29,7 @@ public class SearchServiceImpl implements SearchService {
     public List<GoodsSimpleVo> searchByKeyword(String keyword, int page, int size) {
         PageHelper.startPage(page, size);
         List<Goods> goodsList = searchMapper.findGoodsByKeyword(keyword);
-        return PO2VO.convertList(PO2VO.goodsSimple, goodsList);
+        return PO2VO.convertList(goodsList,GoodsSimpleVo.class);
     }
 
     @Override

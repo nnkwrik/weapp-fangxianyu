@@ -51,13 +51,6 @@ page {
   line-height: 40rpx;
 }
 
-.item .info .subtitle {
-  margin-top: 8rpx;
-  font-size: 24rpx;
-  color: #888;
-  line-height: 40rpx;
-}
-
 .item .info .price {
   margin-top: 8rpx;
   font-size: 28rpx;

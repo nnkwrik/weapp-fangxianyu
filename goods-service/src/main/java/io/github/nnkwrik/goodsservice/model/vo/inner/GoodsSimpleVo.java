@@ -10,9 +10,9 @@ import lombok.Data;
 public class GoodsSimpleVo {
     private Integer id;
     private String name;
-    private String list_pic_url;
+    private String primaryPicUrl;
     private Double price;
-    private Boolean is_selling;
-    private String sold_time;
-    private String last_edit;
+    private Boolean isSelling;
+    private String soldTime;
+    private String lastEdit;
 }

@@ -55,7 +55,7 @@ public class BrowseCache {
         AtomicInteger browseCount = cache.getIfPresent(goodsId);
         if (browseCount != null) {
             count = browseCount.incrementAndGet();
-            if (count > 10) {
+            if (count > 5) {
                 //手动移除缓存，让他触发removalListener，刷新数据库
                 cache.invalidate(goodsId);
             }

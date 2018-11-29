@@ -38,26 +38,26 @@ public class UserServiceImpl implements UserService {
     public List<GoodsSimpleVo> getUserCollectList(String userId) {
         List<Goods> goodsList = userMapper.getUserCollect(userId);
 
-        return PO2VO.convertList(PO2VO.goodsSimple,goodsList);
+        return PO2VO.convertList(goodsList, GoodsSimpleVo.class);
     }
 
     @Override
     public List<GoodsSimpleVo> getUserBought(String buyerId) {
         List<Goods> goodsList = userMapper.getUserBought(buyerId);
-        return PO2VO.convertList(PO2VO.goodsSimple,goodsList);
+        return PO2VO.convertList(goodsList, GoodsSimpleVo.class);
     }
 
     @Override
     public List<GoodsSimpleVo> getUserSold(String sellerId) {
         List<Goods> goodsList = userMapper.getUserSold(sellerId);
-        return PO2VO.convertList(PO2VO.goodsSimple,goodsList);
+        return PO2VO.convertList(goodsList, GoodsSimpleVo.class);
 
     }
 
     @Override
     public List<GoodsSimpleVo> getUserPosted(String userId) {
         List<Goods> goodsList = userMapper.getUserPosted(userId);
-        return PO2VO.convertList(PO2VO.goodsSimple,goodsList);
+        return PO2VO.convertList(goodsList, GoodsSimpleVo.class);
     }
 
 

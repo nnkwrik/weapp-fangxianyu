@@ -1,112 +1,82 @@
 package io.github.nnkwrik.goodsservice.util;
 
-import io.github.nnkwrik.goodsservice.model.po.*;
-import io.github.nnkwrik.goodsservice.model.vo.inner.*;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.BeanWrapperImpl;
 
+import java.beans.PropertyDescriptor;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
- * TODO 后期前后端全改成camel
- *
+ * po转vo
  * @author nnkwrik
  * @date 18/11/15 18:00
  */
 public class PO2VO {
 
-    public static Function<Category, CategoryVo> category =
-            po -> {
-                CategoryVo vo = new CategoryVo();
-                BeanUtils.copyProperties(po, vo);
-                //手动拷贝和po不相同的属性。
-                vo.setWap_banner_url(po.getIconUrl());
-                return vo;
-            };
+    /**
+     * po转vo
+     * @param po
+     * @param voClass vo的类型
+     * @param <T>
+     * @param <R>
+     * @return
+     */
+    public static <T, R> R convert(T po, Class<R> voClass) {
+        R vo = null;
+        try {
+            vo = voClass.newInstance();
+            BeanUtils.copyProperties(po, vo);
+            PO2VO.checkDate(po, vo);
+        } catch (Exception e) {
+            e.printStackTrace();
 
-    public static Function<Channel, ChannelVo> channel =
-            po -> {
-                ChannelVo vo = new ChannelVo();
-                BeanUtils.copyProperties(po, vo);
-                vo.setIcon_url(po.getIconUrl());
-                return vo;
-            };
-
-    public static Function<Ad, BannerVo> banner =
-            po -> {
-                BannerVo vo = new BannerVo();
-                BeanUtils.copyProperties(po, vo);
-                vo.setImage_url(po.getImageUrl());
-                return vo;
-            };
-
-    public static Function<Goods, GoodsSimpleVo> goodsSimple =
-            po -> {
-                GoodsSimpleVo vo = new GoodsSimpleVo();
-                BeanUtils.copyProperties(po, vo);
-                vo.setList_pic_url(po.getPrimaryPicUrl());
-                vo.setIs_selling(po.getIsSelling());
-                //Date转String
-                if (po.getLastEdit() != null) {
-                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-                    vo.setLast_edit(formatter.format(po.getLastEdit()));
-                }
-
-                if (po.getSoldTime() != null) {
-                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-                    vo.setSold_time(formatter.format(po.getSoldTime()));
-                }
-                return vo;
-            };
-
-    public static Function<Goods, GoodsDetailVo> goodsDetail =
-            po -> {
-                GoodsSimpleVo simpleVo = convert(goodsSimple, po);
-                GoodsDetailVo vo = new GoodsDetailVo();
-                BeanUtils.copyProperties(simpleVo, vo);
-                vo.setGoods_brief(po.getDesc());
-                vo.setMarket_price(po.getMarketPrice());
-                vo.setWant_count(po.getWantCount());
-                vo.setBrowse_count(po.getBrowseCount());
-
-                BeanUtils.copyProperties(po, vo);
-                return vo;
-            };
-
-    public static Function<GoodsGallery, GalleryVo> gallery =
-            po -> {
-                GalleryVo vo = new GalleryVo();
-                BeanUtils.copyProperties(po, vo);
-                vo.setImg_url(po.getImgUrl());
-                return vo;
-            };
-
-    public static Function<GoodsComment, CommentVo> comment =
-            po -> {
-                CommentVo vo = new CommentVo();
-                BeanUtils.copyProperties(po, vo);
-                vo.setGoods_id(po.getGoodsId());
-                vo.setUser_id(po.getUserId());
-                vo.setReply_comment_id(po.getReplyCommentId());
-                vo.setReply_user_id(po.getReplyUserId());
-                if (po.getCreateTime() != null) {
-                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-                    vo.setCreate_time(formatter.format(po.getCreateTime()));
-                }
-
-                return vo;
-            };
-
-    public static <T, R> R convert(Function<T, R> converter, T po) {
-        return converter.apply(po);
+        }
+        return vo;
     }
 
-    public static <T, R> List<R> convertList(Function<T, R> converter, List<T> poList) {
+    /**
+     * poList转voList
+     * @param poList
+     * @param voClass vo的类型
+     * @param <T>
+     * @param <R>
+     * @return
+     */
+    public static <T, R> List<R> convertList(List<T> poList, Class<R> voClass) {
         return poList.stream()
-                .map(converter).collect(Collectors.toList());
+                .map(po -> PO2VO.convert(po, voClass)).collect(Collectors.toList());
     }
 
+
+    /**
+     * 把po中的Date对象转换成String,并对vo进行赋值
+     *
+     * @param po
+     * @param vo
+     * @param <T>
+     * @param <R>
+     */
+    private static <T, R> void checkDate(T po, R vo) {
+        BeanWrapper poWrapper = new BeanWrapperImpl(po);
+        BeanWrapper voWrapper = new BeanWrapperImpl(vo);
+
+
+        for (PropertyDescriptor pd : poWrapper.getPropertyDescriptors()) {
+            Object date;
+            if (pd.getPropertyType() == Date.class
+                    && (date = poWrapper.getPropertyValue(pd.getDisplayName())) != null) {
+
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                String formatted = formatter.format(date);
+
+                voWrapper.setPropertyValue(pd.getDisplayName(), formatted);
+
+            }
+        }
+    }
 
 }

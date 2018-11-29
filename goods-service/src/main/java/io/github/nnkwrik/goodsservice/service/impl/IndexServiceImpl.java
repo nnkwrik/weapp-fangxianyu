@@ -35,18 +35,18 @@ public class IndexServiceImpl implements IndexService {
     public IndexVO getIndex() {
         //广告
         List<Ad> adList = otherMapper.findAd();
-        List<BannerVo> bannerVoList = PO2VO.convertList(PO2VO.banner, adList);
+        List<BannerVo> bannerVoList = PO2VO.convertList(adList, BannerVo.class);
 
         //分类
         List<Channel> channelList = otherMapper.findChannel();
-        List<ChannelVo> channelVoList = PO2VO.convertList(PO2VO.channel, channelList);
+        List<ChannelVo> channelVoList = PO2VO.convertList(channelList, ChannelVo.class);
 
         //推荐商品
         int pageNum = 1;
         int pageSize = 10;
         PageHelper.startPage(pageNum, pageSize);
         List<Goods> goodsList = goodsMapper.findSimpleGoods();
-        List<GoodsSimpleVo> goodsSimpleVOList = PO2VO.convertList(PO2VO.goodsSimple, goodsList);
+        List<GoodsSimpleVo> goodsSimpleVOList = PO2VO.convertList(goodsList, GoodsSimpleVo.class);
 
         return new IndexVO(goodsSimpleVOList, bannerVoList, channelVoList);
     }
@@ -58,8 +58,8 @@ public class IndexServiceImpl implements IndexService {
         List<Category> subCategory = categoryMapper.findSubCategory(currentCate.getId());
 
 
-        List<CategoryVo> mainCategoryVo = PO2VO.convertList(PO2VO.category, mainCategory);
-        List<CategoryVo> subCategoryVo = PO2VO.convertList(PO2VO.category, subCategory);
+        List<CategoryVo> mainCategoryVo = PO2VO.convertList(mainCategory, CategoryVo.class);
+        List<CategoryVo> subCategoryVo = PO2VO.convertList(subCategory, CategoryVo.class);
         CategoryVo currentCategoryVo =
                 new CategoryVo(currentCate.getId(), currentCate.getName(), currentCate.getIconUrl(), subCategoryVo);
 
@@ -69,9 +69,9 @@ public class IndexServiceImpl implements IndexService {
     @Override
     public CatalogVo getCatalogById(int id) {
         List<Category> subCategory = categoryMapper.findSubCategory(id);
-        List<CategoryVo> subCategoryVo = PO2VO.convertList(PO2VO.category, subCategory);
+        List<CategoryVo> subCategoryVo = PO2VO.convertList(subCategory, CategoryVo.class);
         Category currentCategory = categoryMapper.findCategoryById(id);
-        CategoryVo currentCategoryVo = PO2VO.convert(PO2VO.category, currentCategory);
+        CategoryVo currentCategoryVo = PO2VO.convert(currentCategory, CategoryVo.class);
         currentCategoryVo.setSubCategoryList(subCategoryVo);
 
         return new CatalogVo(null, currentCategoryVo);
@@ -79,7 +79,7 @@ public class IndexServiceImpl implements IndexService {
 
     @Override
     public void addComment(int goodsId, String userId, int replyCommentId, String replyUserId, String content) {
-        otherMapper.addComment(goodsId,userId,replyCommentId,replyUserId,content);
+        otherMapper.addComment(goodsId, userId, replyCommentId, replyUserId, content);
     }
 
     @Override

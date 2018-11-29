@@ -1,11 +1,11 @@
 <view class="container">
   <swiper class="goodsimgs" indicator-dots="true" autoplay="true" interval="3000" duration="1000">
     <swiper-item wx:for="{{gallery}}" wx:key="{{item.id}}">
-      <image src="{{item.img_url}}" background-size="cover"></image>
+      <image src="{{item.imgUrl}}" background-size="cover"></image>
     </swiper-item>
   </swiper>
   <view class="location-time">
-    <view class="icon time">最后编辑:{{goods.last_edit}}</view>
+    <view class="icon time">最后编辑:{{goods.lastEdit}}</view>
     <view class="icon location">地点:{{goods.region}}</view>
   </view>
   <view class="goods-info">
@@ -13,11 +13,11 @@
       <text class="name">{{goods.name}}</text>
       <view class='flex'>
         <text class="price">￥{{goods.price}}</text>
-        <view wx:if='{{!goods.is_selling}}' class='tag'>已出售</view>
+        <view wx:if='{{!goods.isSelling}}' class='tag'>已出售</view>
       </view>
-      <text wx:if="{{goods.market_price}}" class="market-price">原价 : ￥{{goods.market_price}}</text>
+      <text wx:if="{{goods.marketPrice}}" class="market-price">原价 : ￥{{goods.marketPrice}}</text>
 
-      <text class="desc">{{goods.goods_brief}}</text>
+      <text class="desc">{{goods.desc}}</text>
       <!-- <view class="brand" wx:if="{{brand.name}}">
         <navigator url="../brandDetail/brandDetail?id={{brand.brandId}}">
           <text>{{brand.name}}</text>
@@ -36,8 +36,8 @@
 
     </view>
     <view class="t">
-      <view class="tag">{{goods.want_count}}人想要</view>
-      <view class="tag">浏览 {{goods.browse_count}}</view>
+      <view class="tag">{{goods.wantCount}}人想要</view>
+      <view class="tag">浏览 {{goods.browseCount}}</view>
     </view>
   </view>
 
@@ -110,7 +110,7 @@
                 <image src="{{item.simpleUser.avatarUrl}}"></image>
                 <text>{{item.simpleUser.nickName}}</text>
               </view>
-              <view class="time">{{item.create_time}}</view>
+              <view class="time">{{item.createTime}}</view>
             </view>
             <view class="content">
               {{item.content}}
@@ -123,10 +123,10 @@
                 <image src="{{iitem.simpleUser.avatarUrl}}"></image>
                 <text>{{iitem.simpleUser.nickName}}</text>
               </view>
-              <view class="time">{{iitem.create_time}}</view>
+              <view class="time">{{iitem.createTime}}</view>
             </view>
             <view class="reply-content">
-              回复@{{iitem.reply_user_name}}:{{iitem.content}}
+              回复@{{iitem.replyUserName}}:{{iitem.content}}
             </view>
           </view>
 
@@ -192,7 +192,7 @@
     <view class="b">
       <view class="item" wx:for="{{relatedGoods}}" wx:key="{{item.id}}">
         <navigator url="/pages/goods/goods?id={{item.id}}">
-          <image class="img" src="{{item.list_pic_url}}" background-size="cover"></image>
+          <image class="img" src="{{item.primaryPicUrl}}" background-size="cover"></image>
           <text class="name">{{item.name}}</text>
           <text class="price">￥{{item.price}}</text>
         </navigator>
@@ -277,6 +277,6 @@
     </view>
   </view> -->
   <!-- <view class="c">立即购买</view> -->
-  <view class="r" wx:if='{{!goods.is_selling}}' bindtap="addToCart">该商品已出售</view>
+  <view class="r" wx:if='{{!goods.isSelling}}' bindtap="addToCart">该商品已出售</view>
   <view class="r" wx:else bindtap="addToCart">想要</view>
 </view>

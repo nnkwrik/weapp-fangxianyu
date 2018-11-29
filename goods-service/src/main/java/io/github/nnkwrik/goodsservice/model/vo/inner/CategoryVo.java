@@ -16,6 +16,6 @@ import java.util.List;
 public class CategoryVo {
     private Integer id;
     private String name;
-    private String wap_banner_url;
+    private String iconUrl;
     private List<CategoryVo> subCategoryList;
 }

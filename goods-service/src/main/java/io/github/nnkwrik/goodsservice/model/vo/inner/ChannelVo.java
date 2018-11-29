@@ -11,5 +11,5 @@ public class ChannelVo {
     private Integer id;
     private String name;
     private String url;
-    private String icon_url;
+    private String iconUrl;
 }

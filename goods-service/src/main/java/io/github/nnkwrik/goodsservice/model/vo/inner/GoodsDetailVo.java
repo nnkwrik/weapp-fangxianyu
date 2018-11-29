@@ -10,10 +10,10 @@ import lombok.Data;
 @Data
 public class GoodsDetailVo extends GoodsSimpleVo {
 
-    private String goods_brief;
-    private Double market_price;
-    private Integer want_count;
-    private Integer browse_count;
+    private String desc;
+    private Double marketPrice;
+    private Integer wantCount;
+    private Integer browseCount;
 
     private Double postage;
     private String region;

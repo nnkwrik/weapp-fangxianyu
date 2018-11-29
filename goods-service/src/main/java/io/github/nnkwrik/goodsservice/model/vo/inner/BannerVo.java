@@ -9,6 +9,6 @@ import lombok.Data;
 @Data
 public class BannerVo {
     private Integer id;
-    private String image_url;
+    private String imageUrl;
     private String link;
 }

@@ -9,5 +9,5 @@ import lombok.Data;
 @Data
 public class GalleryVo {
     private Integer id;
-    private String img_url;
+    private String imgUrl;
 }

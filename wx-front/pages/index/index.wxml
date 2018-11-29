@@ -3,7 +3,7 @@
   <swiper class="banner" indicator-dots="true" autoplay="true" interval="3000" duration="1000">
     <swiper-item wx:for="{{banner}}" wx:key="{{item.id}}">
       <navigator url="{{item.link}}">
-        <image src="{{item.image_url}}" background-size="cover"></image>
+        <image src="{{item.imageUrl}}" background-size="cover"></image>
       </navigator>
     </swiper-item>
 
@@ -12,7 +12,7 @@
   <!-- 首页分类 -->
   <view class="m-menu">
     <navigator class="item" url="{{item.url}}" wx:for="{{channel}}" wx:key="{{item.id}}">
-      <image src="{{item.icon_url}}" background-size="cover"></image>
+      <image src="{{item.iconUrl}}" background-size="cover"></image>
       <text>{{item.name}}</text>
     </navigator>
     <navigator open-type="reLaunch" class="item" url="/pages/catalog/catalog">
@@ -35,7 +35,7 @@
     <view class="b">
       <view class="item" wx:for="{{indexGoods}}" wx:for-index="index" wx:for-item="item" wx:key="{{item.id}}">
         <navigator url="../goods/goods?id={{item.id}}">
-          <image class="img" src="{{item.list_pic_url}}" background-size="cover"></image>
+          <image class="img" src="{{item.primaryPicUrl}}" background-size="cover"></image>
           <text class="name">{{item.name}}</text>
           <text class="price">￥{{item.price}}</text>
         </navigator>

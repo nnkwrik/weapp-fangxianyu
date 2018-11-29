@@ -59,17 +59,17 @@ public class IndexController {
                                 @RequestBody CommentVo comment,
                                 @JWT(required = true) JWTUser user) {
         if (StringUtils.isEmpty(user.getOpenId()) ||
-                StringUtils.isEmpty(comment.getReply_user_id()) ||
+                StringUtils.isEmpty(comment.getReplyUserId()) ||
                 StringUtils.isEmpty(comment.getContent()) ||
-                comment.getReply_comment_id() == null) {
+                comment.getReplyCommentId() == null) {
             String msg = "用户发表评论失败，信息不完整";
             log.info(msg);
             return Response.fail(Response.COMMENT_INFO_INCOMPLETE,msg);
         }
 
-        indexService.addComment(goodsId, user.getOpenId(), comment.getReply_comment_id(), comment.getReply_user_id(), comment.getContent());
+        indexService.addComment(goodsId, user.getOpenId(), comment.getReplyCommentId(), comment.getReplyUserId(), comment.getContent());
 
-        log.info("用户添加评论：用户id=【{}】，回复评论id=【{}】，回复内容=【{}】", user.getOpenId(),comment.getReply_comment_id(),comment.getReply_user_name());
+        log.info("用户添加评论：用户id=【{}】，回复评论id=【{}】，回复内容=【{}】", user.getOpenId(),comment.getReplyCommentId(),comment.getReplyUserName());
         return Response.ok();
 
     }

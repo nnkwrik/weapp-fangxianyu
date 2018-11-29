@@ -12,14 +12,14 @@ import java.util.List;
 @Data
 public class CommentVo {
     private Integer id;
-    private Integer goods_id;
-    private String user_id;
-    private Integer reply_comment_id;
-    private String reply_user_id;
+    private Integer goodsId;
+    private String userId;
+    private Integer replyCommentId;
+    private String replyUserId;
     private String content;
-    private String create_time;
+    private String createTime;
 
     private SimpleUser simpleUser;
-    private String reply_user_name;
+    private String replyUserName;
     private List<CommentVo> replyList;
 }
