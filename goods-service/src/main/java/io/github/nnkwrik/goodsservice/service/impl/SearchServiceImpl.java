@@ -7,10 +7,12 @@ import io.github.nnkwrik.goodsservice.model.po.SearchHistory;
 import io.github.nnkwrik.goodsservice.model.vo.inner.GoodsSimpleVo;
 import io.github.nnkwrik.goodsservice.service.SearchService;
 import io.github.nnkwrik.goodsservice.util.PO2VO;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,9 +28,9 @@ public class SearchServiceImpl implements SearchService {
 
 
     @Override
-    public List<GoodsSimpleVo> searchByKeyword(String keyword, int page, int size) {
+    public List<GoodsSimpleVo> searchByKeyword(List<String> keywordList, int page, int size) {
         PageHelper.startPage(page, size);
-        List<Goods> goodsList = searchMapper.findGoodsByKeyword(keyword);
+        List<Goods> goodsList = searchMapper.findGoodsByKeywords(keywordList);
         return PO2VO.convertList(goodsList,GoodsSimpleVo.class);
     }
 

@@ -8,9 +8,11 @@ import io.github.nnkwrik.goodsservice.model.vo.SearchIndexPageVo;
 import io.github.nnkwrik.goodsservice.model.vo.inner.GoodsSimpleVo;
 import io.github.nnkwrik.goodsservice.service.SearchService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -62,7 +64,8 @@ public class SearchController {
                                                      @RequestParam(value = "page", defaultValue = "1") int page,
                                                      @RequestParam(value = "limit", defaultValue = "10") int size,
                                                      @JWT JWTUser jwtUser) {
-        List<GoodsSimpleVo> goodsListVo = searchService.searchByKeyword(keyword, page, size);
+        List<String> keywordList = Arrays.asList(StringUtils.split(keyword));
+        List<GoodsSimpleVo> goodsListVo = searchService.searchByKeyword(keywordList, page, size);
 
         //数据库改openid的搜索历史
         String openId = null;
@@ -70,8 +73,11 @@ public class SearchController {
             openId = jwtUser.getOpenId();
             searchService.updateUserHistory(openId, keyword);
         }
+
         //加入热门搜索缓存
-        searchCache.add(keyword.toLowerCase());
+        keywordList.stream()
+                .forEach(word -> searchCache.add(word.toLowerCase()));
+
         log.debug("用户 openid=【{}】，通过关键字【{}】搜索商品，搜索结果:{}", openId, keyword, goodsListVo);
         return Response.ok(goodsListVo);
     }

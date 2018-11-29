@@ -7,7 +7,7 @@ Page({
     keywrod: '',
     searchStatus: false,
     goodsList: [],
-    // helpKeyword: [],
+    helpKeyword: [],
     historyKeyword: [],
     // categoryFilter: false,
     // currentSortType: 'default',
@@ -47,33 +47,34 @@ Page({
     });
   },
 
-  // inputChange: function (e) {
+  inputChange: function (e) {
 
-  //   this.setData({
-  //     keyword: e.detail.value,
-  //     searchStatus: false
-  //   });
-  //   this.getHelpKeyword();
-  // },
-  // getHelpKeyword: function () {
-  //   let that = this;
-  //   util.request(api.SearchHelper, { keyword: that.data.keyword }).then(function (res) {
-  //     if (res.errno === 0) {
-  //       that.setData({
-  //         helpKeyword: res.data
-  //       });
-  //     }
-  //   });
-  // },
+    this.setData({
+      keyword: e.detail.value,
+      searchStatus: false
+    });
+    this.getHelpKeyword();
+  },
+  getHelpKeyword: function () {
+    let that = this;
+    // 'https://suggest.taobao.com/sug?code=utf-8&q=a'
+    util.request('https://suggest.taobao.com/sug', { code: 'utf-8', q: that.data.keyword }).then(function (res) {
+      
+        that.setData({
+          helpKeyword: res.result
+        });
+      
+    });
+  },
   inputFocus: function () {
     this.setData({
       searchStatus: false,
       goodsList: []
     });
 
-    // if (this.data.keyword) {
-    //   this.getHelpKeyword();
-    // }
+    if (this.data.keyword) {
+      this.getHelpKeyword();
+    }
   },
   clearHistory: function () {
     let that = this;

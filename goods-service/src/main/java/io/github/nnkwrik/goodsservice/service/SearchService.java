@@ -10,7 +10,7 @@ import java.util.List;
  */
 public interface SearchService {
 
-    List<GoodsSimpleVo> searchByKeyword(String keyword, int page, int size);
+    List<GoodsSimpleVo> searchByKeyword(List<String> keywordList, int page, int size);
 
     List<String> getUserHistory(String openId);
 

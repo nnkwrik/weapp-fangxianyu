@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 /**
  * po转vo
+ *
  * @author nnkwrik
  * @date 18/11/15 18:00
  */
@@ -19,6 +20,7 @@ public class PO2VO {
 
     /**
      * po转vo
+     *
      * @param po
      * @param voClass vo的类型
      * @param <T>
@@ -40,6 +42,7 @@ public class PO2VO {
 
     /**
      * poList转voList
+     *
      * @param poList
      * @param voClass vo的类型
      * @param <T>
@@ -54,6 +57,7 @@ public class PO2VO {
 
     /**
      * 把po中的Date对象转换成String,并对vo进行赋值
+     * 不存在Date对象时则什么都不做
      *
      * @param po
      * @param vo
@@ -65,15 +69,16 @@ public class PO2VO {
         BeanWrapper voWrapper = new BeanWrapperImpl(vo);
 
 
-        for (PropertyDescriptor pd : poWrapper.getPropertyDescriptors()) {
+        for (PropertyDescriptor pd : voWrapper.getPropertyDescriptors()) {
             Object date;
+            String fieldName = pd.getDisplayName();
             if (pd.getPropertyType() == Date.class
-                    && (date = poWrapper.getPropertyValue(pd.getDisplayName())) != null) {
+                    && (date = poWrapper.getPropertyValue(fieldName)) != null) {
 
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                 String formatted = formatter.format(date);
 
-                voWrapper.setPropertyValue(pd.getDisplayName(), formatted);
+                voWrapper.setPropertyValue(fieldName, formatted);
 
             }
         }

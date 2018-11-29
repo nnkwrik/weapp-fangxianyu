@@ -28,11 +28,18 @@ public interface SearchMapper {
     List<SearchHistory> findSearchHistory(@Param("user_id") String userId);
 
 
-    @Select("select id, `name`, primary_pic_url, price\n" +
+    @Select("<script>\n" +
+            "select id, `name`, primary_pic_url, price\n" +
             "from goods\n" +
-            "where name like concat(concat('%',#{keyword}),'%') \n" +
-            "order by " + popular_score + " desc")
-    List<Goods> findGoodsByKeyword(@Param("keyword") String keyword);
+            "where\n" +
+            "    <foreach item='item' collection='keywords' open='(' separator='or' close=')'>\n" +
+            "    name like concat(concat('%', #{item}, '%'))\n" +
+            "    </foreach>\n" +
+            "  and is_selling = 1\n" +
+            "  and is_delete = 0\n" +
+            "order by " + popular_score + " desc\n" +
+            "</script>")
+    List<Goods> findGoodsByKeywords(@Param("keywords") List<String> keywords);
 
 
     @Delete("delete from search_history where user_id = #{user_id}")

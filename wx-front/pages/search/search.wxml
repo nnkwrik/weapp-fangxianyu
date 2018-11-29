@@ -4,13 +4,14 @@
       <image class="icon" src="http://nos.netease.com/mailpub/hxm/yanxuan-wap/p/20150730/style/img/icon-normal/search2-2fb94833aa.png"></image>
       <!-- TODO 输入辅助 -->
       <!-- <input name="input" class="keywrod" focus="true" value="{{keyword}}" confirm-type="search" bindinput="inputChange" bindfocus="inputFocus" bindconfirm="onKeywordConfirm" confirm-type="search" placeholder="{{defaultKeyword}}" /> -->
-            <input name="input" class="keywrod" focus="true" value="{{keyword}}"  bindfocus="inputFocus" bindconfirm="onKeywordConfirm" confirm-type="search" placeholder="{{defaultKeyword}}" />
+            <input name="input" class="keywrod" focus="true" value="{{keyword}}" confirm-type="search" bindinput="inputChange" bindfocus="inputFocus" bindconfirm="onKeywordConfirm" confirm-type="search" placeholder="{{defaultKeyword}}" />
+            <!-- <input name="input" class="keywrod" focus="true" value="{{keyword}}"  bindfocus="inputFocus" bindconfirm="onKeywordConfirm" confirm-type="search" placeholder="{{defaultKeyword}}" /> -->
       <image class="del" wx:if="{{keyword}}" bindtap="clearKeyword" src="http://nos.netease.com/mailpub/hxm/yanxuan-wap/p/20150730/style/img/icon-normal/clearIpt-f71b83e3c2.png"></image>
     </view>
     <view class="right" bindtap="closeSearch">取消</view>
   </view>
   <view class="no-search" wx:if="{{ !searchStatus}}">
-    <view class="serach-keywords search-history" wx:if="{{historyKeyword.length}}">
+    <view class="serach-keywords search-history" wx:if="{{!keyword && historyKeyword.length}}">
       <view class="h">
         <text class="title">历史记录</text>
         <image class="icon" bindtap="clearHistory" src="http://nos.netease.com/mailpub/hxm/yanxuan-wap/p/20150730/style/img/icon-normal/del1-93f0a4add4.png"></image>
@@ -28,7 +29,7 @@
       </view>
     </view>
     <view class="shelper-list" wx:if="{{keyword}}">
-      <view class="item" hover-class="navigator-hover" wx:for="{{helpKeyword}}" bindtap="onKeywordTap" data-keyword="{{item}}">{{item}}</view>
+      <view class="item" hover-class="navigator-hover" wx:for="{{helpKeyword}}" bindtap="onKeywordTap" data-keyword="{{item[0]}}">{{item[0]}}</view>
     </view>
   </view>
 
