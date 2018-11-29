@@ -48,6 +48,12 @@ public class PO2VO {
                 BeanUtils.copyProperties(po, vo);
                 vo.setList_pic_url(po.getPrimaryPicUrl());
                 vo.setIs_selling(po.getIsSelling());
+                //Date转String
+                if (po.getLastEdit() != null) {
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                    vo.setLast_edit(formatter.format(po.getLastEdit()));
+                }
+
                 if (po.getSoldTime() != null) {
                     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                     vo.setSold_time(formatter.format(po.getSoldTime()));
@@ -64,11 +70,6 @@ public class PO2VO {
                 vo.setMarket_price(po.getMarketPrice());
                 vo.setWant_count(po.getWantCount());
                 vo.setBrowse_count(po.getBrowseCount());
-                //Date转String
-                if (po.getLastEdit() != null) {
-                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-                    vo.setLast_edit(formatter.format(po.getLastEdit()));
-                }
 
                 BeanUtils.copyProperties(po, vo);
                 return vo;

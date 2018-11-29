@@ -5,21 +5,21 @@ var app = getApp();
 
 Page({
   data: {
-    soldList: []
+    postedList: []
   },
-  getSoldList() {
+  getPostedList() {
     let that = this;
-    util.request(api.SoldList).then(function (res) {
+    util.request(api.PostedList).then(function (res) {
       if (res.errno === 0) {
         console.log(res.data);
         that.setData({
-          soldList: res.data
+          postedList: res.data
         });
       }
     });
   },
   onLoad: function (options) {
-    this.getSoldList();
+    this.getPostedList();
   },
   onReady: function () {
 
@@ -35,7 +35,7 @@ Page({
     // 页面关闭
   },
   openGoods(event) {
-    let goodsId = this.data.soldList[event.currentTarget.dataset.index].id;
+    let goodsId = this.data.postedList[event.currentTarget.dataset.index].id;
 
     wx.navigateTo({
       url: '/pages/goods/goods?id=' + goodsId,

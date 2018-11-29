@@ -54,5 +54,11 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    @Override
+    public List<GoodsSimpleVo> getUserPosted(String userId) {
+        List<Goods> goodsList = userMapper.getUserPosted(userId);
+        return PO2VO.convertList(PO2VO.goodsSimple,goodsList);
+    }
+
 
 }

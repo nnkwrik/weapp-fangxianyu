@@ -18,9 +18,9 @@
       </navigator>
     </view>
     <view class="item">
-      <navigator url="/pages/ucenter/coupon/coupon" class="a">
+      <navigator url="{{isLogin?'/pages/ucenter/posted/posted':'/pages/auth/auth'}}" class="a">
         <text class="icon publish"></text>
-        <text class="txt">优惠券</text>
+        <text class="txt">我发布的</text>
       </navigator>
     </view>
     <view class="item no-border">

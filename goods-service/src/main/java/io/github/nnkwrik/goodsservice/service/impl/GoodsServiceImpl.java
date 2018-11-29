@@ -40,8 +40,6 @@ public class GoodsServiceImpl implements GoodsService {
     @Autowired
     private UserClient userClient;
 
-    @Autowired
-    private OtherMapper otherMapper;
 
 
     @Override

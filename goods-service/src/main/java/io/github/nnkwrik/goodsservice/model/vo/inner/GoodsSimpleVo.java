@@ -14,4 +14,5 @@ public class GoodsSimpleVo {
     private Double price;
     private Boolean is_selling;
     private String sold_time;
+    private String last_edit;
 }

@@ -14,7 +14,6 @@ public class GoodsDetailVo extends GoodsSimpleVo {
     private Double market_price;
     private Integer want_count;
     private Integer browse_count;
-    private String last_edit;
 
     private Double postage;
     private String region;

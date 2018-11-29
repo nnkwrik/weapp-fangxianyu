@@ -35,7 +35,8 @@
     "pages/nav2post/nav2post",
     "pages/postCate/postCate",
     "pages/ucenter/bought/bought",
-    "pages/ucenter/sold/sold"
+    "pages/ucenter/sold/sold",
+    "pages/ucenter/posted/posted"
   ],
   "window": {
     "backgroundTextStyle": "dark",

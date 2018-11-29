@@ -7,7 +7,7 @@ Page({
   data: {
     boughtList: []
   },
-  getCollectList() {
+  getBoughtList() {
     let that = this;
     util.request(api.BoughtList).then(function (res) {
       if (res.errno === 0) {
@@ -19,7 +19,7 @@ Page({
     });
   },
   onLoad: function (options) {
-    this.getCollectList();
+    this.getBoughtList();
   },
   onReady: function () {
 

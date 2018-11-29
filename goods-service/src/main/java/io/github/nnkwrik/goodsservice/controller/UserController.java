@@ -43,17 +43,24 @@ public class UserController {
         return Response.ok(vo);
     }
 
-    @GetMapping("/bought/goods")
+    @GetMapping("goods/bought")
     public Response getUserBought(@JWT(required = true) JWTUser user) {
         List<GoodsSimpleVo> vo = userService.getUserBought(user.getOpenId());
         log.info("用户【{}】查询买过的商品,总数:{}", user.getNickName(), vo.size());
         return Response.ok(vo);
     }
 
-    @GetMapping("/sold/goods")
+    @GetMapping("goods/sold")
     public Response getUserSold(@JWT(required = true) JWTUser user) {
         List<GoodsSimpleVo> vo = userService.getUserSold(user.getOpenId());
         log.info("用户【{}】查询卖出的商品,总数:{}", user.getNickName(), vo.size());
+        return Response.ok(vo);
+    }
+
+    @GetMapping("goods/posted")
+    public Response getUserPosted(@JWT(required = true) JWTUser user) {
+        List<GoodsSimpleVo> vo = userService.getUserPosted(user.getOpenId());
+        log.info("用户【{}】查询发布的商品,总数:{}", user.getNickName(), vo.size());
         return Response.ok(vo);
     }
 }

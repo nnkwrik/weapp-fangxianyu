@@ -3,6 +3,7 @@ package io.github.nnkwrik.goodsservice.controller;
 import io.github.nnkwrik.common.dto.JWTUser;
 import io.github.nnkwrik.common.dto.Response;
 import io.github.nnkwrik.common.token.injection.JWT;
+import io.github.nnkwrik.goodsservice.cache.BrowseCache;
 import io.github.nnkwrik.goodsservice.model.po.Goods;
 import io.github.nnkwrik.goodsservice.model.vo.CategoryPageVo;
 import io.github.nnkwrik.goodsservice.model.vo.GoodsDetailPageVo;
@@ -35,6 +36,9 @@ public class GoodsController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private BrowseCache browseCache;
 
     /**
      * 获取选定的子目录下的商品列表和同一个父目录下的兄弟目录
@@ -69,6 +73,7 @@ public class GoodsController {
     public Response<GoodsDetailPageVo> getGoodsDetail(@PathVariable("goodsId") int goodsId,
                                                       @JWT JWTUser jwtUser) {
         //更新浏览次数
+        browseCache.add(goodsId);
         GoodsDetailVo goodsDetail = goodsService.getGoodsDetail(goodsId);
         if (goodsDetail == null) {
             log.info("搜索goodsId = 【{}】的详情时出错", goodsId);

@@ -58,17 +58,6 @@ zuul:
       serviceId: goods-service
       strip-prefix: false
       sensitiveHeaders:
-    bought:
-      path: /bought/**
-      serviceId: goods-service
-      strip-prefix: false
-      sensitiveHeaders:
-    sold:
-      path: /sold/**
-      serviceId: goods-service
-      strip-prefix: false
-      sensitiveHeaders:
-
 
 
 

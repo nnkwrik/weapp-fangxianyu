@@ -19,4 +19,6 @@ public interface UserService {
     List<GoodsSimpleVo> getUserBought(String buyerId);
 
     List<GoodsSimpleVo> getUserSold(String sellerId);
+
+    List<GoodsSimpleVo> getUserPosted(String userId);
 }

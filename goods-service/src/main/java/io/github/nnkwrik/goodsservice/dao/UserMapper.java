@@ -63,4 +63,12 @@ public interface UserMapper {
             "  and is_selling = 0\n" +
             "order by sold_time desc;")
     List<Goods> getUserSold(@Param("seller_id") String sellerId);
+
+    @Select("select id, name, primary_pic_url, price, last_edit\n" +
+            "from goods\n" +
+            "where seller_id = #{seller_id}\n" +
+            "  and is_selling = 1\n" +
+            "  and is_delete = 0\n" +
+            "order by last_edit desc;")
+    List<Goods> getUserPosted(@Param("seller_id") String sellerId);
 }
