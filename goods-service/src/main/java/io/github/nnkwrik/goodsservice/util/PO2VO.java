@@ -47,7 +47,11 @@ public class PO2VO {
                 GoodsSimpleVo vo = new GoodsSimpleVo();
                 BeanUtils.copyProperties(po, vo);
                 vo.setList_pic_url(po.getPrimaryPicUrl());
-                vo.setIs_on_sale(po.getIsOnSale());
+                vo.setIs_selling(po.getIsSelling());
+                if (po.getSoldTime() != null) {
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                    vo.setSold_time(formatter.format(po.getSoldTime()));
+                }
                 return vo;
             };
 

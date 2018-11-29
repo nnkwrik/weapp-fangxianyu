@@ -24,22 +24,22 @@
       </navigator>
     </view>
     <view class="item no-border">
-      <navigator url="url" class="a">
+      <navigator url="{{isLogin?'/pages/ucenter/sold/sold':'/pages/auth/auth'}}" class="a">
         <text class="icon upload"></text>
-        <text class="txt">礼品卡</text>
+        <text class="txt">我卖出的</text>
+      </navigator>
+    </view>
+    <view class="item">
+      <navigator url="{{isLogin?'/pages/ucenter/bought/bought':'/pages/auth/auth'}}" class="a">
+
+        <text class="icon download"></text>
+        <text class="txt">我买到的</text>
       </navigator>
     </view>
     <view class="item">
       <navigator url="{{isLogin?'/pages/ucenter/collect/collect':'/pages/auth/auth'}}" class="a">
-
-        <text class="icon download"></text>
-        <text class="txt">我的收藏</text>
-      </navigator>
-    </view>
-    <view class="item">
-      <navigator url="/pages/ucenter/footprint/footprint" class="a">
         <text class="icon star"></text>
-        <text class="txt">我的足迹</text>
+        <text class="txt">我的收藏</text>
       </navigator>
     </view>
     <view class="item no-border">

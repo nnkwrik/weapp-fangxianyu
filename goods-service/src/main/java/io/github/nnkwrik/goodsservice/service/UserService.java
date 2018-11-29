@@ -15,4 +15,8 @@ public interface UserService {
     void collectAddOrDelete(int goodsId, String userId, boolean hasCollect);
 
     List<GoodsSimpleVo> getUserCollectList(String userId);
+
+    List<GoodsSimpleVo> getUserBought(String buyerId);
+
+    List<GoodsSimpleVo> getUserSold(String sellerId);
 }

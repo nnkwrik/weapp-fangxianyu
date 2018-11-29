@@ -32,7 +32,7 @@ public interface GoodsMapper {
      */
     @Select("select id, `name`, primary_pic_url, price\n" +
             "from goods\n" +
-            "where is_on_sale = 1 and is_delete = 0\n" +
+            "where is_selling = 1 and is_delete = 0\n" +
             "order by " + popular_score + " desc")
     List<Goods> findSimpleGoods();
 
@@ -44,7 +44,7 @@ public interface GoodsMapper {
     @Select("select id, `name`, primary_pic_url, price\n" +
             "from goods\n" +
             "where category_id = #{cateId}\n" +
-            "and is_on_sale = 1 and is_delete = 0\n" +
+            "and is_selling = 1 and is_delete = 0\n" +
             "order by " + popular_score + " desc")
     List<Goods> findSimpleGoodsByCateId(@Param("cateId") int cateId);
 
@@ -63,7 +63,7 @@ public interface GoodsMapper {
             "       `desc`,\n" +
             "       want_count,\n" +
             "       browse_count,\n" +
-            "       is_on_sale,\n" +
+            "       is_selling,\n" +
             "       last_edit,\n" +
             "       postage,\n" +
             "       region,\n" +
@@ -96,7 +96,7 @@ public interface GoodsMapper {
             "from goods\n" +
             "where category_id = (select category_id from goods where id = #{goodsId})\n" +
             "  and id != #{goodsId}\n" +
-            "  and is_on_sale = 1\n" +
+            "  and is_selling = 1\n" +
             "  and is_delete = 0\n" +
             "order by " + popular_score + " desc")
     List<Goods> findSimpleGoodsInSameCate(@Param("goodsId") int goodsId);
@@ -116,7 +116,7 @@ public interface GoodsMapper {
             "                             inner join category as bar on foo.parent_id = bar.parent_id\n" +
             "                      where goods.id = #{goodsId})\n" +
             "  and id != #{goodsId}\n" +
-            "  and is_on_sale = 1\n" +
+            "  and is_selling = 1\n" +
             "  and is_delete = 0\n" +
             "order by " + popular_score + " desc")
     List<Goods> findSimpleGoodsInSameParentCate(@Param("goodsId") int goodsId);
@@ -165,7 +165,7 @@ public interface GoodsMapper {
     @Select("select COUNT(*)\n" +
             "from goods\n" +
             "where seller_id = #{seller_id}\n" +
-            "  and is_on_sale = false\n" +
+            "  and is_selling = false\n" +
             "  and is_delete = false;")
     Integer getGellerHistory(@Param("seller_id") String sellerId);
 }

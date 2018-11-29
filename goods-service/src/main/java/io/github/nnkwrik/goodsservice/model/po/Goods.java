@@ -20,7 +20,7 @@ public class Goods {
     private String desc;
     private Integer wantCount;
     private Integer browseCount;
-    private Boolean isOnSale;
+    private Boolean isSelling;
     private Boolean isDelete;
     private Date lastEdit;
 
@@ -32,4 +32,7 @@ public class Goods {
     private Boolean ableSelfTake;
     private Boolean ableMeet;
     private Boolean ableExpress;
+
+    private String buyerId;
+    private Date soldTime;
 }

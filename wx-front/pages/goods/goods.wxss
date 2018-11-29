@@ -101,7 +101,7 @@
   font-size: 29rpx;
   line-height: 35rpx;
   color: #555;
-  margin-top: 30rpx;
+  /* margin-top: 30rpx; */
   margin-bottom: 30rpx;
   text-decoration: line-through;
   text-align: center;
