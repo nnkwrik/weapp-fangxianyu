@@ -2,6 +2,8 @@ package io.github.nnkwrik.goodsservice.model.po;
 
 import lombok.Data;
 
+import java.util.Date;
+
 /**
  * @author nnkwrik
  * @date 18/11/23 21:32
@@ -11,5 +13,5 @@ public class UserPreference {
     private Integer id;
     private String userId;
     private Integer type;   //1:收藏，2：想要
-    private Data createTime;
+    private Date createTime;
 }

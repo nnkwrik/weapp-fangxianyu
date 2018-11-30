@@ -15,7 +15,9 @@ Page({
     // brand: {},
     // specificationList: [],
     // productList: [],
+    seller: {},
     sellerDates: 0,
+    sellerHistory: 0,
     relatedGoods: [],
     cartGoodsCount: 0,
     userHasCollect: 0,
@@ -38,12 +40,14 @@ Page({
       if (res.errno === 0) {
 
         //计算卖家来平台第几天
-        let registerTime = res.data.info.seller.registerTime
-        let duration = new Date().getTime() - new Date(registerTime).getTime() ;
+        let registerTime = res.data.seller.registerTime
+        let duration = new Date().getTime() - new Date(registerTime).getTime();
         let dates = parseInt(Math.floor(duration) / (1000 * 60 * 60 * 24));
         that.setData({
           goods: res.data.info,
           gallery: res.data.gallery,
+          seller: res.data.seller,
+          sellerHistory: res.data.sellerHistory,
           sellerDates: dates,
           // attribute: res.data.attribute,
           // issueList: res.data.issue,
@@ -76,7 +80,7 @@ Page({
     util.request(api.GoodsRelated + '/' + that.data.id, ).then(function(res) {
       if (res.errno === 0) {
         that.setData({
-          relatedGoods: res.data.goodsList,
+          relatedGoods: res.data,
         });
       }
     });
@@ -263,9 +267,8 @@ Page({
       return false;
     }
     util.request(api.CommentPost + '/' + this.data.id, {
-      reply_comment_id: this.data.replyId,
-      reply_user_id: this.data.replyUserId,
-      reply_user_name: this.data.replyUserName,
+      replyCommentId: this.data.replyId,
+      replyUserId: this.data.replyUserId,
       content: event.detail.value
     }, "POST").then(function(res) {
       if (res.errno === 0) {

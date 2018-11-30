@@ -7,7 +7,7 @@
   </view>
   <view class="catalog">
     <scroll-view class="nav" scroll-y="true">
-        <view class="item {{ currentCategory.id == item.id ? 'active' : ''}}" wx:for="{{navList}}"  data-id="{{item.id}}" data-index="{{index}}" bindtap="switchCate"  wx:key="{{item.id}}">{{item.name}}</view>
+        <view class="item {{ currentCategoryId == item.id ? 'active' : ''}}" wx:for="{{navList}}"  data-id="{{item.id}}" data-name="{{item.name}}" data-index="{{index}}" bindtap="switchCate"  wx:key="{{item.id}}">{{item.name}}</view>
     </scroll-view>
     <scroll-view class="cate" scroll-y="true">
         <view class="banner">
@@ -15,11 +15,11 @@
         </view>
         <view class="hd">
             <text class="line"></text>
-            <text class="txt">{{currentCategory.name}}分类</text>
+            <text class="txt">{{currentCategoryName}}分类</text>
             <text class="line"></text>
         </view>
         <view class="bd">
-            <navigator url="/pages/category/category?id={{item.id}}" class="item {{(index+1) % 3 == 0 ? 'last' : ''}}" wx:for="{{currentCategory.subCategoryList}}" wx:key="{{item.id}}">
+            <navigator url="/pages/category/category?id={{item.id}}" class="item {{(index+1) % 3 == 0 ? 'last' : ''}}" wx:for="{{currentCategory}}" wx:key="{{item.id}}">
                 <image class="icon" src="{{item.iconUrl}}"></image>
                 <text class="txt">{{item.name}}</text>
             </navigator>

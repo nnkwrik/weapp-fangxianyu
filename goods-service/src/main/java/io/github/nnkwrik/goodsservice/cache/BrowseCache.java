@@ -15,7 +15,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 商品浏览量的缓存,过期(10天)/超出缓存大小/超过10个时更新数据库
- * 由于需要在非静态的RemovalListener才能调用mapper,做成单例
  *
  * @author nnkwrik
  * @date 18/11/20 12:03
@@ -29,7 +28,7 @@ public class BrowseCache {
 
 
     //过期(1天)/超出缓存队列大小(1000)/缓存超过10个时 会触发
-    RemovalListener<Integer, AtomicInteger> listener =
+    private RemovalListener<Integer, AtomicInteger> listener =
             notification -> {
                 log.info("BrowseCache缓存刷入数据库，原因 ：【{}】,数据 ：【key={} , value={}】",
                         notification.getCause(), notification.getKey(), notification.getValue().get());
@@ -50,6 +49,10 @@ public class BrowseCache {
                     .build();
 
 
+    /**
+     * 在缓存中增加某商品的浏览次数
+     * @param goodsId
+     */
     public void add(Integer goodsId) {
         int count = 0;
         AtomicInteger browseCount = cache.getIfPresent(goodsId);
@@ -64,7 +67,7 @@ public class BrowseCache {
             cache.put(goodsId, new AtomicInteger(1));
         }
         log.debug("BrowseCache更新商品id【{}】的浏览次数为【{}】", goodsId, count);
-        //检查过期的缓存,让他触发removalListener
+        //用cleanUp()检查过期的缓存,让他触发removalListener
         //必须执行这个cache才会去检查是否过期, 否则尽管过期他也不会触发removalListener
         cache.cleanUp();
     }

@@ -5,14 +5,12 @@ import io.github.nnkwrik.common.dto.Response;
 import io.github.nnkwrik.common.token.TokenSolver;
 import io.github.nnkwrik.common.token.injection.JWT;
 import io.github.nnkwrik.goodsservice.client.UserClient;
+import io.github.nnkwrik.goodsservice.model.po.Goods;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author nnkwrik
@@ -79,5 +77,14 @@ public class TestController {
         JWTUser solve = tokenSolver.solve(token);
         System.out.println(solve);
         return solve;
+    }
+
+    //testNOT_NULL_JSON
+    @GetMapping("/testJson")
+    public Object testNOT_NULL_JSON(){
+        Goods goods = new Goods();
+        goods.setId(1);
+        goods.setLastEdit(new Date());
+        return goods;
     }
 }

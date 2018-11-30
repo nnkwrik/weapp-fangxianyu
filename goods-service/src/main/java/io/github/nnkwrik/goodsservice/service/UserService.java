@@ -1,6 +1,6 @@
 package io.github.nnkwrik.goodsservice.service;
 
-import io.github.nnkwrik.goodsservice.model.vo.inner.GoodsSimpleVo;
+import io.github.nnkwrik.goodsservice.model.po.Goods;
 
 import java.util.List;
 
@@ -14,11 +14,11 @@ public interface UserService {
 
     void collectAddOrDelete(int goodsId, String userId, boolean hasCollect);
 
-    List<GoodsSimpleVo> getUserCollectList(String userId);
+    List<Goods> getUserCollectList(String userId);
 
-    List<GoodsSimpleVo> getUserBought(String buyerId);
+    List<Goods> getUserBought(String buyerId);
 
-    List<GoodsSimpleVo> getUserSold(String sellerId);
+    List<Goods> getUserSold(String sellerId);
 
-    List<GoodsSimpleVo> getUserPosted(String userId);
+    List<Goods> getUserPosted(String userId);
 }

@@ -16,6 +16,6 @@ public class GoodsComment {
     private Integer replyCommentId;
     private String replyUserId;
     private String content;
-    private boolean isDelete;
+    private Boolean isDelete;
     private Date createTime;
 }

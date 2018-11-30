@@ -2,9 +2,7 @@ package io.github.nnkwrik.goodsservice.service.impl;
 
 import io.github.nnkwrik.goodsservice.dao.UserMapper;
 import io.github.nnkwrik.goodsservice.model.po.Goods;
-import io.github.nnkwrik.goodsservice.model.vo.inner.GoodsSimpleVo;
 import io.github.nnkwrik.goodsservice.service.UserService;
-import io.github.nnkwrik.goodsservice.util.PO2VO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,29 +33,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<GoodsSimpleVo> getUserCollectList(String userId) {
-        List<Goods> goodsList = userMapper.getUserCollect(userId);
-
-        return PO2VO.convertList(goodsList, GoodsSimpleVo.class);
+    public List<Goods> getUserCollectList(String userId) {
+        return userMapper.getUserCollect(userId);
     }
 
     @Override
-    public List<GoodsSimpleVo> getUserBought(String buyerId) {
-        List<Goods> goodsList = userMapper.getUserBought(buyerId);
-        return PO2VO.convertList(goodsList, GoodsSimpleVo.class);
+    public List<Goods> getUserBought(String buyerId) {
+        return userMapper.getUserBought(buyerId);
     }
 
     @Override
-    public List<GoodsSimpleVo> getUserSold(String sellerId) {
-        List<Goods> goodsList = userMapper.getUserSold(sellerId);
-        return PO2VO.convertList(goodsList, GoodsSimpleVo.class);
+    public List<Goods> getUserSold(String sellerId) {
+        return userMapper.getUserSold(sellerId);
 
     }
 
     @Override
-    public List<GoodsSimpleVo> getUserPosted(String userId) {
-        List<Goods> goodsList = userMapper.getUserPosted(userId);
-        return PO2VO.convertList(goodsList, GoodsSimpleVo.class);
+    public List<Goods> getUserPosted(String userId) {
+        return userMapper.getUserPosted(userId);
     }
 
 

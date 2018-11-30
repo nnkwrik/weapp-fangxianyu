@@ -1,6 +1,7 @@
 package io.github.nnkwrik.goodsservice.model.vo;
 
-import io.github.nnkwrik.goodsservice.model.po.Category;
+import io.github.nnkwrik.goodsservice.model.po.Ad;
+import io.github.nnkwrik.goodsservice.model.po.Channel;
 import io.github.nnkwrik.goodsservice.model.po.Goods;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,14 +11,13 @@ import java.util.List;
 
 /**
  * @author nnkwrik
- * @date 18/11/17 20:07
+ * @date 18/11/14 20:57
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CategoryPageVo {
-    private List<Category> brotherCategory; //同一个父分类下的兄弟分类
-    private List<Goods> goodsList;    //当前分类的商品列表
+public class IndexPageVO {
+    private List<Goods> indexGoodsList;
+    private List<Ad> banner;
+    private List<Channel> channel;
 }
-
-

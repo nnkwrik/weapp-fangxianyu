@@ -5,14 +5,9 @@ import io.github.nnkwrik.goodsservice.dao.CategoryMapper;
 import io.github.nnkwrik.goodsservice.dao.GoodsMapper;
 import io.github.nnkwrik.goodsservice.dao.OtherMapper;
 import io.github.nnkwrik.goodsservice.model.po.*;
-import io.github.nnkwrik.goodsservice.model.vo.CatalogVo;
-import io.github.nnkwrik.goodsservice.model.vo.IndexVO;
-import io.github.nnkwrik.goodsservice.model.vo.inner.BannerVo;
-import io.github.nnkwrik.goodsservice.model.vo.inner.CategoryVo;
-import io.github.nnkwrik.goodsservice.model.vo.inner.ChannelVo;
-import io.github.nnkwrik.goodsservice.model.vo.inner.GoodsSimpleVo;
+import io.github.nnkwrik.goodsservice.model.vo.CatalogPageVo;
+import io.github.nnkwrik.goodsservice.model.vo.IndexPageVO;
 import io.github.nnkwrik.goodsservice.service.IndexService;
-import io.github.nnkwrik.goodsservice.util.PO2VO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,49 +27,34 @@ public class IndexServiceImpl implements IndexService {
     private GoodsMapper goodsMapper;
 
     @Override
-    public IndexVO getIndex() {
+    public IndexPageVO getIndex() {
         //广告
         List<Ad> adList = otherMapper.findAd();
-        List<BannerVo> bannerVoList = PO2VO.convertList(adList, BannerVo.class);
 
         //分类
         List<Channel> channelList = otherMapper.findChannel();
-        List<ChannelVo> channelVoList = PO2VO.convertList(channelList, ChannelVo.class);
 
         //推荐商品
         int pageNum = 1;
         int pageSize = 10;
         PageHelper.startPage(pageNum, pageSize);
         List<Goods> goodsList = goodsMapper.findSimpleGoods();
-        List<GoodsSimpleVo> goodsSimpleVOList = PO2VO.convertList(goodsList, GoodsSimpleVo.class);
 
-        return new IndexVO(goodsSimpleVOList, bannerVoList, channelVoList);
+        return new IndexPageVO(goodsList, adList, channelList);
     }
 
     @Override
-    public CatalogVo getCatalogIndex() {
-        List<Category> mainCategory = categoryMapper.findMainCategory();
-        Category currentCate = mainCategory.get(0);
-        List<Category> subCategory = categoryMapper.findSubCategory(currentCate.getId());
+    public CatalogPageVo getCatalogIndex() {
+        List<Category> allCategory = categoryMapper.findMainCategory();
+        Category topCategory = allCategory.get(0);
+        List<Category> subCategory = categoryMapper.findSubCategory(topCategory.getId());
 
-
-        List<CategoryVo> mainCategoryVo = PO2VO.convertList(mainCategory, CategoryVo.class);
-        List<CategoryVo> subCategoryVo = PO2VO.convertList(subCategory, CategoryVo.class);
-        CategoryVo currentCategoryVo =
-                new CategoryVo(currentCate.getId(), currentCate.getName(), currentCate.getIconUrl(), subCategoryVo);
-
-        return new CatalogVo(mainCategoryVo, currentCategoryVo);
+        return new CatalogPageVo(allCategory,subCategory);
     }
 
     @Override
-    public CatalogVo getCatalogById(int id) {
-        List<Category> subCategory = categoryMapper.findSubCategory(id);
-        List<CategoryVo> subCategoryVo = PO2VO.convertList(subCategory, CategoryVo.class);
-        Category currentCategory = categoryMapper.findCategoryById(id);
-        CategoryVo currentCategoryVo = PO2VO.convert(currentCategory, CategoryVo.class);
-        currentCategoryVo.setSubCategoryList(subCategoryVo);
-
-        return new CatalogVo(null, currentCategoryVo);
+    public List<Category> getSubCatalogById(int id) {
+        return categoryMapper.findSubCategory(id);
     }
 
     @Override

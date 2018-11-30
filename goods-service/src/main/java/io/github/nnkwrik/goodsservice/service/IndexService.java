@@ -2,8 +2,8 @@ package io.github.nnkwrik.goodsservice.service;
 
 import io.github.nnkwrik.goodsservice.model.po.Category;
 import io.github.nnkwrik.goodsservice.model.po.Region;
-import io.github.nnkwrik.goodsservice.model.vo.CatalogVo;
-import io.github.nnkwrik.goodsservice.model.vo.IndexVO;
+import io.github.nnkwrik.goodsservice.model.vo.CatalogPageVo;
+import io.github.nnkwrik.goodsservice.model.vo.IndexPageVO;
 
 import java.util.List;
 
@@ -13,11 +13,11 @@ import java.util.List;
  */
 public interface IndexService {
 
-    IndexVO getIndex();
+    IndexPageVO getIndex();
 
-    CatalogVo getCatalogIndex();
+    CatalogPageVo getCatalogIndex();
 
-    CatalogVo getCatalogById(int id);
+    List<Category> getSubCatalogById(int id);
 
 
     void addComment(int goodsId, String userId, int replyCommentId, String replyUserId, String content);

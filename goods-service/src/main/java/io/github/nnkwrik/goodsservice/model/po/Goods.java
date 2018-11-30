@@ -1,5 +1,7 @@
 package io.github.nnkwrik.goodsservice.model.po;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.util.StdDateFormat;
 import lombok.Data;
 
 import java.util.Date;
@@ -22,6 +24,7 @@ public class Goods {
     private Integer browseCount;
     private Boolean isSelling;
     private Boolean isDelete;
+    private Date postTime;
     private Date lastEdit;
 
     private Integer regionId;

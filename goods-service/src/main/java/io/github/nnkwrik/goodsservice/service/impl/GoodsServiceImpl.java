@@ -11,16 +11,14 @@ import io.github.nnkwrik.goodsservice.model.po.Goods;
 import io.github.nnkwrik.goodsservice.model.po.GoodsComment;
 import io.github.nnkwrik.goodsservice.model.po.GoodsGallery;
 import io.github.nnkwrik.goodsservice.model.vo.CategoryPageVo;
-import io.github.nnkwrik.goodsservice.model.vo.GoodsRelatedVo;
-import io.github.nnkwrik.goodsservice.model.vo.inner.*;
+import io.github.nnkwrik.goodsservice.model.vo.CommentVo;
 import io.github.nnkwrik.goodsservice.service.GoodsService;
-import io.github.nnkwrik.goodsservice.util.PO2VO;
+import io.github.nnkwrik.goodsservice.util.BeanListUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @author nnkwrik
@@ -44,52 +42,49 @@ public class GoodsServiceImpl implements GoodsService {
     public CategoryPageVo getGoodsAndBrotherCateById(int id, int page, int size) {
 
         List<Category> brotherCategory = categoryMapper.findBrotherCategory(id);
-        List<CategoryVo> brotherCategoryVo = PO2VO.convertList(brotherCategory, CategoryVo.class);
-        CategoryPageVo vo = getGoodsByCateId(id, page, size);
-        vo.setBrotherCategory(brotherCategoryVo);
+        List<Goods> goodsList = getGoodsByCateId(id, page, size);
+        CategoryPageVo vo = new CategoryPageVo(brotherCategory, goodsList);
 
         return vo;
     }
 
     @Override
-    public CategoryPageVo getGoodsByCateId(int id, int page, int size) {
+    public List<Goods> getGoodsByCateId(int id, int page, int size) {
         //紧跟在这个方法后的第一个MyBatis 查询方法会被进行分页
         PageHelper.startPage(page, size);
-        List<Goods> simpleGoods = goodsMapper.findSimpleGoodsByCateId(id);
-        List<GoodsSimpleVo> goodsSimpleVo = PO2VO.convertList(simpleGoods, GoodsSimpleVo.class);
-
-        return new CategoryPageVo(null, goodsSimpleVo);
+        List<Goods> goodsList = goodsMapper.findSimpleGoodsByCateId(id);
+        return goodsList;
     }
 
     @Override
-    public GoodsDetailVo getGoodsDetail(int id) {
-        Goods detailGoods = goodsMapper.findDetailGoodsByGoodsId(id);
-        GoodsDetailVo goodsDetailVo = PO2VO.convert(detailGoods, GoodsDetailVo.class);
+    public Goods getGoodsDetail(int goodsId) {
+        return goodsMapper.findDetailGoodsByGoodsId(goodsId);
+    }
 
-        Response<SimpleUser> response = userClient.getSimpleUser(detailGoods.getSellerId());
+    @Override
+    public SimpleUser getSellerInfo(String sellerId) {
+                Response<SimpleUser> response = userClient.getSimpleUser(sellerId);
         if (response.getErrno() == Response.USER_IS_NOT_EXIST) {
             log.info("没有搜索到商品卖家的相关信息");
             return null;
         }
-        goodsDetailVo.setSeller(response.getData());
-
-        //卖家出售过的商品数
-        Integer sellerHistory = goodsMapper.getGellerHistory(detailGoods.getSellerId());
-        goodsDetailVo.setSellerHistory(sellerHistory);
-
-        return goodsDetailVo;
+        return response.getData();
     }
 
     @Override
-    public List<GalleryVo> getGoodsGallery(int goodsId) {
-        List<GoodsGallery> gallery = goodsMapper.findGalleryByGoodsId(goodsId);
-        List<GalleryVo> galleryVo = PO2VO.convertList(gallery, GalleryVo.class);
+    public int getSellerHistory(String sellerId) {
+        return goodsMapper.getSellerHistory(sellerId);
+    }
 
-        return galleryVo;
+
+    @Override
+    public List<GoodsGallery> getGoodsGallery(int goodsId) {
+
+        return goodsMapper.findGalleryByGoodsId(goodsId);
     }
 
     @Override
-    public GoodsRelatedVo getGoodsRelated(int goodsId) {
+    public List<Goods> getGoodsRelated(int goodsId) {
         //获取同一子分类下
         int pageNum = 1;
         int pageSize = 10;
@@ -102,8 +97,7 @@ public class GoodsServiceImpl implements GoodsService {
             simpleGoods = goodsMapper.findSimpleGoodsInSameParentCate(goodsId);
         }
 
-        List<GoodsSimpleVo> goodsSimpleVo = PO2VO.convertList(simpleGoods, GoodsSimpleVo.class);
-        return new GoodsRelatedVo(goodsSimpleVo);
+        return simpleGoods;
     }
 
     @Override
@@ -113,33 +107,38 @@ public class GoodsServiceImpl implements GoodsService {
 
     @Override
     public List<CommentVo> getGoodsComment(int goodsId) {
-        List<GoodsComment> baseComment = goodsMapper.findBaseComment(goodsId);
-        if (baseComment == null || baseComment.size() <= 0) return null;
+        List<GoodsComment> baseCommentPo = goodsMapper.findBaseComment(goodsId);
+        if (baseCommentPo == null || baseCommentPo.size() <= 0) return null;
+
+//        List<CommentVo> baseComment = createCommentVoList(baseCommentPo);
+        List<CommentVo> baseComment = BeanListUtils.copyListProperties(baseCommentPo, CommentVo.class);
         Set<String> userIdSet = new HashSet<>();
-        List<CommentVo> voList = baseComment.stream()
+
+
+        baseComment.stream()
                 .map(base -> {
-                    CommentVo baseVo = PO2VO.convert(base, CommentVo.class);
-                    userIdSet.add(baseVo.getUserId());
-                    return baseVo;
-                }).map(baseVo -> {
+                    //待会通过用户服务查找评论的用户信息
+                    userIdSet.add(base.getUserId());
                     //查找回复评论的评论
-                    List<GoodsComment> replyComment = goodsMapper.findReplyComment(baseVo.getId());
-                    List<CommentVo> replyCommentVo = PO2VO.convertList(replyComment, CommentVo.class);
-                    replyCommentVo.stream()
-                            .forEach(reply -> userIdSet.add(reply.getUserId()));
-                    baseVo.setReplyList(replyCommentVo);
-                    return baseVo;
+                    List<GoodsComment> replyListPo = goodsMapper.findReplyComment(base.getId());
+                    List<CommentVo> replyList = BeanListUtils.copyListProperties(replyListPo, CommentVo.class);
+                    base.setReplyList(replyList);
+                    return replyList;
                 })
-                .collect(Collectors.toList());
+                .flatMap(reply -> reply.stream())
+                //待会通过用户服务查找回复评论的用户信息
+                .forEach(reply -> userIdSet.add(reply.getUserId()));
+
 
         Map<String, SimpleUser> simpleUserMap
-                = getSimpleUserList(userIdSet.stream().collect(Collectors.toList()));
+                = getSimpleUserList(new ArrayList<>(userIdSet));
 
-        voList.stream().map(base -> setUser4Comment(simpleUserMap, base).getReplyList())
+        //加入评论中的用户信息
+        baseComment.stream().map(base -> setUser4Comment(simpleUserMap, base).getReplyList())
                 .flatMap(List::stream)
                 .forEach(reply -> setUser4Comment(simpleUserMap, reply));
 
-        return voList;
+        return baseComment;
     }
 
 
@@ -175,6 +174,5 @@ public class GoodsServiceImpl implements GoodsService {
         unknownUser.setAvatarUrl("https://i.postimg.cc/RVbDV5fN/anonymous.png");
         return unknownUser;
     }
-
 
 }

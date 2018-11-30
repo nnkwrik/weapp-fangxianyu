@@ -2,6 +2,8 @@ package io.github.nnkwrik.goodsservice.model.po;
 
 import lombok.Data;
 
+import java.util.Date;
+
 /**
  * @author nnkwrik
  * @date 18/11/16 20:01
@@ -14,5 +16,5 @@ public class Ad {
     private String link;
     private Integer sortOrder;
     private Boolean enable;
-    private Data data;
+    private Date create;
 }

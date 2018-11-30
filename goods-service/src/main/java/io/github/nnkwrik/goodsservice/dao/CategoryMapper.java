@@ -29,13 +29,6 @@ public interface CategoryMapper {
     @Select("select id,name,icon_url from category where parent_id = #{parentId} order by sort_order asc")
     List<Category> findSubCategory(@Param("parentId") int parentId);
 
-    /**
-     * 通过id查找分类名
-     * @param id
-     * @return
-     */
-    @Select("select id,name from category where id = #{id}")
-    Category findCategoryById(@Param("id") int id);
 
     /**
      * 查找同一父分类下的兄弟分类

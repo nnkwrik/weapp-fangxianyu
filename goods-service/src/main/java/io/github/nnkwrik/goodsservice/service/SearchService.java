@@ -1,6 +1,6 @@
 package io.github.nnkwrik.goodsservice.service;
 
-import io.github.nnkwrik.goodsservice.model.vo.inner.GoodsSimpleVo;
+import io.github.nnkwrik.goodsservice.model.po.Goods;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ import java.util.List;
  */
 public interface SearchService {
 
-    List<GoodsSimpleVo> searchByKeyword(List<String> keywordList, int page, int size);
+    List<Goods> searchByKeyword(List<String> keywordList, int page, int size);
 
     List<String> getUserHistory(String openId);
 

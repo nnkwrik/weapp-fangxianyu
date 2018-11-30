@@ -56,12 +56,12 @@
   <!-- history -->
   <view class="seller-nav section-act">
     <view class="seller-t">
-      <image class="seller-avatar" src="{{goods.seller.avatarUrl}}"></image>
+      <image class="seller-avatar" src="{{seller.avatarUrl}}"></image>
     </view>
 
     <view class="seller-info">
-      <view class="name">{{goods.seller.nickName}}</view>
-      <view class="history">加入平台第{{sellerDates}}天,出售过{{goods.sellerHistory}}件宝贝</view>
+      <view class="name">{{seller.nickName}}</view>
+      <view class="history">加入平台第{{sellerDates}}天,出售过{{sellerHistory}}件宝贝</view>
     </view>
 
     <image class="i" src="../../static/images/address_right.png" background-size="cover"></image>

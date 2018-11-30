@@ -6,6 +6,8 @@ Page({
     navList: [],
     categoryList: [],
     currentCategory: {},
+    currentCategoryId: 0,
+    currentCategoryName: '',
     scrollLeft: 0,
     scrollTop: 0,
     goodsCount: 0,
@@ -22,19 +24,25 @@ Page({
     });
     util.request(api.CatalogList).then(function(res) {
       that.setData({
-        navList: res.data.categoryList,
-        currentCategory: res.data.currentCategory
+        navList: res.data.allCategory,
+        currentCategory: res.data.subCategory,
+        currentCategoryId: res.data.allCategory[0].id,
+        currentCategoryName: res.data.allCategory[0].name
       });
       wx.hideLoading();
     });
 
   },
-  getCurrentCategory: function(id) {
+  getCurrentCategory: function(id,name) {
     let that = this;
+    this.setData({
+      currentCategoryId: id,
+      currentCategoryName: name
+    })
     util.request(api.CatalogCurrent + "/" + id)
       .then(function(res) {
         that.setData({
-          currentCategory: res.data.currentCategory
+          currentCategory: res.data,
         });
       });
   },
@@ -56,6 +64,6 @@ Page({
     if (this.data.currentCategory.id == event.currentTarget.dataset.id) {
       return false;
     }
-    this.getCurrentCategory(event.currentTarget.dataset.id);
+    this.getCurrentCategory(event.currentTarget.dataset.id, event.currentTarget.dataset.name);
   }
 })

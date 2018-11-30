@@ -10,6 +10,12 @@ spring:
     username: root
     password: 1234
     driver-class-name: com.mysql.cj.jdbc.Driver
+  jackson:
+    default-property-inclusion: non_null  #如果值为null,构造json时不加入
+    date-format: yyyy-MM-dd HH:mm    #指定Json中Date对象的传输格式.对于DTO还是使用以往的方式
+    locale: zh_CN
+    time-zone: Asia/Shanghai
+
 server:
   port: 8804
 

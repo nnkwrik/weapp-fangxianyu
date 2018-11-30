@@ -31,6 +31,10 @@ public class SearchCache {
                     .expireAfterWrite(30, TimeUnit.DAYS)
                     .build();
 
+    /**
+     * 增加某个关键字在缓存中的次数
+     * @param keyword
+     */
     public void add(String keyword) {
         int count = 0;
         AtomicInteger browseCount = cache.getIfPresent(keyword);
@@ -44,8 +48,13 @@ public class SearchCache {
         log.debug("SearchCache更新关键字【{}】的搜索次数为【{}】", keyword, count);
     }
 
+    /**
+     * 获取热门的关键字列表
+     * @param num
+     * @return
+     */
     public List<String> getHot(int num) {
-        log.debug("从SearchCache获取热门关键字列表");
+        log.info("从SearchCache获取热门关键字列表");
         return cache.asMap().entrySet().stream()
                 .sorted(Comparator.comparingInt(entry -> -entry.getValue().get()))
                 .limit(num)

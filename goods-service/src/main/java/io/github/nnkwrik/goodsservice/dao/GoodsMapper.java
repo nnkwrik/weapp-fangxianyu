@@ -64,6 +64,8 @@ public interface GoodsMapper {
             "       want_count,\n" +
             "       browse_count,\n" +
             "       is_selling,\n" +
+            "       is_delete,\n" +
+            "       post_time,\n" +
             "       last_edit,\n" +
             "       postage,\n" +
             "       region,\n" +
@@ -167,5 +169,5 @@ public interface GoodsMapper {
             "where seller_id = #{seller_id}\n" +
             "  and is_selling = false\n" +
             "  and is_delete = false;")
-    Integer getGellerHistory(@Param("seller_id") String sellerId);
+    Integer getSellerHistory(@Param("seller_id") String sellerId);
 }

@@ -84,7 +84,7 @@ Page({
     util.request(api.GoodsList + "/" + that.data.id, { page: that.data.page, size: that.data.size})
       .then(function (res) {
         that.setData({
-          goodsList: res.data.goodsList,
+          goodsList: res.data,
         });
       });
   },
