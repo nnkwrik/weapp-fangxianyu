@@ -26,7 +26,7 @@ public interface GoodsService {
 
     List<GoodsGallery> getGoodsGallery(int goodsId);
 
-    List<Goods> getGoodsRelated(int goodsId);
+    List<Goods> getGoodsRelated(int goodsId, int page, int size);
 
     List<CommentVo> getGoodsComment(int goodsId);
 

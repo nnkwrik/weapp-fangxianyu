@@ -4,6 +4,7 @@ import io.github.nnkwrik.common.dto.JWTUser;
 import io.github.nnkwrik.common.dto.Response;
 import io.github.nnkwrik.common.token.injection.JWT;
 import io.github.nnkwrik.goodsservice.model.po.Category;
+import io.github.nnkwrik.goodsservice.model.po.Goods;
 import io.github.nnkwrik.goodsservice.model.po.GoodsComment;
 import io.github.nnkwrik.goodsservice.model.po.Region;
 import io.github.nnkwrik.goodsservice.model.vo.CatalogPageVo;
@@ -33,12 +34,27 @@ public class IndexController {
      * @return
      */
     @GetMapping("/index/index")
-    public Response<IndexPageVO> index() {
+    public Response<IndexPageVO> index(@RequestParam(value = "page", defaultValue = "1") int page,
+                                       @RequestParam(value = "size", defaultValue = "10") int size) {
 
-        IndexPageVO vo = indexService.getIndex();
+        IndexPageVO vo = indexService.getIndex(page, size);
         log.info("浏览首页 : 展示{}个广告, {}个分类, {}个商品", vo.getBanner().size(), vo.getChannel().size(), vo.getIndexGoodsList().size());
 
         return Response.ok(vo);
+    }
+
+    /**
+     * 首页展示更多推荐商品
+     * @param page
+     * @param size
+     * @return
+     */
+    @GetMapping("/index/more")
+    public Response<List<Goods>> indexMore(@RequestParam(value = "page", defaultValue = "1") int page,
+                                           @RequestParam(value = "size", defaultValue = "10") int size) {
+        List<Goods> goodsList = indexService.getIndexMore(page, size);
+        log.info("首页获取更多推荐商品 : 返回{}个商品", goodsList.size());
+        return Response.ok(goodsList);
     }
 
     /**
@@ -57,6 +73,7 @@ public class IndexController {
 
     /**
      * 分类页, 获取选定主分类下的子分类
+     *
      * @param id
      * @return
      */
@@ -71,6 +88,7 @@ public class IndexController {
 
     /**
      * 发表评论
+     *
      * @param goodsId
      * @param comment
      * @param user
@@ -98,6 +116,7 @@ public class IndexController {
 
     /**
      * 获取发布商品时需要填选的发货地区
+     *
      * @param regionId
      * @return
      */
@@ -111,6 +130,7 @@ public class IndexController {
 
     /**
      * 获取发布商品时需要填选的分类
+     *
      * @param cateId
      * @return
      */

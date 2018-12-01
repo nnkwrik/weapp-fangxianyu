@@ -46,8 +46,8 @@ public class GoodsController {
     @GetMapping("/category/{categoryId}")
 
     public Response<CategoryPageVo> getCategoryPage(@PathVariable("categoryId") int categoryId,
-                                                @RequestParam(value = "page", defaultValue = "1") int page,
-                                                @RequestParam(value = "limit", defaultValue = "10") int size) {
+                                                    @RequestParam(value = "page", defaultValue = "1") int page,
+                                                    @RequestParam(value = "size", defaultValue = "10") int size) {
 
 
         CategoryPageVo vo = goodsService.getGoodsAndBrotherCateById(categoryId, page, size);
@@ -67,7 +67,7 @@ public class GoodsController {
     @GetMapping("/list/{categoryId}")
     public Response<Goods> getGoodsByCategory(@PathVariable("categoryId") int categoryId,
                                               @RequestParam(value = "page", defaultValue = "1") int page,
-                                              @RequestParam(value = "limit", defaultValue = "10") int size) {
+                                              @RequestParam(value = "size", defaultValue = "10") int size) {
 
         List<Goods> goodsList = goodsService.getGoodsByCateId(categoryId, page, size);
         log.info("通过分类浏览商品 : 分类id = {},展示{}个商品", categoryId, goodsList.size());
@@ -119,8 +119,10 @@ public class GoodsController {
      * @return
      */
     @GetMapping("/related/{goodsId}")
-    public Response<List<Goods>> getGoodsRelated(@PathVariable("goodsId") int goodsId) {
-        List<Goods> goodsList = goodsService.getGoodsRelated(goodsId);
+    public Response<List<Goods>> getGoodsRelated(@PathVariable("goodsId") int goodsId,
+                                                 @RequestParam(value = "page", defaultValue = "1") int page,
+                                                 @RequestParam(value = "size", defaultValue = "10") int size) {
+        List<Goods> goodsList = goodsService.getGoodsRelated(goodsId,page,size);
         log.info("获取与 goodsId=[{}] 相关的商品 : 展示{}个商品", goodsId, goodsList.size());
 
         return Response.ok(goodsList);

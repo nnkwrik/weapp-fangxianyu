@@ -16,28 +16,28 @@ Page({
     defaultKeyword: '输入关键字',
     hotKeyword: [],
     page: 1,
-    size: 20,
+    size: 10,
     // currentSortType: 'id',
     // currentSortOrder: 'desc',
     // categoryId: 0
   },
   //事件处理函数
-  closeSearch: function () {
+  closeSearch: function() {
     wx.navigateBack()
   },
-  clearKeyword: function () {
+  clearKeyword: function() {
     this.setData({
       keyword: '',
       searchStatus: false
     });
   },
-  onLoad: function () {
+  onLoad: function() {
     this.getSearchKeyword();
   },
 
   getSearchKeyword() {
     let that = this;
-    util.request(api.SearchIndex).then(function (res) {
+    util.request(api.SearchIndex).then(function(res) {
       if (res.errno === 0) {
         that.setData({
           historyKeyword: res.data.historyKeywordList,
@@ -47,7 +47,7 @@ Page({
     });
   },
 
-  inputChange: function (e) {
+  inputChange: function(e) {
 
     this.setData({
       keyword: e.detail.value,
@@ -55,18 +55,21 @@ Page({
     });
     this.getHelpKeyword();
   },
-  getHelpKeyword: function () {
+  getHelpKeyword: function() {
     let that = this;
     // 'https://suggest.taobao.com/sug?code=utf-8&q=a'
-    util.request('https://suggest.taobao.com/sug', { code: 'utf-8', q: that.data.keyword }).then(function (res) {
-      
-        that.setData({
-          helpKeyword: res.result
-        });
-      
+    util.request('https://suggest.taobao.com/sug', {
+      code: 'utf-8',
+      q: that.data.keyword
+    }).then(function(res) {
+
+      that.setData({
+        helpKeyword: res.result
+      });
+
     });
   },
-  inputFocus: function () {
+  inputFocus: function() {
     this.setData({
       searchStatus: false,
       goodsList: []
@@ -76,25 +79,28 @@ Page({
       this.getHelpKeyword();
     }
   },
-  clearHistory: function () {
+  clearHistory: function() {
     let that = this;
     this.setData({
       historyKeyword: []
     })
 
     util.request(api.SearchClearHistory)
-      .then(function (res) {
+      .then(function(res) {
         console.log('清除成功');
       });
   },
-  getGoodsList: function () {
+  getGoodsList: function() {
     let that = this;
-    util.request(api.SearchResult + '/' + that.data.keyword).then(function (res) {
+    util.request(api.SearchResult + '/' + that.data.keyword, {
+      page: this.data.page,
+      size: this.data.size
+    }).then(function(res) {
       if (res.errno === 0) {
         that.setData({
           searchStatus: true,
           categoryFilter: false,
-          goodsList: res.data,
+          goodsList: that.data.goodsList.concat(res.data),
           // page: res.data.currentPage,
           // size: res.data.numsPerPage
         });
@@ -104,7 +110,7 @@ Page({
       that.getSearchKeyword();
     });
   },
-  onKeywordTap: function (event) {
+  onKeywordTap: function(event) {
 
     this.getSearchResult(event.target.dataset.keyword);
 
@@ -174,5 +180,21 @@ Page({
   // },
   onKeywordConfirm(event) {
     this.getSearchResult(event.detail.value);
-  }
+  },
+  onPullDownRefresh: function() {
+    console.log("上拉刷新")
+    this.onLoad()
+    setTimeout(function callback() {
+      wx.stopPullDownRefresh()
+    }, 500)
+
+
+  },
+  onReachBottom: function() {
+    console.log("拉到底")
+    this.setData({
+      page: this.data.page + 1
+    })
+    this.getGoodsList()
+  },
 })

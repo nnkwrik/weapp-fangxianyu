@@ -3,10 +3,7 @@ package io.github.nnkwrik.goodsservice.dao;
 import io.github.nnkwrik.goodsservice.model.po.Goods;
 import io.github.nnkwrik.goodsservice.model.po.GoodsComment;
 import io.github.nnkwrik.goodsservice.model.po.GoodsGallery;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -144,7 +141,7 @@ public interface GoodsMapper {
     List<GoodsComment> findReplyComment(@Param("reply_comment_id") int commentId);
 
 
-    @Select("insert into goods (category_id,\n" +
+    @Insert("insert into goods (category_id,\n" +
             "                   seller_id,\n" +
             "                   name,\n" +
             "                   price,\n" +
@@ -161,13 +158,13 @@ public interface GoodsMapper {
             "#{marketPrice},#{postage}," +
 //            "#{primaryPicUrl}," +
             "#{desc}," +
-            "#{regionId},#{region},#{ableExpress},#{ableMeet},#{ableSelfTake});")
+            "#{regionId},#{region},#{ableExpress},#{ableMeet},#{ableSelfTake})")
     void addGoods(Goods goods);
 
     @Select("select COUNT(*)\n" +
             "from goods\n" +
             "where seller_id = #{seller_id}\n" +
             "  and is_selling = false\n" +
-            "  and is_delete = false;")
+            "  and is_delete = false")
     Integer getSellerHistory(@Param("seller_id") String sellerId);
 }

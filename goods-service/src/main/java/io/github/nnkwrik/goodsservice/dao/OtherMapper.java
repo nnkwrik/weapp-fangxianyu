@@ -27,7 +27,7 @@ public interface OtherMapper {
 
 
     @Insert("insert into goods_comment (goods_id, user_id, reply_comment_id, reply_user_id, content)\n" +
-            "values (#{goods_id}, #{user_id}, #{reply_comment_id}, #{reply_user_id}, #{content});")
+            "values (#{goods_id}, #{user_id}, #{reply_comment_id}, #{reply_user_id}, #{content})")
     void addComment(@Param("goods_id") int goodsId,
                     @Param("user_id") String userId,
                     @Param("reply_comment_id") int replyCommentId,

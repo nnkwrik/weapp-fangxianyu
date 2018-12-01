@@ -27,7 +27,7 @@ public class IndexServiceImpl implements IndexService {
     private GoodsMapper goodsMapper;
 
     @Override
-    public IndexPageVO getIndex() {
+    public IndexPageVO getIndex(int page, int size) {
         //广告
         List<Ad> adList = otherMapper.findAd();
 
@@ -35,12 +35,15 @@ public class IndexServiceImpl implements IndexService {
         List<Channel> channelList = otherMapper.findChannel();
 
         //推荐商品
-        int pageNum = 1;
-        int pageSize = 10;
-        PageHelper.startPage(pageNum, pageSize);
-        List<Goods> goodsList = goodsMapper.findSimpleGoods();
+        List<Goods> goodsList = getIndexMore(page,size);
 
         return new IndexPageVO(goodsList, adList, channelList);
+    }
+
+    @Override
+    public List<Goods> getIndexMore(int page, int size) {
+        PageHelper.startPage(page, size);
+        return goodsMapper.findSimpleGoods();
     }
 
     @Override

@@ -5,41 +5,53 @@ var app = getApp();
 
 Page({
   data: {
-    boughtList: []
+    boughtList: [],
+    page: 1,
+    size: 10
   },
   getBoughtList() {
     let that = this;
-    util.request(api.BoughtList).then(function (res) {
+    util.request(api.BoughtList, {
+      page: this.data.page,
+      size: this.data.size
+    }).then(function(res) {
       if (res.errno === 0) {
         console.log(res.data);
         that.setData({
-          boughtList: res.data
+          boughtList: that.data.boughtList.concat(res.data),
         });
       }
     });
   },
-  onLoad: function (options) {
+  onLoad: function(options) {
     this.getBoughtList();
   },
-  onReady: function () {
+  onReady: function() {
 
   },
-  onShow: function () {
+  onShow: function() {
 
   },
-  onHide: function () {
+  onHide: function() {
     // 页面隐藏
 
   },
-  onUnload: function () {
+  onUnload: function() {
     // 页面关闭
   },
   openGoods(event) {
     let goodsId = this.data.boughtList[event.currentTarget.dataset.index].id;
 
-      wx.navigateTo({
-        url: '/pages/goods/goods?id=' + goodsId,
-      });
+    wx.navigateTo({
+      url: '/pages/goods/goods?id=' + goodsId,
+    });
+  },
+  onReachBottom: function() {
+    console.log("拉到底")
+    this.setData({
+      page: this.data.page + 1
+    })
+    this.getBoughtList()
   },
 
 })

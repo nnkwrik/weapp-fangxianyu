@@ -28,6 +28,8 @@ Page({
     replyId: '',
     replyUserId: '',
     replyUserName: '',
+    page: 1,
+    size: 10,
     commentContent: '',
     onLoadOption: {},
     noCollectImage: "/static/images/detail_star.png",
@@ -77,10 +79,13 @@ Page({
   },
   getGoodsRelated: function() {
     let that = this;
-    util.request(api.GoodsRelated + '/' + that.data.id, ).then(function(res) {
+    util.request(api.GoodsRelated + '/' + that.data.id, {
+      page: this.data.page,
+      size: this.data.size
+    }).then(function(res) {
       if (res.errno === 0) {
         that.setData({
-          relatedGoods: res.data,
+          relatedGoods: that.data.relatedGoods.concat(res.data)
         });
       }
     });
@@ -405,4 +410,11 @@ Page({
   //     number: this.data.number + 1
   //   });
   // }
+  onReachBottom: function() {
+    console.log("拉到底")
+    this.setData({
+      page: this.data.page + 1
+    })
+    this.getGoodsRelated()
+  },
 })

@@ -84,16 +84,14 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
-    public List<Goods> getGoodsRelated(int goodsId) {
+    public List<Goods> getGoodsRelated(int goodsId, int page, int size) {
         //获取同一子分类下
-        int pageNum = 1;
-        int pageSize = 10;
-        PageHelper.startPage(pageNum, pageSize);
+        PageHelper.startPage(page, size);
         List<Goods> simpleGoods = goodsMapper.findSimpleGoodsInSameCate(goodsId);
 
         //统一子分类下的数量少于10, 查找同一父分类下
         if (simpleGoods.size() < 10) {
-            PageHelper.startPage(pageNum, pageSize);
+            PageHelper.startPage(page, size);
             simpleGoods = goodsMapper.findSimpleGoodsInSameParentCate(goodsId);
         }
 

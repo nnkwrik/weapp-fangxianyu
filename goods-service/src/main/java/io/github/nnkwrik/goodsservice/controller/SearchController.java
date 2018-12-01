@@ -79,7 +79,7 @@ public class SearchController {
     @GetMapping("/result/{keyword}")
     public Response<List<Goods>> searchGoods(@PathVariable("keyword") String keyword,
                                              @RequestParam(value = "page", defaultValue = "1") int page,
-                                             @RequestParam(value = "limit", defaultValue = "10") int size,
+                                             @RequestParam(value = "size", defaultValue = "10") int size,
                                              @JWT JWTUser jwtUser) {
         List<String> keywordList = Arrays.asList(StringUtils.split(keyword));
         List<Goods> goodsListVo = searchService.searchByKeyword(keywordList, page, size);

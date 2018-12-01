@@ -60,7 +60,7 @@ public interface SearchMapper {
 
     @Update("update search_history\n" +
             "set search_time = now()\n" +
-            "where user_id = #{user_id} and keyword = #{keyword};")
+            "where user_id = #{user_id} and keyword = #{keyword}")
     void updateSearchTime(@Param("user_id") String userId, @Param("keyword") String keyword);
 
 

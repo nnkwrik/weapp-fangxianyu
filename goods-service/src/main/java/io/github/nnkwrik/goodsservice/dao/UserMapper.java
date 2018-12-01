@@ -24,7 +24,7 @@ public interface UserMapper {
             "from user_preference\n" +
             "where goods_id = #{goods_id}\n" +
             "  and user_id = #{user_id}\n" +
-            "  and type = 1;")
+            "  and type = 1")
     void deleteUserCollect(@Param("user_id") String userId, @Param("goods_id") int goodsId);
 
 
@@ -39,7 +39,7 @@ public interface UserMapper {
             "from user_preference\n" +
             "where goods_id = #{goods_id}\n" +
             "  and user_id = #{user_id}\n" +
-            "  and type = 2;")
+            "  and type = 2")
     void deleteUserWant(@Param("user_id") String userId, @Param("goods_id") int goodsId);
 
 
@@ -47,7 +47,7 @@ public interface UserMapper {
             "from goods\n" +
             "       inner join user_preference as u \n" +
             "         on goods.id = u.goods_id and u.user_id = #{user_id} and u.type = 1 and is_delete = false\n" +
-            "order by u.create_time desc;")
+            "order by u.create_time desc")
     List<Goods> getUserCollect(@Param("user_id") String userId);
 
     @Select("select id, name, primary_pic_url, price, sold_time\n" +
@@ -61,7 +61,7 @@ public interface UserMapper {
             "from goods\n" +
             "where seller_id = #{seller_id}\n" +
             "  and is_selling = 0\n" +
-            "order by sold_time desc;")
+            "order by sold_time desc")
     List<Goods> getUserSold(@Param("seller_id") String sellerId);
 
     @Select("select id, name, primary_pic_url, price, last_edit\n" +
@@ -69,6 +69,6 @@ public interface UserMapper {
             "where seller_id = #{seller_id}\n" +
             "  and is_selling = 1\n" +
             "  and is_delete = 0\n" +
-            "order by last_edit desc;")
+            "order by last_edit desc")
     List<Goods> getUserPosted(@Param("seller_id") String sellerId);
 }

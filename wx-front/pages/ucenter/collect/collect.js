@@ -5,15 +5,20 @@ var app = getApp();
 
 Page({
   data: {
-    collectList: []
+    collectList: [],
+    page: 1,
+    size: 10
   },
   getCollectList() {
     let that = this;
-    util.request(api.CollectList).then(function (res) {
+    util.request(api.CollectList, {
+      page: this.data.page,
+      size: this.data.size
+    }).then(function (res) {
       if (res.errno === 0) {
         console.log(res.data);
         that.setData({
-          collectList: res.data
+          collectList: that.data.collectList.concat(res.data),
         });
       }
     });
@@ -88,4 +93,11 @@ Page({
     })
     console.log(e.timeStamp + '- touch-end')
   }, 
+  onReachBottom: function () {
+    console.log("拉到底")
+    this.setData({
+      page: this.data.page + 1
+    })
+    this.getCollectList()
+  },
 })

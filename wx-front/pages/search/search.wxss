@@ -229,7 +229,7 @@ page{
 }
 
 .cate-item{
-    margin-top: 175rpx;
+    margin-top: 100rpx;
     height: auto;
     overflow: hidden;
 }

@@ -8,7 +8,9 @@ Page({
   data: {
     banner: [],
     channel: [],
-    indexGoods: []
+    indexGoods: [],
+    page: 1,
+    size: 10,
     // newGoods: [],
     // hotGoods: [],
     // topics: [],
@@ -17,7 +19,7 @@ Page({
     // banner: [],
     // channel: []
   },
-  onShareAppMessage: function () {
+  onShareAppMessage: function() {
     return {
       title: '古早交易平台',
       desc: '一款开源仿闲鱼交易平台！',
@@ -25,9 +27,9 @@ Page({
     }
   },
 
-  getIndexData: function () {
+  getIndexData: function() {
     let that = this;
-    util.request(api.IndexUrl).then(function (res) {
+    util.request(api.IndexUrl).then(function(res) {
       console.log(res.data)
       // console.log(res.data.hotGoodsList)
       // console.log(res.data.categoryList)
@@ -45,19 +47,51 @@ Page({
       }
     });
   },
-  onLoad: function (options) {
-    this.getIndexData();
+  getIndexMore: function() {
+    let that = this;
+    util.request(api.IndexMore, {
+      page: this.data.page,
+      size: this.data.size
+    }).then(function(res) {
+      console.log(res.data)
+      if (res.errno === 0) {
+        that.setData({
+          indexGoods: that.data.indexGoods.concat(res.data),
+        });
+      }
+    });
   },
-  onReady: function () {
+  onLoad: function(options) {
+    this.getIndexData();
+
+  },
+  onReady: function() {
     // 页面渲染完成
   },
-  onShow: function () {
+  onShow: function() {
     // 页面显示
   },
-  onHide: function () {
+  onHide: function() {
     // 页面隐藏
   },
-  onUnload: function () {
+  onUnload: function() {
     // 页面关闭
+  },
+
+  onPullDownRefresh: function() {
+    console.log("上拉刷新")
+    this.onLoad()
+    setTimeout(function callback() {
+      wx.stopPullDownRefresh()
+    }, 500)
+
+
+  },
+  onReachBottom: function() {
+    console.log("拉到底")
+    this.setData({
+      page: this.data.page + 1
+    })
+    this.getIndexMore()
   },
 })

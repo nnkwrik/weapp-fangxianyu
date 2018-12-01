@@ -44,7 +44,7 @@
     "navigationBarBackgroundColor": "#fff",
     "navigationBarTitleText": "仿闲鱼交易平台",
     "navigationBarTextStyle": "black",
-    "enablePullDownRefresh": true
+    "enablePullDownRefresh": false
   },
   "tabBar": {
     "backgroundColor": "#fafafa",

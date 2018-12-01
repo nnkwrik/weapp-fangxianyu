@@ -5,15 +5,20 @@ var app = getApp();
 
 Page({
   data: {
-    postedList: []
+    postedList: [],
+    page: 1,
+    size: 10
   },
   getPostedList() {
     let that = this;
-    util.request(api.PostedList).then(function (res) {
+    util.request(api.PostedList, {
+      page: this.data.page,
+      size: this.data.size
+    }).then(function (res) {
       if (res.errno === 0) {
         console.log(res.data);
         that.setData({
-          postedList: res.data
+          postedList: that.data.postedList.concat(res.data),
         });
       }
     });
@@ -40,6 +45,13 @@ Page({
     wx.navigateTo({
       url: '/pages/goods/goods?id=' + goodsId,
     });
+  },
+  onReachBottom: function () {
+    console.log("拉到底")
+    this.setData({
+      page: this.data.page + 1
+    })
+    this.getPostedList()
   },
 
 })

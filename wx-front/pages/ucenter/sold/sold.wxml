@@ -1,7 +1,7 @@
 <view class="container">
   <view class="collect-list" wx:if='{{soldList.length}}'>
     <view class="item" bindtap="openGoods" wx:for="{{soldList}}" wx:key="{{item.id}}" data-index="{{index}}">
-      <image class="img" src="{{item.primaryPicUrl}}"></image>
+      <image class="img" src="{{item.primaryPicUrl}}" mode='aspectFill'></image>
       <view class="info">
         <view class="name">{{item.name}}</view>
         <view class="flex">

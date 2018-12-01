@@ -14,11 +14,11 @@ public interface UserService {
 
     void collectAddOrDelete(int goodsId, String userId, boolean hasCollect);
 
-    List<Goods> getUserCollectList(String userId);
+    List<Goods> getUserCollectList(String userId, int page, int size);
 
-    List<Goods> getUserBought(String buyerId);
+    List<Goods> getUserBought(String buyerId, int page, int size);
 
-    List<Goods> getUserSold(String sellerId);
+    List<Goods> getUserSold(String sellerId, int page, int size);
 
-    List<Goods> getUserPosted(String userId);
+    List<Goods> getUserPosted(String userId, int page, int size);
 }

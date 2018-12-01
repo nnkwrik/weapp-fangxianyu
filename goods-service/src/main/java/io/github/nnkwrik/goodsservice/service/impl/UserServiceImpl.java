@@ -1,5 +1,6 @@
 package io.github.nnkwrik.goodsservice.service.impl;
 
+import com.github.pagehelper.PageHelper;
 import io.github.nnkwrik.goodsservice.dao.UserMapper;
 import io.github.nnkwrik.goodsservice.model.po.Goods;
 import io.github.nnkwrik.goodsservice.service.UserService;
@@ -33,23 +34,27 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<Goods> getUserCollectList(String userId) {
+    public List<Goods> getUserCollectList(String userId, int page, int size) {
+        PageHelper.startPage(page, size);
         return userMapper.getUserCollect(userId);
     }
 
     @Override
-    public List<Goods> getUserBought(String buyerId) {
+    public List<Goods> getUserBought(String buyerId, int page, int size) {
+        PageHelper.startPage(page, size);
         return userMapper.getUserBought(buyerId);
     }
 
     @Override
-    public List<Goods> getUserSold(String sellerId) {
+    public List<Goods> getUserSold(String sellerId, int page, int size) {
+        PageHelper.startPage(page, size);
         return userMapper.getUserSold(sellerId);
 
     }
 
     @Override
-    public List<Goods> getUserPosted(String userId) {
+    public List<Goods> getUserPosted(String userId, int page, int size) {
+        PageHelper.startPage(page, size);
         return userMapper.getUserPosted(userId);
     }
 
