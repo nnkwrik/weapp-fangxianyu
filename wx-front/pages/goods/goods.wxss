@@ -687,55 +687,43 @@
   bottom: 100rpx;
 }
 
-.attr-pop .close {
+.delete-pop {
+  width: 100%;
+  height: auto;
+  max-height: 780rpx;
+  padding: 10rpx;
+  background: #fff;
+  position: fixed;
+  z-index: 9;
+  bottom: 50%;
+}
+
+.delete-pop .close {
   position: absolute;
   width: 48rpx;
   height: 48rpx;
   right: 31.25rpx;
   overflow: hidden;
-  top: 31.25rpx;
+  /* top: 31.25rpx; */
 }
 
-.attr-pop .close .icon {
-  width: 48rpx;
-  height: 48rpx;
+.delete-pop .close .icon {
+  width: 60rpx;
+  height: 60rpx;
 }
 
-.attr-pop .img-info {
-  width: 687.5rpx;
-  height: 177rpx;
-  overflow: hidden;
-  margin-bottom: 41.5rpx;
-}
-
-.attr-pop .img {
-  float: left;
-  height: 177rpx;
-  width: 177rpx;
-  background: #f4f4f4;
-  margin-right: 31.25rpx;
-}
-
-.attr-pop .info {
-  float: left;
-  height: 177rpx;
-  display: flex;
-  align-items: center;
-}
-
-.attr-pop .p {
-  font-size: 33rpx;
-  color: #333;
-  height: 33rpx;
-  line-height: 33rpx;
-  margin-bottom: 10rpx;
-}
-
-.attr-pop .a {
-  font-size: 29rpx;
-  color: #333;
-  height: 40rpx;
-  line-height: 40rpx;
+.delete-pop .delete-btn {
+  width: 600rpx;
+  background: #f94b4b;
+  margin-top: 25px;
+  border: 1px solid #f94b4b;
+  height: 100rpx;
+  line-height: 96rpx;
+  text-align: center;
+  color: #fff;
+  font-size: 30rpx;
+  border-radius: 10rpx;
+  margin-bottom: 30rpx;
 }
 
 .spec-con {

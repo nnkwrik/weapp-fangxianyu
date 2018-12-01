@@ -15,6 +15,7 @@ Page({
     // brand: {},
     // specificationList: [],
     // productList: [],
+    isSeller:false,
     seller: {},
     sellerDates: 0,
     sellerHistory: 0,
@@ -25,6 +26,7 @@ Page({
     checkedSpecText: '请选择规格数量',
     openAttr: false,
     openComment: false,
+    openDelete:false,
     replyId: '',
     replyUserId: '',
     replyUserName: '',
@@ -40,6 +42,16 @@ Page({
     let that = this;
     util.request(api.GoodsDetail + '/' + that.data.id).then(function(res) {
       if (res.errno === 0) {
+        if (res.data.info.isDelete) {
+          util.showErrorToast('商品不存在')
+          setTimeout(function callback() {
+            
+            wx.navigateBack({
+              delta: 1
+            })
+          }, 1000)
+          return 
+        }
 
         //计算卖家来平台第几天
         let registerTime = res.data.seller.registerTime
@@ -51,12 +63,7 @@ Page({
           seller: res.data.seller,
           sellerHistory: res.data.sellerHistory,
           sellerDates: dates,
-          // attribute: res.data.attribute,
-          // issueList: res.data.issue,
           comment: res.data.comment,
-          // brand: res.data.brand,
-          // specificationList: res.data.specificationList,
-          // productList: res.data.productList,
           userHasCollect: res.data.userHasCollect
         });
 
@@ -67,6 +74,13 @@ Page({
         } else {
           that.setData({
             'collectBackImage': that.data.noCollectImage
+          });
+        }
+
+        if (that.data.seller.openId == wx.getStorageSync('userInfo').openId){
+          console.log("当前用户是卖家")
+          that.setData({
+            isSeller: true
           });
         }
 
@@ -87,6 +101,26 @@ Page({
         that.setData({
           relatedGoods: that.data.relatedGoods.concat(res.data)
         });
+      }
+    });
+
+  },
+  deleteGoods: function () {
+    let that = this;
+    util.request(api.GoodsDelete + '/' + that.data.id,{},'DELETE').then(function (res) {
+      if (res.errno === 0) {
+
+        setTimeout(function goback() {
+          wx.reLaunch({
+            url: '/pages/index/index'
+          })
+        }, 1000)
+
+        wx.showToast({
+          title: '删除成功'
+        })
+      }else{
+        console.log(res.errmsg)
       }
     });
 
@@ -211,6 +245,7 @@ Page({
 
     var that = this;
     this.getGoodsInfo();
+
     // util.request(api.CartGoodsCount).then(function (res) {
     //   if (res.errno === 0) {
     //     that.setData({
@@ -257,11 +292,30 @@ Page({
 
   },
 
+  switchDeletetPop: function (event) {
+    let that = this
+    user.checkLoginAndNav().then(() => {
+      if (this.data.openDelete == false) {
+        this.setData({
+          openDelete: !this.data.openDelete
+        });
+      }
+    })
+
+  },
+
 
   closeComment: function() {
     this.setData({
 
       openComment: false,
+    });
+  },
+
+  closeDelete: function () {
+    this.setData({
+
+      openDelete: false,
     });
   },
 

@@ -63,7 +63,7 @@ public class GoodsServiceImpl implements GoodsService {
 
     @Override
     public SimpleUser getSellerInfo(String sellerId) {
-                Response<SimpleUser> response = userClient.getSimpleUser(sellerId);
+        Response<SimpleUser> response = userClient.getSimpleUser(sellerId);
         if (response.getErrno() == Response.USER_IS_NOT_EXIST) {
             log.info("没有搜索到商品卖家的相关信息");
             return null;
@@ -101,6 +101,15 @@ public class GoodsServiceImpl implements GoodsService {
     @Override
     public void postGoods(Goods goods) {
         goodsMapper.addGoods(goods);
+    }
+
+    @Override
+    public void deleteGoods(int goodsId, String userId) throws Exception {
+        if (goodsMapper.validateSeller(goodsId, userId)) {
+            goodsMapper.deleteGoods(goodsId);
+        } else {
+            throw new Exception(Response.SELLER_AND_GOODS_IS_NOT_MATCH + "");
+        }
     }
 
     @Override

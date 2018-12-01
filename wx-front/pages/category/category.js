@@ -111,7 +111,9 @@ Page({
       });
     }
     this.setData({
-      id: event.currentTarget.dataset.id
+      id: event.currentTarget.dataset.id,
+      page:1,
+      goodsList:[]
     });
 
     this.getGoodsList();

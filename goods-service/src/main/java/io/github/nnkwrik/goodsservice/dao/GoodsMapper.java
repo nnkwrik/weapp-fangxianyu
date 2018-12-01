@@ -167,4 +167,10 @@ public interface GoodsMapper {
             "  and is_selling = false\n" +
             "  and is_delete = false")
     Integer getSellerHistory(@Param("seller_id") String sellerId);
+
+    @Select("SELECT EXISTS(SELECT 1 FROM goods WHERE seller_id=#{seller_id} and id=#{goods_id})")
+    Boolean validateSeller(@Param("goods_id") int goodsId, @Param("seller_id") String userId);
+
+    @Delete("delete from goods where id = ${goods_id}")
+    void deleteGoods(@Param("goods_id") int goodsId);
 }

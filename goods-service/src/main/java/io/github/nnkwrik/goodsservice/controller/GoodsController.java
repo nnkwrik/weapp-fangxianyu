@@ -122,7 +122,7 @@ public class GoodsController {
     public Response<List<Goods>> getGoodsRelated(@PathVariable("goodsId") int goodsId,
                                                  @RequestParam(value = "page", defaultValue = "1") int page,
                                                  @RequestParam(value = "size", defaultValue = "10") int size) {
-        List<Goods> goodsList = goodsService.getGoodsRelated(goodsId,page,size);
+        List<Goods> goodsList = goodsService.getGoodsRelated(goodsId, page, size);
         log.info("获取与 goodsId=[{}] 相关的商品 : 展示{}个商品", goodsId, goodsList.size());
 
         return Response.ok(goodsList);
@@ -155,6 +155,23 @@ public class GoodsController {
         goodsService.postGoods(goods);
         log.info("用户发布商品：用户昵称=【{}】，商品名=【{}】，详情=【{}】", user.getNickName(), goods.getName(), goods);
 
+        return Response.ok();
+    }
+
+    @DeleteMapping("/delete/{goodsId}")
+    public Response postGoods(@PathVariable int goodsId,
+                              @JWT(required = true) JWTUser user) {
+        try {
+            goodsService.deleteGoods(goodsId, user.getOpenId());
+        } catch (Exception e) {
+            if (e.getMessage().equals(Response.SELLER_AND_GOODS_IS_NOT_MATCH + "")) {
+                String msg = "删除商品失败.当前用户信息和卖家信息不匹配";
+                return Response.fail(Response.SELLER_AND_GOODS_IS_NOT_MATCH, msg);
+            }
+            e.printStackTrace();
+
+        }
+        log.info("用户删除商品: 用户id=【{}】，商品Id=【{}】", user.getOpenId(), goodsId);
         return Response.ok();
     }
 

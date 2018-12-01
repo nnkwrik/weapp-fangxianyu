@@ -32,4 +32,5 @@ public interface GoodsService {
 
     void postGoods(Goods goods);
 
+    void deleteGoods(int goodsId, String userId) throws Exception;
 }

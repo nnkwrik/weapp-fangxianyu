@@ -257,6 +257,16 @@
 </view>
 
 
+<view class="attr-pop-box" hidden="{{!openDelete}}">
+  <view class="delete-pop ">
+    <view class="close" bindtap="closeDelete">
+      <image class="icon" src="/static/images/clear_input.png"></image>
+    </view>
+    <button class='delete-btn' bindtap="deleteGoods" >确定删除</button>
+  </view>
+</view>
+
+
 <view class="bottom-btn">
   <view class="l" bindtap="addCannelCollect">
     <image class="icon" src="{{ collectBackImage }}"></image>
@@ -278,5 +288,7 @@
   </view> -->
   <!-- <view class="c">立即购买</view> -->
   <view class="r" wx:if='{{!goods.isSelling}}' bindtap="addToCart">该商品已出售</view>
+  <view class="r" wx:elif="{{isSeller && !goods.isDelete && goods.isSelling}}" bindtap="switchDeletetPop">删除该商品</view>
   <view class="r" wx:else bindtap="addToCart">想要</view>
+  
 </view>

@@ -1,8 +1,9 @@
-const ApiRootUrl = 'https://5d876383.ngrok.io/';
-// const ApiRootUrl = 'http://127.0.0.1:8080/';
+// const ApiRootUrl = 'https://5d876383.ngrok.io/';
+const ApiRootUrl = 'http://127.0.0.1:8080/';
 
 module.exports = {
   IndexUrl: ApiRootUrl + 'index/index', //首页数据接口
+  IndexMore: ApiRootUrl + 'index/more', //首页展示更多推荐商品
   CatalogList: ApiRootUrl + 'catalog/index',  //分类目录全部分类数据接口
   CatalogCurrent: ApiRootUrl + 'catalog',  //分类目录当前分类数据接口
 
@@ -16,6 +17,7 @@ module.exports = {
   GoodsHot: ApiRootUrl + 'goods/hot',  //热门
   GoodsRelated: ApiRootUrl + 'goods/related',  //商品详情页的关联商品（大家都在看）
   GoodsPost: ApiRootUrl + 'goods/post', //发布商品
+  GoodsDelete: ApiRootUrl + 'goods/delete', //删除商品
 
   PostCateList: ApiRootUrl + 'category/post', //发布商品时选择分类
 
@@ -35,6 +37,11 @@ module.exports = {
 
   CollectList: ApiRootUrl + 'collect/list',  //收藏列表
   CollectAddOrDelete: ApiRootUrl + 'collect/addordelete',  //添加或取消收藏
+  
+  PostedList: ApiRootUrl + 'goods/posted',  //发布的商品
+  BoughtList: ApiRootUrl + 'goods/bought',  //买过的商品
+  SoldList: ApiRootUrl + 'goods/sold',  //卖出的商品
+  
 
   CommentList: ApiRootUrl + 'comment/list',  //评论列表
   CommentCount: ApiRootUrl + 'comment/count',  //评论总数
