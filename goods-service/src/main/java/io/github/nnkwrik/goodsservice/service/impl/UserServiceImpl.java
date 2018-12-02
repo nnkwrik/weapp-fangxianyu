@@ -1,12 +1,23 @@
 package io.github.nnkwrik.goodsservice.service.impl;
 
 import com.github.pagehelper.PageHelper;
+import io.github.nnkwrik.common.dto.Response;
+import io.github.nnkwrik.common.dto.SimpleUser;
+import io.github.nnkwrik.goodsservice.client.UserClient;
 import io.github.nnkwrik.goodsservice.dao.UserMapper;
 import io.github.nnkwrik.goodsservice.model.po.Goods;
+import io.github.nnkwrik.goodsservice.model.po.GoodsExample;
 import io.github.nnkwrik.goodsservice.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
@@ -14,10 +25,14 @@ import java.util.List;
  * @date 18/11/27 20:37
  */
 @Service
+@Slf4j
 public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private UserClient userClient;
 
     @Override
     public Boolean userHasCollect(String userId, int goodsId) {
@@ -56,6 +71,54 @@ public class UserServiceImpl implements UserService {
     public List<Goods> getUserPosted(String userId, int page, int size) {
         PageHelper.startPage(page, size);
         return userMapper.getUserPosted(userId);
+    }
+
+    @Override
+    public SimpleUser getUserInfo(String userId) {
+        Response<SimpleUser> response = userClient.getSimpleUser(userId);
+        if (response.getErrno() == Response.USER_IS_NOT_EXIST) {
+            log.info("没有搜索到用户的相关信息");
+            return null;
+        }
+        return response.getData();
+    }
+
+
+    @Override
+    public LinkedHashMap<String, List<Goods>> getUserHistoryList(String userId, int page, int size) {
+        PageHelper.startPage(page, size);
+        List<GoodsExample> userHistoryList = userMapper.getUserHistoryList(userId);
+
+        LinkedHashMap<String, List<Goods>> result = new LinkedHashMap<>();
+
+        LocalDate lastDay = getDay(userHistoryList.get(0).getTime());
+        List<Goods> lastValue = new ArrayList<>();
+
+        for (GoodsExample goods : userHistoryList) {
+            if (lastDay.equals(getDay(goods.getTime()))) {
+                lastValue.add(goods);
+            } else {
+                String key = dateFormat(lastDay);
+                result.put(key, lastValue);
+                lastDay = getDay(goods.getTime());
+                lastValue = new ArrayList<>();
+
+                lastValue.add(goods);
+            }
+        }
+        result.put(dateFormat(lastDay), lastValue);
+
+        return result;
+    }
+
+    private LocalDate getDay(Date date) {
+        return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+    }
+
+    private String dateFormat(LocalDate localDate) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String formattedString = localDate.format(formatter);
+        return formattedString;
     }
 
 

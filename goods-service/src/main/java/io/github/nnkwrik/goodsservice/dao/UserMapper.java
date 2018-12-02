@@ -1,6 +1,7 @@
 package io.github.nnkwrik.goodsservice.dao;
 
 import io.github.nnkwrik.goodsservice.model.po.Goods;
+import io.github.nnkwrik.goodsservice.model.po.GoodsExample;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -71,4 +72,21 @@ public interface UserMapper {
             "  and is_delete = 0\n" +
             "order by last_edit desc")
     List<Goods> getUserPosted(@Param("seller_id") String sellerId);
+
+
+    @Select("select goods.id,\n" +
+            "       name,\n" +
+            "       primary_pic_url,\n" +
+            "       price,\n" +
+            "       is_selling,\n" +
+            "       post_time,\n" +
+            "       sold_time,\n" +
+            "       time\n" +
+            "from goods\n" +
+            "       inner join (select id, post_time as time from goods\n" +
+            "                   UNION\n" +
+            "                   select id, sold_time as time from goods where sold_time is not null) as ids\n" +
+            "         on goods.id = ids.id and seller_id = #{user_id}\n" +
+            "order by time desc")
+    List<GoodsExample> getUserHistoryList(@Param("user_id") String userId);
 }

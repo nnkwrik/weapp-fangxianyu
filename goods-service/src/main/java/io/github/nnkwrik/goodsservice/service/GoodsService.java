@@ -20,8 +20,6 @@ public interface GoodsService {
 
     Goods getGoodsDetail(int goodsId);
 
-    SimpleUser getSellerInfo(String sellerId);
-
     int getSellerHistory(String sellerId);
 
     List<GoodsGallery> getGoodsGallery(int goodsId);

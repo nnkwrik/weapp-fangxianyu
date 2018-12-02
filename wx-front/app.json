@@ -37,7 +37,8 @@
     "pages/ucenter/bought/bought",
     "pages/ucenter/sold/sold",
     "pages/ucenter/posted/posted",
-    "pages/ucenter/about/about"
+    "pages/ucenter/about/about",
+    "pages/user/user"
   ],
   "window": {
     "backgroundTextStyle": "dark",

@@ -61,15 +61,7 @@ public class GoodsServiceImpl implements GoodsService {
         return goodsMapper.findDetailGoodsByGoodsId(goodsId);
     }
 
-    @Override
-    public SimpleUser getSellerInfo(String sellerId) {
-        Response<SimpleUser> response = userClient.getSimpleUser(sellerId);
-        if (response.getErrno() == Response.USER_IS_NOT_EXIST) {
-            log.info("没有搜索到商品卖家的相关信息");
-            return null;
-        }
-        return response.getData();
-    }
+
 
     @Override
     public int getSellerHistory(String sellerId) {

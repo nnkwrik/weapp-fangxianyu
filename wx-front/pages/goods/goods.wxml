@@ -54,18 +54,18 @@
   <!-- seller avater -->
   <!-- day -->
   <!-- history -->
-  <view class="seller-nav section-act">
+  <navigator url="/pages/user/user?userId={{seller.openId}}" class="seller-nav section-act">
     <view class="seller-t">
       <image class="seller-avatar" src="{{seller.avatarUrl}}"></image>
     </view>
 
     <view class="seller-info">
       <view class="name">{{seller.nickName}}</view>
-      <view class="history">加入平台第{{sellerDates}}天,出售过{{sellerHistory}}件宝贝</view>
+      <view class="history">加入平台第{{sellerDates}}天,卖出过{{sellerHistory}}件宝贝</view>
     </view>
 
     <image class="i" src="../../static/images/address_right.png" background-size="cover"></image>
-  </view>
+  </navigator>
 
 
 
@@ -104,28 +104,32 @@
       <view wx:for="{{comment}}" wx:for-index="index" wx:for-item="item" wx:key="{{item.id}}">
         <!-- comment -->
         <view class="item">
-          <view bindtap="switchCommentPop" data-reply-id="{{item.id}}" data-reply-user-id="{{item.simpleUser.openId}}" data-reply-user-name='{{item.simpleUser.nickName}}'>
-            <view class="info">
-              <view class="user">
-                <image src="{{item.simpleUser.avatarUrl}}"></image>
-                <text>{{item.simpleUser.nickName}}</text>
-              </view>
-              <view class="time">{{item.createTime}}</view>
+
+          <view class="info">
+            <view class="user">
+
+              <navigator class='navimg' url="/pages/user/user?userId={{item.simpleUser.openId}}" wx: style="background-image: url('{{item.simpleUser.avatarUrl}}')">
+              </navigator>
+
+              <text>{{item.simpleUser.nickName}}</text>
             </view>
-            <view class="content">
-              {{item.content}}
-            </view>
+            <view class="time">{{item.createTime}}</view>
           </view>
+          <view class="content" bindtap="switchCommentPop" data-reply-id="{{item.id}}" data-reply-user-id="{{item.simpleUser.openId}}" data-reply-user-name='{{item.simpleUser.nickName}}'>
+            {{item.content}}
+          </view>
+
           <!-- reply -->
-          <view wx:for="{{item.replyList}}" wx:for-index="iindex" wx:for-item="iitem" wx:key="{{iitem.id}}" bindtap="switchCommentPop" data-reply-id="{{iitem.id}}" data-reply-user-id="{{iitem.simpleUser.openId}}" data-reply-user-name='{{iitem.simpleUser.nickName}}'>
+          <view wx:for="{{item.replyList}}" wx:for-index="iindex" wx:for-item="iitem" wx:key="{{iitem.id}}">
             <view class="reply-info">
               <view class="reply-user">
-                <image src="{{iitem.simpleUser.avatarUrl}}"></image>
+                <navigator class='navimg-reply' url="/pages/user/user?userId={{iitem.simpleUser.openId}}" wx: style="background-image: url('{{item.simpleUser.avatarUrl}}')"></navigator>
+
                 <text>{{iitem.simpleUser.nickName}}</text>
               </view>
               <view class="time">{{iitem.createTime}}</view>
             </view>
-            <view class="reply-content">
+            <view class="reply-content" bindtap="switchCommentPop" data-reply-id="{{iitem.id}}" data-reply-user-id="{{iitem.simpleUser.openId}}" data-reply-user-name='{{iitem.simpleUser.nickName}}'>
               回复@{{iitem.replyUserName}}:{{iitem.content}}
             </view>
           </view>
@@ -262,7 +266,7 @@
     <view class="close" bindtap="closeDelete">
       <image class="icon" src="/static/images/clear_input.png"></image>
     </view>
-    <button class='delete-btn' bindtap="deleteGoods" >确定删除</button>
+    <button class='delete-btn' bindtap="deleteGoods">确定删除</button>
   </view>
 </view>
 
@@ -290,5 +294,5 @@
   <view class="r" wx:if='{{!goods.isSelling}}' bindtap="addToCart">该商品已出售</view>
   <view class="r" wx:elif="{{isSeller && !goods.isDelete && goods.isSelling}}" bindtap="switchDeletetPop">删除该商品</view>
   <view class="r" wx:else bindtap="addToCart">想要</view>
-  
+
 </view>

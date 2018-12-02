@@ -21,6 +21,7 @@ Page({
     let userInfo = wx.getStorageSync('userInfo');
     let token = wx.getStorageSync('token');
 
+  
     // 页面显示
     if (userInfo && token) {
       app.globalData.userInfo = userInfo;
@@ -43,9 +44,14 @@ Page({
     // 页面关闭
   },
   goLogin() {
-    if (!this.isLogin) {
+
+    if (!this.data.isLogin) {
       wx.navigateTo({
         url: '/pages/auth/auth'
+      })
+    }else{
+      wx.navigateTo({
+        url: '/pages/user/user?userId=' + app.globalData.userInfo.openId,
       })
     }
   },

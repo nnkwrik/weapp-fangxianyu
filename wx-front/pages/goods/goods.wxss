@@ -275,14 +275,7 @@
   overflow: hidden;
 }
 
-.comments .reply-user  image {
-  float: left;
-  width: 50rpx;
-  height: 50rpx;
-  margin-right: 17rpx;
-  margin-top: 5rpx;
-  border-radius: 50%;
-}
+
 
 .comments .reply-user text {
   display: inline-block;
@@ -294,12 +287,23 @@
   font-weight: bold;
 }
 
-.comments .user  image {
+.navimg {
   float: left;
   width: 67rpx;
   height: 67rpx;
   margin-right: 17rpx;
   border-radius: 50%;
+  background-size:cover;
+}
+
+.navimg-reply {
+  float: left;
+  width: 50rpx;
+  height: 50rpx;
+  margin-right: 17rpx;
+  margin-top: 5rpx;
+  border-radius: 50%;
+  background-size:cover;
 }
 
 .comments .user text {

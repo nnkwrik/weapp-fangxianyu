@@ -90,7 +90,7 @@ public class GoodsController {
         //获取商品详情
         Goods goods = goodsService.getGoodsDetail(goodsId);
         //获取买家信息
-        SimpleUser seller = goodsService.getSellerInfo(goods.getSellerId());
+        SimpleUser seller = userService.getUserInfo(goods.getSellerId());
         if (seller == null) {
             log.info("搜索goodsId = 【{}】的详情时出错", goodsId);
             return Response.fail(Response.USER_IS_NOT_EXIST, "无法搜索到商品卖家的信息");

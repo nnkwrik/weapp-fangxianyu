@@ -8,7 +8,7 @@ import io.github.nnkwrik.goodsservice.model.po.Goods;
 import io.github.nnkwrik.goodsservice.model.po.GoodsComment;
 import io.github.nnkwrik.goodsservice.model.po.Region;
 import io.github.nnkwrik.goodsservice.model.vo.CatalogPageVo;
-import io.github.nnkwrik.goodsservice.model.vo.IndexPageVO;
+import io.github.nnkwrik.goodsservice.model.vo.IndexPageVo;
 import io.github.nnkwrik.goodsservice.service.IndexService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,10 +34,10 @@ public class IndexController {
      * @return
      */
     @GetMapping("/index/index")
-    public Response<IndexPageVO> index(@RequestParam(value = "page", defaultValue = "1") int page,
+    public Response<IndexPageVo> index(@RequestParam(value = "page", defaultValue = "1") int page,
                                        @RequestParam(value = "size", defaultValue = "10") int size) {
 
-        IndexPageVO vo = indexService.getIndex(page, size);
+        IndexPageVo vo = indexService.getIndex(page, size);
         log.info("浏览首页 : 展示{}个广告, {}个分类, {}个商品", vo.getBanner().size(), vo.getChannel().size(), vo.getIndexGoodsList().size());
 
         return Response.ok(vo);

@@ -1,7 +1,9 @@
 package io.github.nnkwrik.goodsservice.service;
 
+import io.github.nnkwrik.common.dto.SimpleUser;
 import io.github.nnkwrik.goodsservice.model.po.Goods;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
@@ -21,4 +23,8 @@ public interface UserService {
     List<Goods> getUserSold(String sellerId, int page, int size);
 
     List<Goods> getUserPosted(String userId, int page, int size);
+
+    SimpleUser getUserInfo(String userId);
+
+    LinkedHashMap<String, List<Goods>> getUserHistoryList(String userId, int page, int size);
 }

@@ -4,7 +4,7 @@ import io.github.nnkwrik.goodsservice.model.po.Category;
 import io.github.nnkwrik.goodsservice.model.po.Goods;
 import io.github.nnkwrik.goodsservice.model.po.Region;
 import io.github.nnkwrik.goodsservice.model.vo.CatalogPageVo;
-import io.github.nnkwrik.goodsservice.model.vo.IndexPageVO;
+import io.github.nnkwrik.goodsservice.model.vo.IndexPageVo;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ import java.util.List;
  */
 public interface IndexService {
 
-    IndexPageVO getIndex(int page, int size);
+    IndexPageVo getIndex(int page, int size);
 
     List<Goods> getIndexMore(int page, int size);
 

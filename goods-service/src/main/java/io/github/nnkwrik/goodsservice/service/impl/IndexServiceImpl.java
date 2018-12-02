@@ -6,7 +6,7 @@ import io.github.nnkwrik.goodsservice.dao.GoodsMapper;
 import io.github.nnkwrik.goodsservice.dao.OtherMapper;
 import io.github.nnkwrik.goodsservice.model.po.*;
 import io.github.nnkwrik.goodsservice.model.vo.CatalogPageVo;
-import io.github.nnkwrik.goodsservice.model.vo.IndexPageVO;
+import io.github.nnkwrik.goodsservice.model.vo.IndexPageVo;
 import io.github.nnkwrik.goodsservice.service.IndexService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +27,7 @@ public class IndexServiceImpl implements IndexService {
     private GoodsMapper goodsMapper;
 
     @Override
-    public IndexPageVO getIndex(int page, int size) {
+    public IndexPageVo getIndex(int page, int size) {
         //广告
         List<Ad> adList = otherMapper.findAd();
 
@@ -37,7 +37,7 @@ public class IndexServiceImpl implements IndexService {
         //推荐商品
         List<Goods> goodsList = getIndexMore(page,size);
 
-        return new IndexPageVO(goodsList, adList, channelList);
+        return new IndexPageVo(goodsList, adList, channelList);
     }
 
     @Override

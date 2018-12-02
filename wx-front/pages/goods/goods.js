@@ -273,22 +273,28 @@ Page({
   },
 
   switchCommentPop: function(event) {
-    let that = this
+    if(event.currentTarget.dataset.disable){
+      console.log("disable")
+      return
+    }
+      let that = this
 
-    this.setData({
-      replyId: event.currentTarget.dataset.replyId,
-      replyUserId: event.currentTarget.dataset.replyUserId,
-      replyUserName: event.currentTarget.dataset.replyUserName
+      this.setData({
+        replyId: event.currentTarget.dataset.replyId,
+        replyUserId: event.currentTarget.dataset.replyUserId,
+        replyUserName: event.currentTarget.dataset.replyUserName
 
-    })
+      })
 
-    user.checkLoginAndNav().then(() => {
-      if (this.data.openComment == false) {
-        this.setData({
-          openComment: !this.data.openComment
-        });
-      }
-    })
+      user.checkLoginAndNav().then(() => {
+        if (this.data.openComment == false) {
+          this.setData({
+            openComment: !this.data.openComment
+          });
+        }
+      })
+    
+
 
   },
 
