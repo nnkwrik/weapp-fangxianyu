@@ -120,7 +120,7 @@ public class UserController {
 
         Integer soldCount = goodsService.getSellerHistory(userId);
         LinkedHashMap<String, List<Goods>> userHistory = userService.getUserHistoryList(userId, page, size);
-        UserPageVo vo = new UserPageVo(user, userHistory,soldCount);
+        UserPageVo vo = new UserPageVo(user, userHistory, soldCount);
         log.info("浏览用户id=[{}],昵称=[{}]的首页,搜索到{}天的记录", user.getOpenId(), user.getNickName(), userHistory.size());
 
         return Response.ok(vo);

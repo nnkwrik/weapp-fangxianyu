@@ -61,6 +61,16 @@ Page({
     });
   },
 
+  preview: function(event){
+    let url = event.currentTarget.dataset.url
+    url = url.slice(0,-3)+0 //浏览头像大图
+    
+    wx.previewImage({
+      urls: [url] // 需要预览的图片http链接列表
+    })
+    console.log(url)
+  },
+
 
   /**
    * 生命周期函数--监听页面加载

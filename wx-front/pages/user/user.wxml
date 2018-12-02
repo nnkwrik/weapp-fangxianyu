@@ -1,9 +1,9 @@
 <view class="container">
 <view class='top'>
-  <view class='bg' style="background-image: url('https://i.postimg.cc/8z1C1k82/2144.jpg')">   </view>
+  <view class='bg' style="background-image: url('https://i.postimg.cc/bwmqpKjL/watercolour-1336856-640.jpg)">   </view>
     <view class="profile-info">
       <view class='img'>
-        <image class="avatar" src="{{userInfo.avatarUrl}}"></image>
+        <image bindtap='preview' data-url="{{userInfo.avatarUrl}}" class="avatar" src="{{userInfo.avatarUrl}}"></image>
       </view>
       <view class="info">
       <text class="name">{{userInfo.nickName}}</text>
@@ -13,7 +13,7 @@
   </view>
   </view>
 
-  <view class="userhis" wx:if='{{historyList}}'>
+  <view class="userhis" wx:if='{{historyList.lenght}}'>
     <view class="day-item" wx:for="{{historyList}}" wx:key="{{index}}">
       <view class="day-hd">{{index}}</view>
       <view class="day-list">

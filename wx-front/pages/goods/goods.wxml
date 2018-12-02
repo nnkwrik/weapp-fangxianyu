@@ -1,7 +1,7 @@
 <view class="container">
   <swiper class="goodsimgs" indicator-dots="true" autoplay="true" interval="3000" duration="1000">
     <swiper-item wx:for="{{gallery}}" wx:key="{{item.id}}">
-      <image src="{{item.imgUrl}}" background-size="cover"></image>
+      <image bindtap='preview' data-url="{{item.imgUrl}}" src="{{item.imgUrl}}" background-size="cover"></image>
     </swiper-item>
   </swiper>
   <view class="location-time">
@@ -123,7 +123,7 @@
           <view wx:for="{{item.replyList}}" wx:for-index="iindex" wx:for-item="iitem" wx:key="{{iitem.id}}">
             <view class="reply-info">
               <view class="reply-user">
-                <navigator class='navimg-reply' url="/pages/user/user?userId={{iitem.simpleUser.openId}}" wx: style="background-image: url('{{item.simpleUser.avatarUrl}}')"></navigator>
+                <navigator class='navimg-reply' url="/pages/user/user?userId={{iitem.simpleUser.openId}}" wx: style="background-image: url('{{iitem.simpleUser.avatarUrl}}')"></navigator>
 
                 <text>{{iitem.simpleUser.nickName}}</text>
               </view>
