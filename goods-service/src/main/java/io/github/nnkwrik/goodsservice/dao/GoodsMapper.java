@@ -147,7 +147,7 @@ public interface GoodsMapper {
             "                   price,\n" +
             "                   market_price,\n" +
             "                   postage,\n" +
-//            "                   primary_pic_url,\n" +
+            "                   primary_pic_url,\n" +
             "                   `desc`,\n" +
             "                   region_id,\n" +
             "                   region,\n" +
@@ -156,10 +156,24 @@ public interface GoodsMapper {
             "                   able_self_take)\n" +
             "values (#{categoryId},#{sellerId},#{name},#{price}," +
             "#{marketPrice},#{postage}," +
-//            "#{primaryPicUrl}," +
+            "#{primaryPicUrl}," +
             "#{desc}," +
             "#{regionId},#{region},#{ableExpress},#{ableMeet},#{ableSelfTake})")
+    @SelectKey(resultType = Integer.class, before = false, keyProperty = "id", statement = "SELECT LAST_INSERT_ID()")
     void addGoods(Goods goods);
+
+    @Insert({
+            "<script>",
+            "INSERT INTO goods_gallery",
+            "(goods_id, img_url)",
+            "VALUES" +
+                    "<foreach item='item' collection='galleryList' open='' separator=',' close=''>" +
+                    "(" +
+                    "#{item.goodsId},#{item.imgUrl}" +
+                    ")" +
+                    "</foreach>",
+            "</script>"})
+    void addGalleryList(@Param("galleryList") List<GoodsGallery> galleryList);
 
     @Select("select COUNT(*)\n" +
             "from goods\n" +

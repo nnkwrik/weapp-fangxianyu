@@ -24,8 +24,8 @@ function formatNumber(n) {
 function request(url, data = {}, method = "GET") {
   let that = this
   let token = wx.getStorageSync('token')
-  
-  return new Promise(function (resolve, reject) {
+
+  return new Promise(function(resolve, reject) {
     wx.request({
       url: url,
       data: data,
@@ -34,7 +34,7 @@ function request(url, data = {}, method = "GET") {
         'Content-Type': 'application/json',
         'Authorization': token
       },
-      success: function (res) {
+      success: function(res) {
         console.log("success");
 
         if (res.statusCode == 200) {
@@ -47,18 +47,19 @@ function request(url, data = {}, method = "GET") {
                 if (res.authSetting['scope.userInfo']) {
                   // // 已经授权，可以直接调用 getUserInfo 获取头像昵称，不会弹框
                   that.getUserInfo().then((res) => {
-                    that.backendLogin(res).then(()=>{
-                      that.request(url,data,method)
+                    that.backendLogin(res).then((res) => {
+                      that.request(url, data, method)
+                      console.log('再次请求')
                     })
                   })
 
-                }else{
+                } else {
                   wx.navigateTo({
                     url: '/pages/auth/auth'
                   })
                 }
               }
-            })   
+            })
 
           } else {
             resolve(res.data);
@@ -68,7 +69,7 @@ function request(url, data = {}, method = "GET") {
         }
 
       },
-      fail: function (err) {
+      fail: function(err) {
         reject(err)
         console.log("failed")
       }
@@ -82,13 +83,14 @@ function request(url, data = {}, method = "GET") {
  * 检查微信会话是否过期
  */
 function checkSession() {
-  return new Promise(function (resolve, reject) {
+  return new Promise(function(resolve, reject) {
     wx.checkSession({
-      success: function () {
+      success: function() {
         resolve(true);
       },
-      fail: function () {
-        reject(false);
+      fail: function() {
+        wx.login() //重新登录
+        resolve(true);
       }
     })
   });
@@ -101,7 +103,7 @@ function backendLogin(detail) {
   console.log("在后端服务器进行登录" + detail)
   let that = this;
   let code = null;
-  return new Promise(function (resolve, reject) {
+  return new Promise(function(resolve, reject) {
     return that.login().then((res) => {
       code = res.code;
     }).then(() => {
@@ -115,14 +117,14 @@ function backendLogin(detail) {
           wx.setStorageSync('userInfo', res.data.userInfo);
           wx.setStorageSync('token', res.data.token);
 
-            resolve(res.data.userInfo);
-          } else {
-            reject(res);
-          }
+          resolve(res.data.userInfo);
+        } else {
+          reject(res);
+        }
       }).catch((err) => { //request
         reject(err);
       });
-    }).catch((err) => {   //login
+    }).catch((err) => { //login
       reject(err);
     })
   });
@@ -132,34 +134,37 @@ function backendLogin(detail) {
  * 调用微信登录
  */
 function login() {
-  return new Promise(function (resolve, reject) {
-    wx.login({
-      success: function (res) {
-        if (res.code) {
-          //登录远程服务器
-          console.log(res)
-          resolve(res);
-        } else {
-          reject(res);
+  let that = this
+  return new Promise(function(resolve, reject) {
+    that.checkSession().then(() => {
+      wx.login({
+        success: function (res) {
+          if (res.code) {
+            //登录远程服务器
+            console.log(res)
+            resolve(res);
+          } else {
+            reject(res);
+          }
+        },
+        fail: function (err) {
+          reject(err);
         }
-      },
-      fail: function (err) {
-        reject(err);
-      }
-    });
+      });
+    })
   });
 }
 
 
 function getUserInfo() {
-  return new Promise(function (resolve, reject) {
+  return new Promise(function(resolve, reject) {
     wx.getUserInfo({
       withCredentials: true,
-      success: function (res) {
+      success: function(res) {
         console.log(res)
         resolve(res);
       },
-      fail: function (err) {
+      fail: function(err) {
         reject(err);
       }
     })
@@ -198,5 +203,3 @@ module.exports = {
   getUserInfo,
   backendLogin,
 }
-
-

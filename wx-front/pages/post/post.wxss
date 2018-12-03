@@ -78,6 +78,87 @@ page, .container {
   padding: 0 30rpx;
 }
 
+.img {
+
+  padding:0 20rpx 0 20rpx;
+
+
+display:flex;
+flex-wrap:wrap;
+justify-content:flex-start;
+background:#fff;
+
+
+}
+
+.img .add .upload{
+height:108rpx;
+width:108rpx;
+border:2rpx solid #ddd;
+
+}
+.img .add .delete{
+position:absolute;
+height:34rpx;
+width:34rpx;
+float:right;
+transform:translate(270%,-40%);
+
+}
+
+
+
+.img .add {
+  display: block;
+height:110rpx;
+width:110rpx;
+/* margin-right:27rpx; */
+margin-right:20rpx;
+
+
+
+
+background:#fff;
+border:1rpx solid #eee;
+
+margin-bottom:30rpx;
+
+
+}
+
+.img .add .txt {
+margin-top:7px;
+text-align:center;
+display:block;
+color:#999;
+font-size:25rpx;
+
+
+}
+
+.img .add .icon {
+  height: 35rpx;
+  width: 33%;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  margin-top: 7rpx;
+}
+
+.img .blur {
+  filter: blur(1rpx) contrast(50%) ;
+  background-size: cover;
+}
+.img .loading {
+height:55rpx;
+width:46%;
+margin-left:auto;
+margin-right:auto;
+display:block;
+margin-top:30rpx;
+
+}
+
 .bottom-btn {
   position: fixed;
   left: 0;
@@ -109,6 +190,9 @@ page, .container {
   padding: 30rpx;
   background: #fff;
   padding-top: 10rpx;
+  padding-bottom:70rpx;
+margin-bottom:150rpx;
+
 }
 
 .detail .element {
@@ -158,8 +242,8 @@ page, .container {
   height: 45rpx;
 }
 
-.detail .cate{
+.detail .cate {
   line-height: 50rpx;
-  width:400rpx;
-  color:#666;
+  width: 400rpx;
+  color: #666;
 }

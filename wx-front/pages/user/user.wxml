@@ -13,18 +13,18 @@
   </view>
   </view>
 
-  <view class="userhis" wx:if='{{historyList.lenght}}'>
+  <view class="userhis" wx:if='{{historyList}}'>
     <view class="day-item" wx:for="{{historyList}}" wx:key="{{index}}">
       <view class="day-hd">{{index}}</view>
       <view class="day-list">
         <view class="item" bindtap="openGoods" data-id="{{iitem.id}}"  wx:for="{{item}}" wx:for-item="iitem" wx:key="{{iitem.id}}">
-          <image class="img" src="{{iitem.primaryPicUrl}}"></image>
+          <image class="img" src="{{iitem.primaryPicUrl}}" mode='aspectFill'></image>
           <view class="info">
             <view class="name">{{iitem.name}}</view>
             <view class="flex">
               <view class="price">￥{{iitem.price}}</view>
-              <view class='msg' wx:if="{{iitem.postTime == iitem.time}}">发布了这件商品</view>
-              <view class='msg' wx:elif="{{iitem.soldTime == iitem.time}}">卖出了这件商品</view>
+              <view class='msg' wx:if="{{iitem.postTime == iitem.time}}">发布了这件宝贝</view>
+              <view class='msg' wx:elif="{{iitem.soldTime == iitem.time}}">卖出了这件宝贝</view>
             </view>
           </view>
         </view>

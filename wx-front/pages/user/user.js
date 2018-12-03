@@ -12,7 +12,7 @@ Page({
     page: 1,
     size: 10000,
     userInfo: {},
-    historyList: {},
+    historyList: null,
     soldCount: 0,
     userDates:0
   },
@@ -25,23 +25,27 @@ Page({
       if (res.errno === 0) {
         console.log(res.data);
 
+        if (res.data.userHistory){
+          for (var list in res.data.userHistory) {
+            for (var i = 0; i < res.data.userHistory[list].length; i++) {
+              var goods = res.data.userHistory[list][i];
+              if (goods.time) {
+                res.data.userHistory[list][i].time = goods.time.split(' ')[0]
+              }
+              if (goods.postTime) {
+                res.data.userHistory[list][i].postTime = goods.postTime.split(' ')[0]
+              }
+              if (goods.soldTime) {
+                res.data.userHistory[list][i].soldTime = goods.soldTime.split(' ')[0]
+              }
+            }
 
-        for (var list in res.data.userHistory) {
-          for (var i = 0; i < res.data.userHistory[list].length; i++) {
-            var goods = res.data.userHistory[list][i];
-            if (goods.time) {
-              res.data.userHistory[list][i].time = goods.time.split(' ')[0]
-            }
-            if (goods.postTime) {
-              res.data.userHistory[list][i].postTime = goods.postTime.split(' ')[0]
-            }
-            if (goods.soldTime) {
-              res.data.userHistory[list][i].soldTime = goods.soldTime.split(' ')[0]
-            }
           }
-
-          
+          that.setData({
+            historyList: res.data.userHistory,
+          })
         }
+
 
         //计算卖家来平台第几天
         let registerTime = res.data.user.registerTime
@@ -50,7 +54,6 @@ Page({
 
         that.setData({
           userInfo: res.data.user,
-          historyList: res.data.userHistory,
           soldCount: res.data.soldCount,
           userDates: dates
         });

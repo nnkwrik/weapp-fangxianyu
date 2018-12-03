@@ -6,10 +6,7 @@ import io.github.nnkwrik.common.dto.SimpleUser;
 import io.github.nnkwrik.goodsservice.client.UserClient;
 import io.github.nnkwrik.goodsservice.dao.CategoryMapper;
 import io.github.nnkwrik.goodsservice.dao.GoodsMapper;
-import io.github.nnkwrik.goodsservice.model.po.Category;
-import io.github.nnkwrik.goodsservice.model.po.Goods;
-import io.github.nnkwrik.goodsservice.model.po.GoodsComment;
-import io.github.nnkwrik.goodsservice.model.po.GoodsGallery;
+import io.github.nnkwrik.goodsservice.model.po.*;
 import io.github.nnkwrik.goodsservice.model.vo.CategoryPageVo;
 import io.github.nnkwrik.goodsservice.model.vo.CommentVo;
 import io.github.nnkwrik.goodsservice.service.GoodsService;
@@ -17,6 +14,7 @@ import io.github.nnkwrik.goodsservice.util.BeanListUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -62,7 +60,6 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
 
-
     @Override
     public int getSellerHistory(String sellerId) {
         return goodsMapper.getSellerHistory(sellerId);
@@ -91,8 +88,24 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
-    public void postGoods(Goods goods) {
-        goodsMapper.addGoods(goods);
+    @Transactional
+    public void postGoods(PostExample post) {
+        List<String> images = post.getImages();
+        List<GoodsGallery> galleryList = new ArrayList<>();
+        post.setPrimaryPicUrl(images.get(0)); //TODO 对PrimaryImage进行压缩
+
+        //insert并获取id
+        goodsMapper.addGoods(post);
+        int goodsId = post.getId();
+
+        images.stream()
+                .forEach(url -> {
+                    GoodsGallery gallery = new GoodsGallery();
+                    gallery.setGoodsId(goodsId);
+                    gallery.setImgUrl(url);
+                    galleryList.add(gallery);
+                });
+        goodsMapper.addGalleryList(galleryList);
     }
 
     @Override

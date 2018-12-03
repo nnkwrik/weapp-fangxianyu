@@ -7,6 +7,7 @@ import io.github.nnkwrik.common.token.injection.JWT;
 import io.github.nnkwrik.goodsservice.cache.BrowseCache;
 import io.github.nnkwrik.goodsservice.model.po.Goods;
 import io.github.nnkwrik.goodsservice.model.po.GoodsGallery;
+import io.github.nnkwrik.goodsservice.model.po.PostExample;
 import io.github.nnkwrik.goodsservice.model.vo.CategoryPageVo;
 import io.github.nnkwrik.goodsservice.model.vo.GoodsDetailPageVo;
 import io.github.nnkwrik.goodsservice.model.vo.CommentVo;
@@ -132,28 +133,28 @@ public class GoodsController {
     /**
      * 发布商品
      *
-     * @param goods
+     * @param post
      * @param user
      * @return
      */
     @PostMapping("/post")
-    public Response postGoods(@RequestBody Goods goods,
+    public Response postGoods(@RequestBody PostExample post,
                               @JWT(required = true) JWTUser user) {
 
-        if (StringUtils.isEmpty(goods.getName()) ||
-                StringUtils.isEmpty(goods.getDesc()) ||
-                StringUtils.isEmpty(goods.getRegion()) ||
-                goods.getCategoryId() == null ||
-//                goods.getPrimaryPicUrl() == null ||
-                goods.getRegionId() == null ||
-                goods.getPrice() == null) {
+        if (StringUtils.isEmpty(post.getName()) ||
+                StringUtils.isEmpty(post.getDesc()) ||
+                StringUtils.isEmpty(post.getRegion()) ||
+                post.getCategoryId() == null ||
+                post.getRegionId() == null ||
+                post.getPrice() == null ||
+                post.getImages() == null || post.getImages().size() < 1) {
             String msg = "用户发布商品失败，信息不完整";
             log.info(msg);
             return Response.fail(Response.POST_INFO_INCOMPLETE, msg);
         }
-        goods.setSellerId(user.getOpenId());
-        goodsService.postGoods(goods);
-        log.info("用户发布商品：用户昵称=【{}】，商品名=【{}】，详情=【{}】", user.getNickName(), goods.getName(), goods);
+        post.setSellerId(user.getOpenId());
+        goodsService.postGoods(post);
+        log.info("用户发布商品：用户昵称=【{}】，商品名=【{}】，{}张图片", user.getNickName(), post.getName(),post.getImages().size());
 
         return Response.ok();
     }

@@ -88,7 +88,7 @@ public class UserServiceImpl implements UserService {
     public LinkedHashMap<String, List<Goods>> getUserHistoryList(String userId, int page, int size) {
         PageHelper.startPage(page, size);
         List<GoodsExample> userHistoryList = userMapper.getUserHistoryList(userId);
-        if (userHistoryList.size() < 1) return new LinkedHashMap<>();
+        if (userHistoryList.size() < 1) return null;
 
         LinkedHashMap<String, List<Goods>> result = new LinkedHashMap<>();
 

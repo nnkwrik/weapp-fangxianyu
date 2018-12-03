@@ -16,7 +16,9 @@ Page({
     ableMeet: false,
     ableExpress: false,
     cateId: 0,
-    cateName:''
+    cateName: '',
+    imgList: [],
+    tmpImgList:[],
   },
   onLoad: function(options) {
 
@@ -29,7 +31,130 @@ Page({
       delta: 1
     });
   },
+  addImage() {
+    let that = this;
+    let remain = 10 - this.data.imgList.length;
+    console.log('上传图片')
+    wx.chooseImage({
+      count: remain,
+      success(res) {
+        let length = res.tempFiles.length
+
+        // tempFilePath可以作为img标签的src属性显示图片        
+        let tempFilePaths = res.tempFilePaths
+        let tempFiles = res.tempFiles
+        that.setData({
+          tmpImgList: that.data.tmpImgList.concat(tempFilePaths)
+        })
+        for (var i = 0; i < length; i++) {
+          that.data.imgList.push('false');
+          var index = that.data.imgList.length-1
+          that.setData({
+            imgList: that.data.imgList
+          })
+          
+          if (tempFiles[i].size > 4500000) {
+            console.log("图片太大")
+            that.compressImg(tempFilePaths[i], index)
+          } else {
+            console.log("上传到图床")
+            that.uploadFile(tempFilePaths[i], index)
+          }
+
+          // console.log(tempFilePaths[i]);
+
+        }
+        console.log(that.data.imgList);
+
+      },
+      fail(res) {
+        console.log(res);
+      },
+
+
+
+
+
+    })
+  },
+  uploadFile(url, i) {
+    let that = this;
+    // wx.uploadFile({
+    //   url: '	https://sm.ms/api/upload',
+    //   filePath: url,
+    //   name: 'smfile',
+    //   success(res) {
+    //     const data = JSON.parse(res.data);
+
+    //     console.log(data)
+    //     if (data.code == 'success') {
+    //       console.log("图片上传成功, " + data.data.url)
+    //       that.data.imgList[i] = data.data.url
+    //       that.setData({
+    //         imgList: that.data.imgList
+    //       })
+    //       // that.onLoad();
+
+    //     } else if (data.code == 'error' && data.msg == 'File is too large.') {
+    //       console.log("上传失败,图片太大")
+    //       that.compressImg(url, i)
+    //     }
+    //   }
+    // })
+
+    //模拟上传
+    setTimeout(function goback() {
+      console.log("图片上传成功, " + url)
+      that.data.imgList[i] = url
+      that.setData({
+        imgList: that.data.imgList
+      })
+    }, 2000)
+
+  },
+  compressImg(url, i) {
+    let that = this
+    wx.compressImage({
+      src: url, // 图片路径
+      quality: 50, // 压缩质量
+      success() {
+        console.log("压缩后重新上传")
+        that.uploadFile(url, i)
+      },
+      fail(res) {
+        console.log(res)
+        console.log("压缩失败 ")
+      }
+    })
+  },
+  removeImg(event){
+    console.log("删除元素")
+    let index = event.currentTarget.dataset.index
+    let that = this
+    that.data.imgList.splice(index, 1)
+    that.data.tmpImgList.splice(index, 1)
+    this.setData({
+      imgList: that.data.imgList ,
+      tmpImgList: that.data.tmpImgList,
+    })
+
+  },
+  preview(event){
+    let url = event.currentTarget.dataset.url
+    let urls = [];
+    let imgList = this.data.imgList
+    for (var index in imgList){
+      if (imgList[index]!='false'){
+        urls.push(imgList[index])
+      }
+    }
+    wx.previewImage({
+      current: url,
+      urls: urls // 需要预览的图片http链接列表
+    })
+  },
   onPost() {
+    
     if (this.data.title.trim() == '') {
       util.showErrorToast('必须填写商品名')
       return;
@@ -41,6 +166,10 @@ Page({
     }
     if (this.data.region.trim() == '') {
       util.showErrorToast('请选择发货地点')
+      return;
+    }
+    if (this.data.imgList.length < 1) {
+      util.showErrorToast('请上传图片')
       return;
     }
     if (this.data.cateName.trim() == '') {
@@ -77,41 +206,50 @@ Page({
       util.showErrorToast("邮费最大1千元")
       return;
     }
-    if (!this.data.ableSelfTake && !this.data.ableMeet && !this.data.ableExpress ){
+    if (!this.data.ableSelfTake && !this.data.ableMeet && !this.data.ableExpress) {
       util.showErrorToast("请选择交易方式")
       return;
     }
 
+    let imgList = this.data.imgList
+    for (var index in imgList) {
+      if (imgList[index] == 'false') {
+        util.showErrorToast('图片上传中')
+        return;
+      }
+    }
+
     let that = this
     user.checkLoginAndNav().then(() => {
-    util.request(api.GoodsPost, {
-      name: this.data.title,
-      desc: this.data.desc,
-      regionId: this.data.regionId,
-      region: this.data.region,
-      categoryId: this.data.cateId,
-      price: this.data.price,
-      marketPrice: this.data.marketPrice,
-      postage: postage,
-      ableSelfTake: this.data.ableSelfTake,
-      ableMeet: this.data.ableMeet,
-      ableExpress: this.data.ableExpress
-    }, 'POST').then(function(res) {
-      if (res.errno === 0) {
+      util.request(api.GoodsPost, {
+        name: this.data.title,
+        desc: this.data.desc,
+        regionId: this.data.regionId,
+        region: this.data.region,
+        categoryId: this.data.cateId,
+        price: this.data.price,
+        marketPrice: this.data.marketPrice,
+        postage: postage,
+        ableSelfTake: this.data.ableSelfTake,
+        ableMeet: this.data.ableMeet,
+        ableExpress: this.data.ableExpress,
+        images: this.data.imgList,
+      }, 'POST').then(function(res) {
+        if (res.errno === 0) {
 
-        setTimeout(function goback(){
-          wx.reLaunch({
-            url: '/pages/index/index'
+          setTimeout(function goback() {
+            wx.reLaunch({
+              url: '/pages/index/index'
+            })
+          }, 1000)
+
+          wx.showToast({
+            title: '发布成功'
           })
-        }, 1000)
+        }
 
-        wx.showToast({
-          title: '发布成功'
-        })
-      }
-
-      console.log(res)
-    });
+        console.log(res)
+      });
     })
 
   },
@@ -197,7 +335,7 @@ Page({
       app.post.region.name = ''
     }
 
-    if(app.post.cate.id){
+    if (app.post.cate.id) {
       this.setData({
         cateId: app.post.cate.id,
         cateName: app.post.cate.name

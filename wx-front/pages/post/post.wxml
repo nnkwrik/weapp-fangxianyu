@@ -1,44 +1,77 @@
 <view class="container">
   <view class="post-goods">
-    <input class="title" maxlength="60" placeholder="标题，品牌品类都是买家喜欢搜索的" bindinput='bindInputTitle'/>
+    <input class="title" maxlength="60" placeholder="标题，品牌品类都是买家喜欢搜索的" bindinput='bindInputTitle' />
 
     <view class="input-box">
       <textarea class="content" bindinput="bindInputDesc" maxlength="800" placeholder="描述一下宝贝的转手原因，入手渠道和使用感受" />
       <text class="count">{{800 - desc.length}}</text>
     </view>
 
+
     <navigator url="../region/region" class='location'>
       <view class="icon" wx:if='{{!regionId}}'>选择发货地点</view>
       <view class="icon" wx:else>{{region}}</view>
     </navigator>
 
+      <view class='img'>
+    <view wx:for="{{imgList}}" wx:key="{{index}}">
+
+      <view wx:if="{{imgList[index] == 'false'}}">
+      <!-- 上传中 -->
+        <view class='add blur' style="background-image: url('{{tmpImgList[index]}}')">
+          <image class='loading' src='../../static/images/loading.png'></image>
+        </view>
+      </view>
+      <view wx:else>
+      <!-- 完成上传 -->
+        <view class='add'>
+          <image class="delete" src="/static/images/delete.png" bindtap='removeImg' data-index='{{index}}'></image>
+
+          <image class='upload' bindtap='preview' data-url='{{imgList[index]}}' mode='aspectFill' src='{{imgList[index]}}'></image>
+        </view>
+      </view>
+
+    </view>
+      <view wx:if="{{imgList.length < 10}}" class='add' bindtap='addImage'>
+    <text class='txt'>添加图片</text>
+    <image class='icon' src='../../static/images/plus.png'></image>
+  </view>
 
   </view>
+
+
+  </view>
+
+
+
+
+
+
   <view class="detail">
     <view class="element">
       <view class="lable">价格</view>
       <view class="rmb">¥</view>
-      <input class="price" type="digit" placeholder="0.00"  bindinput='bindInputPrice' />
+      <input class="price" type="digit" placeholder="0.00" bindinput='bindInputPrice' />
     </view>
     <view class="element">
       <view class="lable">入手价</view>
       <view class="rmb">¥</view>
-      <input class="price" type="digit"  placeholder="0.00"  bindinput='bindInputMarketPrice'/>
+      <input class="price" type="digit" placeholder="0.00" bindinput='bindInputMarketPrice' />
     </view>
     <view class="element">
       <view class="lable">运费</view>
       <view class="rmb">¥</view>
-      <input class="price" type="digit"  placeholder="0.00" bindinput='bindInputPostage' value='{{postage}}' disabled='{{isPostageFree}}'/>
+      <input class="price" type="digit" placeholder="0.00" bindinput='bindInputPostage' value='{{postage}}' disabled='{{isPostageFree}}' />
       <checkbox-group bindchange="postageFree">
         <label class="checkbox-a">
           <checkbox value="true" color="#fd9f06" />包邮
         </label>
       </checkbox-group>
     </view>
-    <navigator url="../postCate/postCate"  class="element">
+    <navigator url="../postCate/postCate" class="element">
       <view class="lable">分类</view>
-      
-      <view class="cate">{{cateName  ? cateName : '选择分类'}}</view>
+
+      <view class="cate">{{cateName ? cateName : '选择分类'}}</view>
       <image background-size="cover" class="i" src="../../static/images/address_right.png"></image>
     </navigator>
 
@@ -56,6 +89,6 @@
   </view>
 
   <view class="bottom-btn">
-    <button class="r"  bindtap='onPost'>确认发布</button>
+    <button class="r" bindtap='onPost'>确认发布</button>
   </view>
 </view>
