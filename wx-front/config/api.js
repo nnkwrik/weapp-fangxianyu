@@ -41,7 +41,8 @@ module.exports = {
   PostedList: ApiRootUrl + 'goods/posted',  //发布的商品
   BoughtList: ApiRootUrl + 'goods/bought',  //买过的商品
   SoldList: ApiRootUrl + 'goods/sold',  //卖出的商品
-  
+  UserPage: ApiRootUrl + 'goods/user',  //用户主页
+  UserPageMore: ApiRootUrl + 'goods/user/more',  //用户主页
 
   CommentList: ApiRootUrl + 'comment/list',  //评论列表
   CommentCount: ApiRootUrl + 'comment/count',  //评论总数

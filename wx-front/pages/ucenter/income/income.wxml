@@ -1,0 +1,32 @@
+<view class="container">
+
+
+  <view class="income-list">
+
+    <view class="item all">
+      <view class="tag">总收入</view>
+      <view class="content">
+        <view class="left">
+          <view class="name">¥ 0</view>
+        </view>
+        <view class="right">
+          <button class="go">查看历史</button>
+        </view>
+      </view>
+    </view>
+
+     <view class="item change">
+      <view class="tag change-tag">零钱包</view>
+      <view class="content">
+        <view class="left">
+          <view class="name">¥ 0</view>
+        </view>
+        <view class="right">
+          <button class="go">提现</button>
+        </view>
+      </view>
+    </view>
+  </view>
+<view class="help">提现说明</view>
+
+</view>

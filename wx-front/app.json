@@ -11,7 +11,7 @@
     "pages/ucenter/orderDetail/orderDetail",
     "pages/ucenter/express/express",
     "pages/ucenter/feedback/feedback",
-    "pages/ucenter/coupon/coupon",
+    "pages/ucenter/income/income",
     "pages/ucenter/collect/collect",
     "pages/pay/pay",
     "pages/payResult/payResult",

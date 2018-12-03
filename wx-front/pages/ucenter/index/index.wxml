@@ -5,18 +5,21 @@
     <view class="info">
       <text class="name">{{userInfo.nickName}}</text>
 
-      <text  wx:if="{{isLogin}}" class="level">点击查看个人主页</text>
-      <text wx:else  class="level">马上授权登录</text>
+      <text wx:if="{{isLogin}}" class="level">点击查看个人主页</text>
+      <text wx:else class="level">马上授权登录</text>
     </view>
   </view>
 
   <view class="user-menu">
+
     <view class="item">
-      <navigator url="/pages/ucenter/order/order" class="a">
+      <navigator url="{{isLogin?'/pages/ucenter/income/income':'/pages/auth/auth'}}" class="a">
         <text class="icon coin"></text>
-        <text class="txt">我的订单</text>
+        <text class="txt">我的收入</text>
       </navigator>
     </view>
+
+
     <view class="item">
       <navigator url="{{isLogin?'/pages/ucenter/posted/posted':'/pages/auth/auth'}}" class="a">
         <text class="icon publish"></text>
@@ -42,42 +45,29 @@
         <text class="txt">我的收藏</text>
       </navigator>
     </view>
-    <view class="item no-border">
-      <navigator url="url" class="a">
-        <text class="icon support"></text>
-        <text class="txt">会员福利</text>
-      </navigator>
-    </view>
+
     <view class="item">
       <navigator url="../address/address" class="a">
-        <text class="icon donation"></text>
+        <text class="icon map"></text>
         <text class="txt">地址管理</text>
       </navigator>
     </view>
-    <view class="item">
-      <navigator url="url" class="a">
-        <text class="icon map"></text>
-        <text class="txt">账号安全</text>
+
+    <view class="item item-bottom">
+      <navigator url="/pages/ucenter/order/order" class="a">
+        <text class="icon order"></text>
+        <text class="txt">我订单</text>
       </navigator>
     </view>
-    <view class="item no-border">
-      <navigator url="url" class="a">
-        <text class="icon question"></text>
-        <text class="txt">联系客服</text>
-      </navigator>
-    </view>
+
+
     <view class="item item-bottom">
       <navigator url="/pages/ucenter/about/about" class="a">
         <text class="icon embarrass"></text>
         <text class="txt">关于作者</text>
       </navigator>
     </view>
-    <view class="item item-bottom">
-      <navigator url="/pages/ucenter/feedback/feedback" class="a">
-        <text class="icon feedback"></text>
-        <text class="txt">意见反馈</text>
-      </navigator>
-    </view>
+
   </view>
 
   <!--<view class="logout" bindtap="exitLogin">退出登录</view>-->

@@ -1,0 +1,111 @@
+page{
+    background: #f4f4f4;
+    min-height: 100%;
+}
+
+.container{
+    background: #f4f4f4;
+    min-height: 100%;
+    padding-top:50px;
+
+}
+
+
+
+.help{
+  height: 72rpx;
+  line-height: 72rpx;
+  text-align: right;
+  padding-right: 30rpx;
+  background: url(https://yanxuan.nosdn.127.net/hxm/yanxuan-wap/p/20161201/style/img/icon-normal/couponHelp-4768607555.png) 590rpx center no-repeat;
+  background-size: 28rpx;
+  color: #999;
+  font-size: 24rpx;
+}
+
+.income-list{
+  width: 100%;
+  height: auto;
+  overflow: hidden;
+  padding-left: 30rpx;
+  padding-right: 30rpx;
+}
+
+.item{
+  position: relative;
+  height:250rpx;
+  width: 100%;
+  background: linear-gradient(to right,#cfa568,#e3bf79);
+  margin-bottom: 30rpx;
+  padding-top: 52rpx;
+  border-radius:20rpx;
+
+}
+.all{
+  background: #facc5d;
+}
+.change{
+  background: #95cdb4;
+}
+
+
+
+.tag{
+  height: 32rpx;
+  background: #A48143;
+  padding-left: 16rpx;
+  padding-right: 16rpx;
+  position: absolute;
+  left:30rpx;
+  color: #fff;
+  top: 20rpx;
+  /* font-size: 20rpx; */
+  text-align: center;
+  line-height: 32rpx;
+  margin-top:40rpx;
+}
+.change-tag{
+ background: #739c8a;
+}
+
+
+.content{
+  margin-top:50rpx;
+
+  margin-left: 40rpx;
+  display: flex;
+  margin-right: 40rpx;
+  flex-direction: row;
+  align-items: center;
+}
+
+.content .left{
+  flex: 1;
+}
+
+.name{
+font-size:60rpx;
+color:#fff;
+margin-bottom:14rpx;
+margin-left:10rpx;
+margin-top:20rpx;
+
+
+}
+
+
+
+.content .right{
+  width: 162rpx;
+}
+
+.go{
+  height: 48rpx;
+  border:none;
+  width: 162rpx;
+  background: rgba(255,255,255, 0.8);
+  border-radius: 4rpx;
+  line-height: 48rpx;
+  color: #b69150;
+  font-size: 24rpx;
+}
