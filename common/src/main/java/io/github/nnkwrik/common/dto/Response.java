@@ -20,6 +20,7 @@ public class Response<T> {
     public static final int OPEN_ID_IS_EMPTY = 4001;
     public static final int COMMENT_INFO_INCOMPLETE = 4002;
     public static final int POST_INFO_INCOMPLETE = 4003;
+    public static final int SELLER_AND_GOODS_IS_NOT_MATCH = 4004;
 
     //user
     public static final int USER_IS_NOT_EXIST = 3001;

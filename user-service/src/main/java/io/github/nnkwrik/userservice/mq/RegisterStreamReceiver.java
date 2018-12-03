@@ -29,7 +29,6 @@ public class RegisterStreamReceiver {
 
         log.info("从 [ auth-service ] 收到 [ 用户注册 ]的消息");
         log.info("新用户：用户名 = [{}],城市 = [{}]", user.getNickName(), user.getCity());
-        //TODO 先确认用户是否存在
         userService.register(user);
     }
 }

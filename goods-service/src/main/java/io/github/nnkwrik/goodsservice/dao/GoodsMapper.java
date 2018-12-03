@@ -16,10 +16,10 @@ public interface GoodsMapper {
 
     /**
      * 热度算法
-     * Score = (1*click + 10 * want) /e^ (day/10)
-     * = (1*click + 10 * want) / e^((T(now) - T *  10^-7 )
+     * Score = (1*click + 10 * want + 500) /e^ (day/10)
+     * = (1*click + 10 * want + 500) / e^((T(now) - T *  10^-7 )
      */
-    String popular_score = "(1 * browse_count + 10 * want_count) / exp((now() - last_edit) * POW(10, -7))";
+    String popular_score = "(1 * browse_count + 10 * want_count + 500) / exp((now() - last_edit) * POW(10, -7))";
 
 
     /**

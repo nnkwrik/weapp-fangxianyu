@@ -79,37 +79,37 @@ Page({
   },
   uploadFile(url, i) {
     let that = this;
-    // wx.uploadFile({
-    //   url: '	https://sm.ms/api/upload',
-    //   filePath: url,
-    //   name: 'smfile',
-    //   success(res) {
-    //     const data = JSON.parse(res.data);
+    wx.uploadFile({
+      url: '	https://sm.ms/api/upload',
+      filePath: url,
+      name: 'smfile',
+      success(res) {
+        const data = JSON.parse(res.data);
 
-    //     console.log(data)
-    //     if (data.code == 'success') {
-    //       console.log("图片上传成功, " + data.data.url)
-    //       that.data.imgList[i] = data.data.url
-    //       that.setData({
-    //         imgList: that.data.imgList
-    //       })
-    //       // that.onLoad();
+        console.log(data)
+        if (data.code == 'success') {
+          console.log("图片上传成功, " + data.data.url)
+          that.data.imgList[i] = data.data.url
+          that.setData({
+            imgList: that.data.imgList
+          })
+          // that.onLoad();
 
-    //     } else if (data.code == 'error' && data.msg == 'File is too large.') {
-    //       console.log("上传失败,图片太大")
-    //       that.compressImg(url, i)
-    //     }
-    //   }
-    // })
+        } else if (data.code == 'error' && data.msg == 'File is too large.') {
+          console.log("上传失败,图片太大")
+          that.compressImg(url, i)
+        }
+      }
+    })
 
     //模拟上传
-    setTimeout(function goback() {
-      console.log("图片上传成功, " + url)
-      that.data.imgList[i] = url
-      that.setData({
-        imgList: that.data.imgList
-      })
-    }, 2000)
+    // setTimeout(function goback() {
+    //   console.log("图片上传成功, " + url)
+    //   that.data.imgList[i] = url
+    //   that.setData({
+    //     imgList: that.data.imgList
+    //   })
+    // }, 2000)
 
   },
   compressImg(url, i) {
