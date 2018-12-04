@@ -1,0 +1,242 @@
+/* pages/index/to_news/to_news.wxss */
+
+page {
+  background-color: #f7f7f7;
+}
+
+
+.time {
+  text-align: center;
+  padding: 5rpx 20rpx 5rpx 20rpx;
+  width: 200rpx;
+  font-size: 26rpx;
+  background-color: #ccc;
+  color: #fff;
+  border-radius: 20rpx;
+}
+
+
+/* 聊天内容 */
+
+.news {
+  margin-top: 180rpx;
+  text-align: center;
+  margin-bottom: 120rpx;
+  /* overflow: auto; */
+}
+
+
+
+/* 聊天 */
+
+.page_row {
+  display: flex;
+}
+
+.my_right {
+  float: right;
+  position: relative;
+  /* right: 40rpx; */
+}
+
+.you_left {
+  float: left;
+  position: relative;
+  /* left: 5rpx; */
+}
+
+.new_img {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+}
+
+.new_txt {
+  max-width: 500rpx;
+  border-radius: 7px;
+  background-color: #ffde57;
+  padding: 20rpx 20rpx 20rpx 20rpx;
+  text-align: left;
+  line-height: 47rpx;
+  font-size: 30rpx;
+}
+
+.sanjiao {
+  top: 20rpx;
+  position: relative;
+  width: 0px;
+  height: 0px;
+  border-width: 10px;
+  border-style: solid;
+}
+
+.my {
+  border-color: transparent transparent transparent #ffde57;
+}
+
+.you {
+  border-color: transparent #ffde57 transparent transparent;
+}
+
+
+
+.historycon {
+  height: 90%;
+  width: 100%;
+  flex-direction: column;
+  display: flex;
+  /* margin-top: 100rpx; */
+  border-top: 0px;
+}
+
+
+
+.history {
+  margin-top: 15px;
+  margin: 10px;
+  font-size: 14px;
+  line-height: 40px;
+  word-break: break-all;
+}
+
+/* input */
+
+.input-pop-box {
+  /* width: 100%;
+  height: 100%; */
+  position: fixed;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 8;
+  bottom: 0;
+  /* display: none; */
+}
+
+.input-pop {
+  width: 100%;
+  height: auto;
+  max-height: 780rpx;
+  background: #fff;
+  position: fixed;
+  z-index: 9;
+  bottom: 0rpx;
+}
+
+.input-pop-box .input-pop .input {
+  display: flex;
+  background: #fff;
+  font-size: 29rpx;
+  color: #333;
+  height: auto;
+  /* width: 650rpx; */
+  padding: 20rpx 30rpx 20rpx 30rpx;
+  /* margin:10px; */
+  overflow: hidden;
+}
+
+.input-pop-box .input-pop .title {
+  margin-bottom: 10rpx;
+}
+
+.input-pop-box .input-pop .content {
+  border: 1rpx solid #eee;
+  border-radius: 20rpx;
+  padding: 10rpx;
+  background: #eee;
+  overflow: hidden;
+  height: 65rpx;
+  width: 550rpx;
+}
+
+.input-pop-box .input-pop input {
+  display: block;
+  height: 1.4rem;
+  text-overflow: clip;
+  overflow: hidden;
+  white-space: nowrap;
+  font-family: UICTFontTextStyleBody;
+  min-height: 1.4rem;
+  margin-bottom: 40rpx;
+}
+
+.input-pop-box .input-pop .send {
+  width: 120rpx;
+  height: 65rpx;
+  line-height: 60rpx;
+  text-align: center;
+  border-radius: 20rpx;
+  background: #ffde57;
+  font-size: 30rpx;
+  border: 3rpx solid #333;
+  margin-left: 20rpx;
+}
+
+/* top */
+
+
+
+.top-pop {
+  width: 100%;
+  height: auto;
+  max-height: 780rpx;
+  background: #fff;
+  position: fixed;
+  z-index: 9;
+  top: 0rpx;
+  border-bottom: 1rpx solid #ddd;
+}
+
+.top-pop-box .top-pop .content {
+  display: flex;
+  background: #fff;
+  font-size: 29rpx;
+  color: #333;
+  height: auto;
+  /* width: 650rpx; */
+  padding: 20rpx 30rpx 20rpx 30rpx;
+  /* margin:10px; */
+  overflow: hidden;
+}
+
+.top-pop-box .top-pop .img {
+  height: 125rpx;
+  width: 125rpx;
+}
+
+.top-pop-box .top-pop .info {
+  padding-left: 30rpx;
+}
+
+.top-pop-box .top-pop .info .price {
+  margin-top: 8rpx;
+  font-size: 28rpx;
+  color: #f94b4b;
+  line-height: 40rpx;
+  width: 160rpx;
+}
+
+.top-pop-box .top-pop .info .name {
+  font-size: 30rpx;
+  color: #000;
+  line-height: 40rpx;
+}
+
+.top-pop-box .top-pop .info .order {
+  display: flex;
+}
+
+.top-pop-box .top-pop .info .msg {
+  font-size: 24rpx;
+  color: #666;
+}
+
+.top-pop-box .top-pop .info .btn {
+  font-size: 24rpx;
+  background: #f94b4b;
+  color: #fff;
+  margin-left: 120px;
+  padding: 10rpx;
+}
+
+.scroll {
+  height: 75vh;
+}

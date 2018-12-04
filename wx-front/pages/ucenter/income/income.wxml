@@ -2,6 +2,7 @@
 
 
   <view class="income-list">
+  
 
     <view class="item all">
       <view class="tag">总收入</view>

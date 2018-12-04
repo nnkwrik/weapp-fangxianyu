@@ -21,7 +21,6 @@ Page({
     tmpImgList:[],
   },
   onLoad: function(options) {
-
     var that = this;
     user.checkLoginAndNav()
 

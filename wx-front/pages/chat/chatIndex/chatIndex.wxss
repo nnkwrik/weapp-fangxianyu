@@ -1,0 +1,189 @@
+page {
+  height: 100%;
+  min-height: 100%;
+  background: #f4f4f4;
+}
+
+.container {
+  background: #f4f4f4;
+  width: 100%;
+  height: auto;
+  min-height: 100%;
+  overflow: hidden;
+}
+
+.top {
+  margin-top: 10rpx;
+  background: #ffde57;
+  padding: 15px 0;
+  margin-bottom: 20rpx;
+  border-bottom: 2rpx solid #999;
+  border-top: 2rpx solid #999;
+}
+
+.top .msg {
+  color: #000;
+  margin-left: 30rpx;
+}
+
+.top .item-group {
+  width: 750rpx;
+  padding-bottom: 10px;
+  padding: 0 31.25rpx;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.top .item-group .item {
+  align-items: center;
+  font-size: 25rpx;
+  color: #000;
+}
+
+.result-empty {
+  width: 100%;
+  height: auto;
+  margin: 0 auto;
+}
+
+.result-empty .c {
+  width: 100%;
+  height: auto;
+  margin-top: 280rpx;
+}
+
+.result-empty .c image {
+  margin: 0 auto;
+  display: block;
+  text-align: center;
+  width: 180rpx;
+  height: 180rpx;
+}
+
+.result-empty .c text {
+  margin: 30rpx auto;
+  display: block;
+  width: 258rpx;
+  height: 29rpx;
+  line-height: 29rpx;
+  text-align: center;
+  font-size: 29rpx;
+  color: #999;
+}
+
+.result-list {
+  width: 100%;
+  height: auto;
+  overflow: hidden;
+  margin-bottom: 120rpx;
+}
+
+.result-list .chat {
+  height: auto;
+  width: 100%;
+  background: #fff;
+  margin-bottom: 20rpx;
+}
+
+.result-list .item {
+  height: 164rpx;
+  width: 100%;
+  overflow: hidden;
+  border-bottom: 1rpx solid #ddd;
+  border-top: 1rpx solid #ddd;
+}
+
+
+
+.result-list .item .avatar-item {
+  float: left;
+  /* width:190rpx; */
+}
+
+.result-list .item .avatar {
+  float: left;
+  height: 110rpx;
+  width: 110rpx;
+  background: #f4f4f4;
+  margin: 19.5rpx 18rpx 19.5rpx 25rpx;
+  border-radius: 50%;
+}
+
+.result-list .item .badge {
+  background: red;
+  position: relative;
+  left: 110rpx;
+  top: 13px;
+  border: 3rpx solid #fff;
+  border-radius: 50%;
+  padding: 2rpx;
+  width: 32rpx;
+  height: 32rpx;
+}
+
+.result-list .item .badge .num {
+  position: absolute;
+  color: #fff;
+  left: 0rpx;
+  font-size: 20rpx;
+  text-align: center;
+  font-weight: bold;
+  width: 30rpx;
+  line-height: 13px;
+}
+
+.result-list .item .img {
+  float: right;
+  height: 130rpx;
+  width: 130rpx;
+  background: #f4f4f4;
+  margin: 19.5rpx 18rpx 19.5rpx 25rpx;
+}
+
+.result-list .item .info {
+  float: left;
+  height: 125rpx;
+  width: 380rpx;
+  margin: 19.5rpx 0rpx 19.5rpx 20rpx;
+}
+
+.result-list .item .t {
+  margin: 8rpx 0;
+  font-size: 25rpx;
+  color: #333;
+  overflow: hidden;
+}
+
+.result-list .item .name {
+  height: 28rpx;
+  max-width: 310rpx;
+  line-height: 30rpx;
+  font-size: 30rpx;
+  color: #000;
+  overflow: hidden;
+}
+
+.result-list .item .time {
+  margin-bottom: 17rpx;
+  height: 24rpx;
+  line-height: 24rpx;
+  font-size: 22rpx;
+  color: #666;
+  overflow: hidden;
+}
+
+.result-list .item .b {
+  height: 28rpx;
+  line-height: 28rpx;
+  font-size: 25rpx;
+  color: #333;
+  overflow: hidden;
+}
+
+.result-list .item .chat-msg {
+  float: left;
+  color: #666;
+  font-size: 27rpx;
+}

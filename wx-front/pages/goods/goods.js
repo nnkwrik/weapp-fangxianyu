@@ -277,9 +277,14 @@ Page({
   },
   preview: function (event) {
     let url = event.currentTarget.dataset.url
+    let urls = []
+    for (var i in this.data.gallery){
+      urls.push(this.data.gallery[i].imgUrl)
+    }
 
     wx.previewImage({
-      urls: [url] // 需要预览的图片http链接列表
+      current: url,
+      urls: urls // 需要预览的图片http链接列表
     })
     console.log(url)
   },

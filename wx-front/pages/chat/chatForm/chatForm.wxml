@@ -1,0 +1,74 @@
+<view class="top-pop-box">
+  <view class="top-pop">
+    <view class="content">
+      <image class='img' mode='aspectFill' src='http://img.alicdn.com/bao/uploaded/i4/TB2HcB9v7omBKNjSZFqXXXtqVXa_!!0-fleamarket.jpg'></image>
+      <view class='info'>
+        <view class='name'>84青轴红轴键盘</view>
+        <view class='order'>
+          <view class='price'>¥ 249</view>
+          <view class='btn'>立即购买</view>
+        </view>
+        <view class='msg'>交易前聊一聊</view>
+      </view>
+    </view>
+  </view>
+</view>
+
+
+
+<view class='news'>
+  <scroll-view scroll-y="true" scroll-top="5000" wx:key='' class='scroll'>
+    <view class="historycon">
+
+      <!-- 一条记录 -->
+      <view class='history'>
+        <view>
+          <text class='time'>2018-12-12 11:21</text>
+        </view>
+
+        <view class='my_right'>
+          <view class='page_row'>
+            <text class='new_txt'> item.conten</text>
+            <view class='sanjiao my'></view>
+            <image class='new_img' mode='aspectFill' src='https://avatars2.githubusercontent.com/u/29662114?s=460&v=4'></image>
+          </view>
+        </view>
+      </view>
+<!-- 一条记录结束 -->
+
+
+      <view class='history'>
+        <view>
+          <text class='time'>2018-12-12 11:21</text>
+        </view>
+
+        <view class='you_left'>
+          <view class='page_row'>
+
+            <image class='new_img' mode='aspectFill' src='https://avatars2.githubusercontent.com/u/29662114?s=460&v=4'></image>
+            <view class='sanjiao you'></view>
+            <text  class='new_txt'> 您正在与 tabdata.nickname 进行沟通您正在与 tabdata.nickname 进行沟通您正在与 tabdata.nickname 进行沟通您正在与 tabdata.nickname 进行沟通您正在与 tabdata.nickname 进行沟通您正在与 tabdata.nickname 进行沟通您正在与 tabdata.nickname 进行沟通</text>
+
+          </view>
+        </view>
+      </view>
+    </view>
+
+
+  </scroll-view>
+</view>
+
+
+<view class="input-pop-box">
+  <view class="input-pop">
+
+    <view class="input">
+
+      <view class="content">
+        <input class='' focus='{{openComment}}' placeholder="" maxlength='800' confirm-type="done" bindconfirm='done' value='{{}}' />
+
+      </view>
+      <view class='send'>发送</view>
+    </view>
+  </view>
+</view>

@@ -23,7 +23,6 @@
     "pages/brandDetail/brandDetail",
     "pages/search/search",
     "pages/category/category",
-    "pages/cart/cart",
     "pages/shopping/checkout/checkout",
     "pages/shopping/address/address",
     "pages/shopping/addressAdd/addressAdd",
@@ -38,7 +37,9 @@
     "pages/ucenter/sold/sold",
     "pages/ucenter/posted/posted",
     "pages/ucenter/about/about",
-    "pages/user/user"
+    "pages/user/user",
+    "pages/chat/chatIndex/chatIndex",
+    "pages/chat/chatForm/chatForm"
   ],
   "window": {
     "backgroundTextStyle": "dark",
@@ -72,7 +73,7 @@
         "text": "发布"
       },
       {
-        "pagePath": "pages/cart/cart",
+        "pagePath": "pages/chat/chatIndex/chatIndex",
         "iconPath": "static/images/ic_menu_chat_nor.png",
         "selectedIconPath": "static/images/ic_menu_chat_pressed.png",
         "text": "消息"

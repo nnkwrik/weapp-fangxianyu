@@ -62,6 +62,10 @@ Page({
     });
   },
   onLoad: function(options) {
+    // wx.setTabBarBadge({
+    //   index: 3,
+    //   text: '1'
+    // })
     this.getIndexData();
 
   },

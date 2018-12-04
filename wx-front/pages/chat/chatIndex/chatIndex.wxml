@@ -1,0 +1,68 @@
+<view class="container">
+
+  <view class='top'>
+    <view class='msg'> 如遇到以下情况可能是诈骗行为：</view>
+    <view class="item-group">
+      <view class="item">1.宝贝价格异常低</view>
+      <view class="item">2.卖家要求QQ沟通</view>
+      <view class="item">3.卖家要求直接汇款</view>
+    </view>
+  </view>
+
+  <!-- <view class="result-empty" wx:if="{{cartGoods.length <= 0}}">
+    <view class="c">
+      <image src="https://i.postimg.cc/v8KbQ4Sx/cry.png" />
+      <text>您还没有聊天记录</text>
+    </view>
+  </view> -->
+
+
+  <view class="result-list">
+
+    <navigator class="chat" url='/pages/chat/chatForm/chatForm'>
+      <view class="item">
+        <view class='avatar-item'>
+          <image class="avatar" mode='aspectFill' src="https://avatars2.githubusercontent.com/u/29662114?s=460&v=4"></image>
+
+          <view class='badge'>  <text class=' num'>99</text></view>
+        </view>
+        <view class="info">
+          <view class="t">
+            <text class="name">测试用户</text>
+          </view>
+          <view class="time">2018-10-12</view>
+          <view class="b">
+            <text class="chat-msg">你好.可以聊一下吗</text>
+          </view>
+        </view>
+        <image class="img" mode='aspectFill' src="http://yanxuan.nosdn.127.net/04e05e9de3a471b1f6479dd137b459a8.png"></image>
+      </view>
+    </navigator>
+
+    <view class="chat">
+      <view class="item">
+        <view class='avatar-item'>
+          <image class="avatar" src="http://yanxuan.nosdn.127.net/04e05e9de3a471b1f6479dd137b459a8.png"></image>
+          <view class='badge'>  <text class=' num'>9</text></view>
+        </view>
+        <view class="info">
+          <view class="t">
+            <text class="name">测试用户</text>
+          </view>
+          <view class="time">2018-10-12</view>
+          <view class="b">
+            <text class="chat-msg">你好.可以聊一下吗</text>
+          </view>
+        </view>
+        <image class="img" src="http://yanxuan.nosdn.127.net/04e05e9de3a471b1f6479dd137b459a8.png"></image>
+      </view>
+    </view>
+
+
+
+
+  </view>
+
+
+
+</view>

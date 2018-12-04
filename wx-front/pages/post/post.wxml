@@ -8,37 +8,37 @@
     </view>
 
 
+
+
+    <view class='img'>
+      <view wx:for="{{imgList}}" wx:key="{{index}}">
+
+        <view wx:if="{{imgList[index] == 'false'}}">
+          <!-- 上传中 -->
+          <view class='add blur' style="background-image: url('{{tmpImgList[index]}}')">
+            <image class='loading' src='../../static/images/loading.png'></image>
+          </view>
+        </view>
+        <view wx:else>
+          <!-- 完成上传 -->
+          <view class='add'>
+            <image class="delete" src="/static/images/delete.png" bindtap='removeImg' data-index='{{index}}'></image>
+
+            <image class='upload' bindtap='preview' data-url='{{imgList[index]}}' mode='aspectFill' src='{{imgList[index]}}'></image>
+          </view>
+        </view>
+
+      </view>
+      <view wx:if="{{imgList.length < 10}}" class='add' bindtap='addImage'>
+        <text class='txt'>添加图片</text>
+        <image class='icon' src='../../static/images/plus.png'></image>
+      </view>
+
+    </view>
     <navigator url="../region/region" class='location'>
       <view class="icon" wx:if='{{!regionId}}'>选择发货地点</view>
       <view class="icon" wx:else>{{region}}</view>
     </navigator>
-
-      <view class='img'>
-    <view wx:for="{{imgList}}" wx:key="{{index}}">
-
-      <view wx:if="{{imgList[index] == 'false'}}">
-      <!-- 上传中 -->
-        <view class='add blur' style="background-image: url('{{tmpImgList[index]}}')">
-          <image class='loading' src='../../static/images/loading.png'></image>
-        </view>
-      </view>
-      <view wx:else>
-      <!-- 完成上传 -->
-        <view class='add'>
-          <image class="delete" src="/static/images/delete.png" bindtap='removeImg' data-index='{{index}}'></image>
-
-          <image class='upload' bindtap='preview' data-url='{{imgList[index]}}' mode='aspectFill' src='{{imgList[index]}}'></image>
-        </view>
-      </view>
-
-    </view>
-      <view wx:if="{{imgList.length < 10}}" class='add' bindtap='addImage'>
-    <text class='txt'>添加图片</text>
-    <image class='icon' src='../../static/images/plus.png'></image>
-  </view>
-
-  </view>
-
 
   </view>
 
