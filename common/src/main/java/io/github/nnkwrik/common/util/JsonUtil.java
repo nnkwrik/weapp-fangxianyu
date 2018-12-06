@@ -1,5 +1,6 @@
 package io.github.nnkwrik.common.util;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,7 +15,8 @@ import java.util.Map;
 public class JsonUtil {
 
     public static TypeReference<Map<String, String>> simpleJsonMap =
-            new TypeReference<Map<String, String>>(){};
+            new TypeReference<Map<String, String>>() {
+            };
 
     public static Map<String, String> fromJson(String rawData, TypeReference typeReference) {
         try {
@@ -37,9 +39,10 @@ public class JsonUtil {
         return null;
     }
 
-    public static String toJson(Object object){
+    public static String toJson(Object object) {
 
-            ObjectMapper mapper = new ObjectMapper();
+        ObjectMapper mapper = new ObjectMapper()
+                .setSerializationInclusion(JsonInclude.Include.NON_NULL);
         try {
             return mapper.writeValueAsString(object);
         } catch (JsonProcessingException e) {

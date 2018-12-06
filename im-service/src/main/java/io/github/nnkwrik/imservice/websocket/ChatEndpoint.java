@@ -1,6 +1,10 @@
 package io.github.nnkwrik.imservice.websocket;
 
+import io.github.nnkwrik.common.dto.Response;
+import io.github.nnkwrik.common.util.JsonUtil;
+import io.github.nnkwrik.imservice.service.WebSocketService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.websocket.OnClose;
@@ -18,9 +22,12 @@ import java.util.concurrent.ConcurrentMap;
  * @date 18/12/05 11:34
  */
 @Component
-@ServerEndpoint("/im/{openId}")
+@ServerEndpoint(value = "/ws/{openId}", configurator = ChatEndpointConfigure.class)
 @Slf4j
-public class WebSocket {
+public class ChatEndpoint {
+
+    @Autowired
+    private WebSocketService webSocketService;
 
     private static ConcurrentMap<String, Session> sessionMap = new ConcurrentHashMap<>();
 
@@ -37,22 +44,27 @@ public class WebSocket {
     }
 
     @OnMessage
-    public void onMessage(@PathParam("openId") String openId, String message) {
-        log.info("【websocket消息】收到客户端发来的消息:openId = [{}],消息内容 = [{}]", openId, message);
+    public void onMessage(@PathParam("openId") String sender, String message) {
+        log.info("【websocket消息】收到客户端发来的消息:发送者 = [{}],消息内容 = [{}]", sender, message);
+        if (webSocketService == null) {
+            log.info("webSocketService为空");
+        }
+        webSocketService.OnMessage(sender, message);
     }
 
-    public boolean sendMessage(String openId, String message) {
+    public boolean sendMessage(String openId, Response response) {
         Session session = sessionMap.get(openId);
+
         if (session == null) {
-            log.info("消息发送失败,不存在该session:openId = [{}],消息内容 = [{}]", openId, message);
+            log.info("消息发送失败,不存在该session:openId = [{}],消息内容 = [{}]", openId, response);
             return false;
         } else {
             try {
-                session.getBasicRemote().sendText(message);
-                log.info("消息发送成功:openId = [{}],消息内容 = [{}]", openId, message);
+                session.getBasicRemote().sendText(JsonUtil.toJson(response));
+                log.info("消息发送成功:openId = [{}],消息内容 = [{}]", openId, response);
                 return true;
             } catch (IOException e) {
-                log.info("消息发送失败:openId = [{}],消息内容 = [{}]", openId, message);
+                log.info("消息发送失败:openId = [{}],消息内容 = [{}]", openId, response);
                 e.printStackTrace();
                 return false;
             }

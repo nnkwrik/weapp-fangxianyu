@@ -15,6 +15,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class GlobalExceptionHandler {
 
     @ResponseBody
+    @ExceptionHandler(GlobalException.class)
+    public Object handleJWTException(GlobalException e) {
+        log.info("发生异常，errno = {},errmsg = {}", e.getErrno(), e.getErrmsg());
+        return Response.fail(e.getErrno(), e.getErrmsg());
+    }
+
+    @ResponseBody
     @ExceptionHandler(JWTException.class)
     public Object handleJWTException(JWTException e) {
         log.info("发生JWTException，errno = {},errmsg = {}", e.getErrno(), e.getErrmsg());

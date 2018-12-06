@@ -13,6 +13,7 @@
 # other
 dev/mysql/data/*
 dev/mysql/log/*
+dev/redis/log/*
 auth-service/src/main/resources/application-secret.yml
 **/*.key
 **/*.pub

@@ -1,4 +1,4 @@
-package io.github.nnkwrik.imservice.config;
+package io.github.nnkwrik.imservice.websocket;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,5 +14,10 @@ public class WebSocketConfig {
     @Bean
     public ServerEndpointExporter serverEndpointExporter() {
         return new ServerEndpointExporter();
+    }
+
+    @Bean
+    public ChatEndpointConfigure newConfigure() {
+        return new ChatEndpointConfigure();
     }
 }

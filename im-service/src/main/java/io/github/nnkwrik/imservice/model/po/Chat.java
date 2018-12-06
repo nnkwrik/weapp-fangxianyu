@@ -7,10 +7,12 @@ import lombok.Data;
  * @date 18/12/05 21:19
  */
 @Data
-public class ChatUser {
+public class Chat {
     private Integer id;
     private String u1;   //u1 < u2
     private String u2;
-    private Boolean u1ToU2; //指最后一条信息
-    private Integer unreadCount;
+    private Integer goodsId;
+
+    private Boolean showToU1;
+    private Boolean showToU2;
 }

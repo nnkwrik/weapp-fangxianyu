@@ -23,7 +23,11 @@ public class Response<T> {
     public static final int SELLER_AND_GOODS_IS_NOT_MATCH = 4004;
 
     //user
-    public static final int USER_IS_NOT_EXIST = 3001;
+    public static final int USER_IS_NOT_EXIST = 2001;
+
+    //im
+    public static final int MESSAGE_FORMAT_IS_WRONG = 5001;
+    public static final int MESSAGE_IS_INCOMPLETE = 5002;
 
     private int errno;
     private String errmsg;

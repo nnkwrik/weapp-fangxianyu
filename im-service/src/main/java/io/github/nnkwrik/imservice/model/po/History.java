@@ -9,12 +9,11 @@ import java.util.Date;
  * @date 18/12/05 21:23
  */
 @Data
-public class ChatHistory {
+public class History {
     private Integer id;
-    private Integer chatUserId;
+    private Integer chatId;
     private Boolean u1ToU2;
-    private Integer messageType;    //0:系统消息,1.用户消息
-    private String hint;            //相关的商品id等
+    private Integer messageType;    //0:系统消息,1.用户消息,2.建立连接(u1点开了u2但没发消息, u1ToU2 = false,type = )
     private String messageBody;
-    private Date createTime;
+    private Date sendTime;
 }
