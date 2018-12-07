@@ -21,6 +21,7 @@ public class Response<T> {
     public static final int COMMENT_INFO_INCOMPLETE = 4002;
     public static final int POST_INFO_INCOMPLETE = 4003;
     public static final int SELLER_AND_GOODS_IS_NOT_MATCH = 4004;
+    public static final int GOODS_IN_NOT_EXIST = 4005;
 
     //user
     public static final int USER_IS_NOT_EXIST = 2001;
@@ -51,6 +52,7 @@ public class Response<T> {
     public static Response ok() {
         return new Response();
     }
+
     public static <T> Response ok(T data) {
         return new Response(data);
     }

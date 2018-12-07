@@ -4,7 +4,7 @@ import io.github.nnkwrik.common.dto.JWTUser;
 import io.github.nnkwrik.common.dto.Response;
 import io.github.nnkwrik.common.token.TokenSolver;
 import io.github.nnkwrik.common.token.injection.JWT;
-import io.github.nnkwrik.common.client.UserClient;
+import io.github.nnkwrik.goodsservice.client.UserClient;
 import io.github.nnkwrik.goodsservice.model.po.Goods;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,9 +24,8 @@ public class TestController {
 
     @GetMapping("/testFeign")
     public Response testFeign() {
-        Map<String, String> map = new HashMap<>();
-        map.put("openId", "1");
-        return client.getSimpleUser(map);
+
+        return client.getSimpleUser("1");
     }
 
     @GetMapping("/testFeign2")

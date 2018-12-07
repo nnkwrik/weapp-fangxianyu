@@ -3,7 +3,7 @@ package io.github.nnkwrik.goodsservice.service.impl;
 import com.github.pagehelper.PageHelper;
 import io.github.nnkwrik.common.dto.Response;
 import io.github.nnkwrik.common.dto.SimpleUser;
-import io.github.nnkwrik.common.client.UserClient;
+import io.github.nnkwrik.goodsservice.client.UserClient;
 import io.github.nnkwrik.goodsservice.dao.CategoryMapper;
 import io.github.nnkwrik.goodsservice.dao.GoodsMapper;
 import io.github.nnkwrik.goodsservice.model.po.*;
@@ -156,7 +156,7 @@ public class GoodsServiceImpl implements GoodsService {
 
     private Map<String, SimpleUser> getSimpleUserList(List<String> openIdList) {
         log.info("从用户服务查询用户的简单信息");
-        Response<HashMap<String, SimpleUser>> response = userClient.getSimpleUserList(openIdList);
+        Response<Map<String, SimpleUser>> response = userClient.getSimpleUserList(openIdList);
         if (response.getErrno() == Response.USER_IS_NOT_EXIST) {
             log.info("没有查到匹配openId的用户");
             return new HashMap<>();
