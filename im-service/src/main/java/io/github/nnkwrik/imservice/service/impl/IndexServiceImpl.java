@@ -1,6 +1,11 @@
 package io.github.nnkwrik.imservice.service.impl;
 
 import com.github.pagehelper.PageHelper;
+import io.github.nnkwrik.common.dto.Response;
+import io.github.nnkwrik.common.dto.SimpleGoods;
+import io.github.nnkwrik.common.dto.SimpleUser;
+import io.github.nnkwrik.imservice.client.GoodsClient;
+import io.github.nnkwrik.imservice.client.UserClient;
 import io.github.nnkwrik.imservice.dao.HistoryMapper;
 import io.github.nnkwrik.imservice.model.po.History;
 import io.github.nnkwrik.imservice.model.po.HistoryExample;
@@ -8,12 +13,15 @@ import io.github.nnkwrik.imservice.model.po.LastChat;
 import io.github.nnkwrik.imservice.model.vo.ChatIndex;
 import io.github.nnkwrik.imservice.redis.RedisClient;
 import io.github.nnkwrik.imservice.service.IndexService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -21,6 +29,7 @@ import java.util.stream.Collectors;
  * @date 18/12/07 16:32
  */
 @Service
+@Slf4j
 public class IndexServiceImpl implements IndexService {
 
     @Autowired
@@ -29,17 +38,20 @@ public class IndexServiceImpl implements IndexService {
     @Autowired
     private HistoryMapper historyMapper;
 
-//    @Autowired
-//    private UserClient userClient;
+    @Autowired
+    private UserClient userClient;
+
+    @Autowired
+    private GoodsClient goodsClient;
 
 
     @Override
-    public List<ChatIndex> showIndex(String userId, int page, int size) {
-        List<LastChat> unreadMessage = redisClient.hvals(userId);
+    public List<ChatIndex> showIndex(String currentUser, int page, int size) {
+        List<LastChat> unreadMessage = redisClient.hvals(currentUser);
 
         List<ChatIndex> resultVoList = new ArrayList<>();    //最终要返回的值
-        List<Integer> goodsIds = new ArrayList<>();         //需要去商品服务查的id
-        List<String> userIds = new ArrayList<>();           //需要去用户服务查的id
+        Map<Integer, Integer> chatGoodsMap = new HashMap<>();         //需要去商品服务查的id
+        Map<Integer, String> chatUserMap = new HashMap<>();           //需要去用户服务查的id
 
 
         int alreadyShow = size * (page - 1);
@@ -49,13 +61,13 @@ public class IndexServiceImpl implements IndexService {
 
             List<LastChat> unread = getDisplayUnread(unreadMessage, alreadyShow, size);
 
-            dealUnread(unread, resultVoList, goodsIds, userIds);
+            dealUnread(unread, resultVoList, chatGoodsMap, chatUserMap);
         } else if (unreadMessage.size() > alreadyShow) {
             //需要的内容的一部分在redis(未读),一部分在sql(已读)
 
             //未读消息
             List<LastChat> unread = getDisplayUnread(unreadMessage, alreadyShow, size);
-            dealUnread(unread, resultVoList, goodsIds, userIds);
+            dealUnread(unread, resultVoList, chatGoodsMap, chatUserMap);
 
             List<Integer> unreadChatIds = unread.stream()
                     .map(chat -> chat.getLastMsg().getChatId())
@@ -65,7 +77,7 @@ public class IndexServiceImpl implements IndexService {
             int remain = needShow - unreadMessage.size();
             PageHelper.offsetPage(0, remain);
             List<HistoryExample> read = historyMapper.getLastReadChat(unreadChatIds);
-            dealRead(read,userId, resultVoList, goodsIds, userIds);
+            dealRead(read, currentUser, resultVoList, chatGoodsMap, chatUserMap);
 
 
         } else {
@@ -74,23 +86,20 @@ public class IndexServiceImpl implements IndexService {
             int offset = alreadyShow - unreadMessage.size();
             PageHelper.offsetPage(offset, size);
             List<HistoryExample> read = historyMapper.getLastChat();
-            dealRead(read,userId, resultVoList, goodsIds, userIds);
+            dealRead(read, currentUser, resultVoList, chatGoodsMap, chatUserMap);
         }
 
-        //去用户服务查用户名字头像
-
-        //去商品服务查商品图片
-
-        //遍历赋值
-
+        //添加用户和商品信息
+        resultVoList = setGoodsAndUser4Chat(resultVoList, chatGoodsMap, chatUserMap);
 
         return resultVoList;
     }
 
 
+
     private List<LastChat> getDisplayUnread(List<LastChat> unreadMessage, int offset, int size) {
         List<LastChat> displayUnread = unreadMessage.stream()
-                .sorted((a, b) -> b.getLastMsg().getSenderId().compareTo(a.getLastMsg().getSenderId()))
+                .sorted((a, b) -> b.getLastMsg().getSendTime().compareTo(a.getLastMsg().getSendTime()))
                 .skip(offset)
                 .limit(size)
                 .collect(Collectors.toList());
@@ -99,12 +108,13 @@ public class IndexServiceImpl implements IndexService {
 
     private void dealUnread(List<LastChat> unread,
                             List<ChatIndex> resultVoList,
-                            List<Integer> goodsIds, List<String> userIds) {
+                            Map<Integer, Integer> chatGoodsMap,
+                            Map<Integer, String> chatUserMap) {
 
         unread.stream().forEach(po -> {
             //稍后去其他服务查询
-            goodsIds.add(po.getLastMsg().getGoodsId());
-            userIds.add(po.getLastMsg().getSenderId());
+            chatGoodsMap.put(po.getLastMsg().getChatId(), po.getLastMsg().getGoodsId());
+            chatUserMap.put(po.getLastMsg().getChatId(), po.getLastMsg().getSenderId());
 
             //设置未读数
             ChatIndex vo = new ChatIndex();
@@ -122,15 +132,16 @@ public class IndexServiceImpl implements IndexService {
 
     private void dealRead(List<HistoryExample> read, String userId,
                           List<ChatIndex> resultVoList,
-                          List<Integer> goodsIds, List<String> userIds) {
+                          Map<Integer, Integer> chatGoodsMap,
+                          Map<Integer, String> chatUserMap) {
 
         read.stream().forEach(po -> {
 
-            goodsIds.add(po.getGoodsId());
+            chatGoodsMap.put(po.getChatId(), po.getGoodsId());
             if (userId.equals(po.getU1())) {
-                userIds.add(po.getU2());
+                chatUserMap.put(po.getChatId(), po.getU2());
             } else {
-                userIds.add(po.getU1());
+                chatUserMap.put(po.getChatId(), po.getU1());
             }
 
             //设置未读数
@@ -145,5 +156,73 @@ public class IndexServiceImpl implements IndexService {
             resultVoList.add(vo);
         });
 
+    }
+
+    private List<ChatIndex> setGoodsAndUser4Chat(List<ChatIndex> voList,
+                                                 Map<Integer, Integer> chatGoodsMap,
+                                                 Map<Integer, String> chatUserMap){
+
+        //去商品服务查商品图片
+        Map<Integer, SimpleGoods> simpleGoodsMap = getSimpleGoodsList(new ArrayList<>(chatGoodsMap.values()));
+
+        //去用户服务查用户名字头像
+        Map<String, SimpleUser> simpleUserMap = getSimpleUserList(new ArrayList<>(chatUserMap.values()));
+
+
+        voList.stream().forEach(vo -> {
+
+            String userId = chatUserMap.get(vo.getLastChat().getChatId());
+
+            SimpleUser simpleUser = simpleUserMap.get(userId);
+            if (simpleUser == null){
+                simpleUser = unknownUser();
+            }
+            vo.setOtherSide(simpleUser);
+
+            Integer goodsId = chatGoodsMap.get(vo.getLastChat().getChatId());
+
+            SimpleGoods simpleGoods = simpleGoodsMap.get(goodsId);
+            if (simpleGoods == null){
+                simpleGoods = unknownGoods();
+            }
+            vo.setGoods(simpleGoods);
+
+        });
+
+        return voList;
+    }
+
+    //TODO 以下goods-service中有重复
+    private Map<Integer, SimpleGoods> getSimpleGoodsList(List<Integer> goodsIdList) {
+        log.info("从商品服务查询商品的简单信息");
+        Response<Map<Integer, SimpleGoods>> response = goodsClient.getSimpleGoodsList(goodsIdList);
+        if (response.getErrno() != 0) {
+            log.info("从商品服务获取商品信息列表失败,errno={},原因={}", response.getErrno(), response.getErrmsg());
+            return new HashMap<>();
+        }
+        return response.getData();
+    }
+
+    private Map<String, SimpleUser> getSimpleUserList(List<String> openIdList) {
+        log.info("从用户服务查询用户的简单信息");
+        Response<Map<String, SimpleUser>> response = userClient.getSimpleUserList(openIdList);
+        if (response.getErrno() != 0) {
+            log.info("从用户服务获取用户信息列表失败,errno={},原因={}", response.getErrno(), response.getErrmsg());
+            return new HashMap<>();
+        }
+        return response.getData();
+    }
+
+    private SimpleUser unknownUser() {
+        SimpleUser unknownUser = new SimpleUser();
+        unknownUser.setNickName("用户不存在");
+        unknownUser.setAvatarUrl("https://i.postimg.cc/RVbDV5fN/anonymous.png");
+        return unknownUser;
+    }
+
+    private SimpleGoods unknownGoods() {
+        SimpleGoods unknownGoods = new SimpleGoods();
+        unknownGoods.setName("商品不存在");
+        return unknownGoods;
     }
 }

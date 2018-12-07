@@ -55,8 +55,6 @@ public class ChatController {
         log.info("展示消息一览,展示{} 条信息.用户id = {},用户昵称 = {}", voList.size(), user.getOpenId(), user.getNickName());
 
         return Response.ok(voList);
-
-
     }
 
 }
