@@ -1,5 +1,6 @@
-package io.github.nnkwrik.imservice.dao;
+package io.github.nnkwrik.imservice;
 
+import io.github.nnkwrik.imservice.dao.ChatMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

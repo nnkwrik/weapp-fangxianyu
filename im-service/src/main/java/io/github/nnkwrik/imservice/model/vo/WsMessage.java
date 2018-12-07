@@ -12,6 +12,7 @@ import java.util.Date;
  */
 @Data
 public class WsMessage {
+    private Integer chatId;
     private String senderId;
     private String receiverId;
     private Integer goodsId;

@@ -28,6 +28,8 @@ public class Response<T> {
     //im
     public static final int MESSAGE_FORMAT_IS_WRONG = 5001;
     public static final int MESSAGE_IS_INCOMPLETE = 5002;
+    public static final int SENDER_AND_WS_IS_NOT_MATCH = 5003;
+    public static final int UPDATE_HISTORY_TO_SQL_FAIL = 5004;
 
     private int errno;
     private String errmsg;

@@ -14,11 +14,11 @@ spring:
     port: 6379
     host: localhost
     timeout: 30s
-#  jackson:
-#    default-property-inclusion: non_null  #如果值为null,构造json时不加入
-#    date-format: yyyy-MM-dd HH:mm    #指定Json中Date对象的传输格式.对于DTO还是使用以往的方式
-#    locale: zh_CN
-#    time-zone: Asia/Shanghai
+  jackson:
+    default-property-inclusion: non_null  #如果值为null,构造json时不加入
+    date-format: yyyy-MM-dd HH:mm    #指定Json中Date对象的传输格式.对于DTO还是使用以往的方式
+    locale: zh_CN
+    time-zone: Asia/Shanghai
 
 server:
   port: 8805
@@ -31,5 +31,5 @@ mybatis:
 #  level:
 #    org.springframework.web: info
 #    io.github.nnkwrik.goodsservice: debug
-#jwt:
-#  pub-key-file-name: RSA.pub
+jwt:
+  pub-key-file-name: RSA.pub

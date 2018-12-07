@@ -1,4 +1,4 @@
-package io.github.nnkwrik.goodsservice.util;
+package io.github.nnkwrik.common.util;
 
 import org.springframework.beans.BeanUtils;
 

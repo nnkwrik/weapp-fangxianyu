@@ -1,4 +1,4 @@
-package io.github.nnkwrik.goodsservice.client;
+package io.github.nnkwrik.common.client;
 
 import io.github.nnkwrik.common.dto.Response;
 import io.github.nnkwrik.common.dto.SimpleUser;

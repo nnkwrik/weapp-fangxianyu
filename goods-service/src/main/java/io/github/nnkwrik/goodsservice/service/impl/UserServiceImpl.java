@@ -3,7 +3,7 @@ package io.github.nnkwrik.goodsservice.service.impl;
 import com.github.pagehelper.PageHelper;
 import io.github.nnkwrik.common.dto.Response;
 import io.github.nnkwrik.common.dto.SimpleUser;
-import io.github.nnkwrik.goodsservice.client.UserClient;
+import io.github.nnkwrik.common.client.UserClient;
 import io.github.nnkwrik.goodsservice.dao.UserMapper;
 import io.github.nnkwrik.goodsservice.model.po.Goods;
 import io.github.nnkwrik.goodsservice.model.po.GoodsExample;
