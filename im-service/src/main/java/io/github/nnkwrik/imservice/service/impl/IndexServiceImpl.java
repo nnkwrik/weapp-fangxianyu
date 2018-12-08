@@ -96,7 +96,6 @@ public class IndexServiceImpl implements IndexService {
     }
 
 
-
     private List<LastChat> getDisplayUnread(List<LastChat> unreadMessage, int offset, int size) {
         List<LastChat> displayUnread = unreadMessage.stream()
                 .sorted((a, b) -> b.getLastMsg().getSendTime().compareTo(a.getLastMsg().getSendTime()))
@@ -160,7 +159,7 @@ public class IndexServiceImpl implements IndexService {
 
     private List<ChatIndex> setGoodsAndUser4Chat(List<ChatIndex> voList,
                                                  Map<Integer, Integer> chatGoodsMap,
-                                                 Map<Integer, String> chatUserMap){
+                                                 Map<Integer, String> chatUserMap) {
 
         //去商品服务查商品图片
         Map<Integer, SimpleGoods> simpleGoodsMap = getSimpleGoodsList(new ArrayList<>(chatGoodsMap.values()));
@@ -174,7 +173,7 @@ public class IndexServiceImpl implements IndexService {
             String userId = chatUserMap.get(vo.getLastChat().getChatId());
 
             SimpleUser simpleUser = simpleUserMap.get(userId);
-            if (simpleUser == null){
+            if (simpleUser == null) {
                 simpleUser = unknownUser();
             }
             vo.setOtherSide(simpleUser);
@@ -182,7 +181,7 @@ public class IndexServiceImpl implements IndexService {
             Integer goodsId = chatGoodsMap.get(vo.getLastChat().getChatId());
 
             SimpleGoods simpleGoods = simpleGoodsMap.get(goodsId);
-            if (simpleGoods == null){
+            if (simpleGoods == null) {
                 simpleGoods = unknownGoods();
             }
             vo.setGoods(simpleGoods);

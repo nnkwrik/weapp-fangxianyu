@@ -49,7 +49,7 @@ public class WebSocketServiceImpl implements WebSocketService {
             chatEndpoint.sendMessage(senderId, Response.fail(e.getErrno(), e.getErrmsg()));
             return;
         }
-        if (!senderId.equals(message.getSenderId())){
+        if (!senderId.equals(message.getSenderId())) {
             String msg = "发送者与ws连接中的不一致,消息发送失败";
             log.info(msg);
             chatEndpoint.sendMessage(senderId, Response.fail(Response.SENDER_AND_WS_IS_NOT_MATCH, msg));
@@ -76,7 +76,7 @@ public class WebSocketServiceImpl implements WebSocketService {
     }
 
     private void updateRedis(WsMessage message) {
-        LastChat lastChat = redisClient.hget(message.getReceiverId(), message.getGoodsId() + "");
+        LastChat lastChat = redisClient.hget(message.getReceiverId(), message.getChatId() + "");
         if (lastChat != null) {
             lastChat.setUnreadCount(lastChat.getUnreadCount() + 1);
             lastChat.setLastMsg(message);
@@ -85,7 +85,7 @@ public class WebSocketServiceImpl implements WebSocketService {
             lastChat.setUnreadCount(1);
             lastChat.setLastMsg(message);
         }
-        redisClient.hset(message.getReceiverId(), message.getGoodsId() + "", lastChat);
+        redisClient.hset(message.getReceiverId(), message.getChatId() + "", lastChat);
     }
 
     @Transactional

@@ -27,4 +27,8 @@ public class RedisClient {
     public <T> List<T> hvals(String key) {
         return redisTemplate.opsForHash().values(key);
     }
+
+    public void hdel(String key,String... fields){
+        redisTemplate.opsForHash().delete(key,fields);
+    }
 }
