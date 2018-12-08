@@ -1,5 +1,6 @@
 package io.github.nnkwrik.goodsservice.controller;
 
+import fangxianyu.innerApi.user.UserClientHandler;
 import io.github.nnkwrik.common.dto.JWTUser;
 import io.github.nnkwrik.common.dto.Response;
 import io.github.nnkwrik.common.dto.SimpleUser;
@@ -28,6 +29,9 @@ public class UserController {
 
     @Autowired
     private GoodsService goodsService;
+
+    @Autowired
+    private UserClientHandler userClientHandler;
 
     /**
      * 收藏或取消收藏某个商品
@@ -112,7 +116,7 @@ public class UserController {
     public Response getUserPage(@PathVariable("userId") String userId,
                                 @RequestParam(value = "page", defaultValue = "1") int page,
                                 @RequestParam(value = "size", defaultValue = "10") int size) {
-        SimpleUser user = userService.getUserInfo(userId);
+        SimpleUser user = userClientHandler.getSimpleUser(userId);
         if (user == null) {
             log.info("搜索goodsId = 【{}】的详情时出错", userId);
             return Response.fail(Response.USER_IS_NOT_EXIST, "无法搜索到商品卖家的信息");

@@ -1,16 +1,18 @@
 package io.github.nnkwrik.goodsservice.controller;
 
+import fangxianyu.innerApi.user.UserClientHandler;
 import io.github.nnkwrik.common.dto.JWTUser;
 import io.github.nnkwrik.common.dto.Response;
 import io.github.nnkwrik.common.token.TokenSolver;
 import io.github.nnkwrik.common.token.injection.JWT;
-import io.github.nnkwrik.goodsservice.client.UserClient;
 import io.github.nnkwrik.goodsservice.model.po.Goods;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author nnkwrik
@@ -20,12 +22,12 @@ import java.util.*;
 public class TestController {
 
     @Autowired
-    private UserClient client;
+    private UserClientHandler userClientHandler;
 
     @GetMapping("/testFeign")
     public Response testFeign() {
 
-        return client.getSimpleUser("1");
+        return Response.ok(userClientHandler.getSimpleUser("1"));
     }
 
     @GetMapping("/testFeign2")
@@ -33,17 +35,18 @@ public class TestController {
         List<String> ids = new ArrayList<>();
         ids.add("1");
         ids.add("3");
-        return client.getSimpleUserList(ids);
+        return Response.ok(userClientHandler.getSimpleUserList(ids));
     }
 
     @GetMapping("/testFeign3")
     public Response testFeign3() {
-        return client.getSimpleUser("1");
+        return Response.ok(userClientHandler.getSimpleUser("1"));
     }
 
 
     /**
      * jwt解析失败时会抛错
+     *
      * @param jwt
      * @return
      */
@@ -56,6 +59,7 @@ public class TestController {
 
     /**
      * jwt解析失败时不会抛错
+     *
      * @param jwt 解析失败时是null
      * @return
      */
@@ -80,7 +84,7 @@ public class TestController {
 
     //testNOT_NULL_JSON
     @GetMapping("/testJson")
-    public Object testNOT_NULL_JSON(){
+    public Object testNOT_NULL_JSON() {
         Goods goods = new Goods();
         goods.setId(1);
         goods.setLastEdit(new Date());

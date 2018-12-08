@@ -1,9 +1,6 @@
 package io.github.nnkwrik.goodsservice.service.impl;
 
 import com.github.pagehelper.PageHelper;
-import io.github.nnkwrik.common.dto.Response;
-import io.github.nnkwrik.common.dto.SimpleUser;
-import io.github.nnkwrik.goodsservice.client.UserClient;
 import io.github.nnkwrik.goodsservice.dao.UserMapper;
 import io.github.nnkwrik.goodsservice.model.po.Goods;
 import io.github.nnkwrik.goodsservice.model.po.GoodsExample;
@@ -30,9 +27,6 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserMapper userMapper;
-
-    @Autowired
-    private UserClient userClient;
 
     @Override
     public Boolean userHasCollect(String userId, int goodsId) {
@@ -71,16 +65,6 @@ public class UserServiceImpl implements UserService {
     public List<Goods> getUserPosted(String userId, int page, int size) {
         PageHelper.startPage(page, size);
         return userMapper.getUserPosted(userId);
-    }
-
-    @Override
-    public SimpleUser getUserInfo(String userId) {
-        Response<SimpleUser> response = userClient.getSimpleUser(userId);
-        if (response.getErrno() == Response.USER_IS_NOT_EXIST) {
-            log.info("没有搜索到用户的相关信息");
-            return null;
-        }
-        return response.getData();
     }
 
 

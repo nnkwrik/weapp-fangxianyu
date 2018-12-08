@@ -1,11 +1,10 @@
 package io.github.nnkwrik.imservice.service.impl;
 
 import com.github.pagehelper.PageHelper;
-import io.github.nnkwrik.common.dto.Response;
+import fangxianyu.innerApi.goods.GoodsClientHandler;
+import fangxianyu.innerApi.user.UserClientHandler;
 import io.github.nnkwrik.common.dto.SimpleGoods;
 import io.github.nnkwrik.common.dto.SimpleUser;
-import io.github.nnkwrik.imservice.client.GoodsClient;
-import io.github.nnkwrik.imservice.client.UserClient;
 import io.github.nnkwrik.imservice.dao.HistoryMapper;
 import io.github.nnkwrik.imservice.model.po.History;
 import io.github.nnkwrik.imservice.model.po.HistoryExample;
@@ -39,10 +38,10 @@ public class IndexServiceImpl implements IndexService {
     private HistoryMapper historyMapper;
 
     @Autowired
-    private UserClient userClient;
+    private UserClientHandler userClientHandler;
 
     @Autowired
-    private GoodsClient goodsClient;
+    private GoodsClientHandler goodsClientHandler;
 
 
     @Override
@@ -162,10 +161,12 @@ public class IndexServiceImpl implements IndexService {
                                                  Map<Integer, String> chatUserMap) {
 
         //去商品服务查商品图片
-        Map<Integer, SimpleGoods> simpleGoodsMap = getSimpleGoodsList(new ArrayList<>(chatGoodsMap.values()));
+        Map<Integer, SimpleGoods> simpleGoodsMap
+                = goodsClientHandler.getSimpleGoodsList(new ArrayList<>(chatGoodsMap.values()));
 
         //去用户服务查用户名字头像
-        Map<String, SimpleUser> simpleUserMap = getSimpleUserList(new ArrayList<>(chatUserMap.values()));
+        Map<String, SimpleUser> simpleUserMap
+                = userClientHandler.getSimpleUserList(new ArrayList<>(chatUserMap.values()));
 
 
         voList.stream().forEach(vo -> {
@@ -174,7 +175,7 @@ public class IndexServiceImpl implements IndexService {
 
             SimpleUser simpleUser = simpleUserMap.get(userId);
             if (simpleUser == null) {
-                simpleUser = unknownUser();
+                simpleUser = SimpleUser.unknownUser();
             }
             vo.setOtherSide(simpleUser);
 
@@ -182,7 +183,7 @@ public class IndexServiceImpl implements IndexService {
 
             SimpleGoods simpleGoods = simpleGoodsMap.get(goodsId);
             if (simpleGoods == null) {
-                simpleGoods = unknownGoods();
+                simpleGoods = SimpleGoods.unknownGoods();
             }
             vo.setGoods(simpleGoods);
 
@@ -191,37 +192,4 @@ public class IndexServiceImpl implements IndexService {
         return voList;
     }
 
-    //TODO 以下goods-service中有重复
-    private Map<Integer, SimpleGoods> getSimpleGoodsList(List<Integer> goodsIdList) {
-        log.info("从商品服务查询商品的简单信息");
-        Response<Map<Integer, SimpleGoods>> response = goodsClient.getSimpleGoodsList(goodsIdList);
-        if (response.getErrno() != 0) {
-            log.info("从商品服务获取商品信息列表失败,errno={},原因={}", response.getErrno(), response.getErrmsg());
-            return new HashMap<>();
-        }
-        return response.getData();
-    }
-
-    private Map<String, SimpleUser> getSimpleUserList(List<String> openIdList) {
-        log.info("从用户服务查询用户的简单信息");
-        Response<Map<String, SimpleUser>> response = userClient.getSimpleUserList(openIdList);
-        if (response.getErrno() != 0) {
-            log.info("从用户服务获取用户信息列表失败,errno={},原因={}", response.getErrno(), response.getErrmsg());
-            return new HashMap<>();
-        }
-        return response.getData();
-    }
-
-    private SimpleUser unknownUser() {
-        SimpleUser unknownUser = new SimpleUser();
-        unknownUser.setNickName("用户不存在");
-        unknownUser.setAvatarUrl("https://i.postimg.cc/RVbDV5fN/anonymous.png");
-        return unknownUser;
-    }
-
-    private SimpleGoods unknownGoods() {
-        SimpleGoods unknownGoods = new SimpleGoods();
-        unknownGoods.setName("商品不存在");
-        return unknownGoods;
-    }
 }

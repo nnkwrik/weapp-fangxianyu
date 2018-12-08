@@ -1,4 +1,4 @@
-package io.github.nnkwrik.goodsservice.client;
+package fangxianyu.innerApi.user;
 
 import io.github.nnkwrik.common.dto.Response;
 import io.github.nnkwrik.common.dto.SimpleUser;
@@ -39,4 +39,3 @@ public interface UserClient {
     @GetMapping("/simpleUserList")
     Response<Map<String, SimpleUser>> getSimpleUserList(@RequestParam List<String> openIdList);
 }
-

@@ -18,4 +18,11 @@ public class SimpleUser {
 
     @JsonFormat(pattern = StdDateFormat.DATE_FORMAT_STR_ISO8601)
     private Date registerTime;
+
+    public static SimpleUser unknownUser() {
+        SimpleUser unknownUser = new SimpleUser();
+        unknownUser.setNickName("用户不存在");
+        unknownUser.setAvatarUrl("https://i.postimg.cc/RVbDV5fN/anonymous.png");
+        return unknownUser;
+    }
 }

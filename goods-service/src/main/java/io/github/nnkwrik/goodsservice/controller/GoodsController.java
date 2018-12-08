@@ -1,5 +1,6 @@
 package io.github.nnkwrik.goodsservice.controller;
 
+import fangxianyu.innerApi.user.UserClientHandler;
 import io.github.nnkwrik.common.dto.JWTUser;
 import io.github.nnkwrik.common.dto.Response;
 import io.github.nnkwrik.common.dto.SimpleUser;
@@ -9,8 +10,8 @@ import io.github.nnkwrik.goodsservice.model.po.Goods;
 import io.github.nnkwrik.goodsservice.model.po.GoodsGallery;
 import io.github.nnkwrik.goodsservice.model.po.PostExample;
 import io.github.nnkwrik.goodsservice.model.vo.CategoryPageVo;
-import io.github.nnkwrik.goodsservice.model.vo.GoodsDetailPageVo;
 import io.github.nnkwrik.goodsservice.model.vo.CommentVo;
+import io.github.nnkwrik.goodsservice.model.vo.GoodsDetailPageVo;
 import io.github.nnkwrik.goodsservice.service.GoodsService;
 import io.github.nnkwrik.goodsservice.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +38,9 @@ public class GoodsController {
 
     @Autowired
     private BrowseCache browseCache;
+
+    @Autowired
+    private UserClientHandler userClientHandler;
 
     /**
      * 通过分类浏览商品,获取选定目录下的商品列表和同级的兄弟目录
@@ -91,7 +95,7 @@ public class GoodsController {
         //获取商品详情
         Goods goods = goodsService.getGoodsDetail(goodsId);
         //获取买家信息
-        SimpleUser seller = userService.getUserInfo(goods.getSellerId());
+        SimpleUser seller = userClientHandler.getSimpleUser(goods.getSellerId());
         if (seller == null) {
             log.info("搜索goodsId = 【{}】的详情时出错", goodsId);
             return Response.fail(Response.USER_IS_NOT_EXIST, "无法搜索到商品卖家的信息");
@@ -154,7 +158,7 @@ public class GoodsController {
         }
         post.setSellerId(user.getOpenId());
         goodsService.postGoods(post);
-        log.info("用户发布商品：用户昵称=【{}】，商品名=【{}】，{}张图片", user.getNickName(), post.getName(),post.getImages().size());
+        log.info("用户发布商品：用户昵称=【{}】，商品名=【{}】，{}张图片", user.getNickName(), post.getName(), post.getImages().size());
 
         return Response.ok();
     }

@@ -1,16 +1,16 @@
 package io.github.nnkwrik.goodsservice.service.impl;
 
 import com.github.pagehelper.PageHelper;
+import fangxianyu.innerApi.user.UserClientHandler;
 import io.github.nnkwrik.common.dto.Response;
 import io.github.nnkwrik.common.dto.SimpleUser;
-import io.github.nnkwrik.goodsservice.client.UserClient;
+import io.github.nnkwrik.common.util.BeanListUtils;
 import io.github.nnkwrik.goodsservice.dao.CategoryMapper;
 import io.github.nnkwrik.goodsservice.dao.GoodsMapper;
 import io.github.nnkwrik.goodsservice.model.po.*;
 import io.github.nnkwrik.goodsservice.model.vo.CategoryPageVo;
 import io.github.nnkwrik.goodsservice.model.vo.CommentVo;
 import io.github.nnkwrik.goodsservice.service.GoodsService;
-import io.github.nnkwrik.common.util.BeanListUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,8 +33,7 @@ public class GoodsServiceImpl implements GoodsService {
     private GoodsMapper goodsMapper;
 
     @Autowired
-    private UserClient userClient;
-
+    private UserClientHandler userClientHandler;
 
     @Override
     public CategoryPageVo getGoodsAndBrotherCateById(int id, int page, int size) {
@@ -143,7 +142,7 @@ public class GoodsServiceImpl implements GoodsService {
 
 
         Map<String, SimpleUser> simpleUserMap
-                = getSimpleUserList(new ArrayList<>(userIdSet));
+                = userClientHandler.getSimpleUserList(new ArrayList<>(userIdSet));
 
         //加入评论中的用户信息
         baseComment.stream().map(base -> setUser4Comment(simpleUserMap, base).getReplyList())
@@ -154,20 +153,10 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
 
-    private Map<String, SimpleUser> getSimpleUserList(List<String> openIdList) {
-        log.info("从用户服务查询用户的简单信息");
-        Response<Map<String, SimpleUser>> response = userClient.getSimpleUserList(openIdList);
-        if (response.getErrno() == Response.USER_IS_NOT_EXIST) {
-            log.info("没有查到匹配openId的用户");
-            return new HashMap<>();
-        }
-        return response.getData();
-    }
-
     private CommentVo setUser4Comment(Map<String, SimpleUser> simpleUserMap, CommentVo comment) {
         SimpleUser userDTO = simpleUserMap.get(comment.getUserId());
         if (userDTO == null) {
-            comment.setSimpleUser(unknownUser());
+            comment.setSimpleUser(SimpleUser.unknownUser());
         } else {
             comment.setSimpleUser(userDTO);
         }
@@ -180,11 +169,5 @@ public class GoodsServiceImpl implements GoodsService {
         return comment;
     }
 
-    private SimpleUser unknownUser() {
-        SimpleUser unknownUser = new SimpleUser();
-        unknownUser.setNickName("用户不存在");
-        unknownUser.setAvatarUrl("https://i.postimg.cc/RVbDV5fN/anonymous.png");
-        return unknownUser;
-    }
 
 }
