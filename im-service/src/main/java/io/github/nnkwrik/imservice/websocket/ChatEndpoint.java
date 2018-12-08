@@ -1,16 +1,17 @@
 package io.github.nnkwrik.imservice.websocket;
 
+import com.auth0.jwt.exceptions.TokenExpiredException;
+import io.github.nnkwrik.common.dto.JWTUser;
 import io.github.nnkwrik.common.dto.Response;
+import io.github.nnkwrik.common.token.TokenSolver;
 import io.github.nnkwrik.common.util.JsonUtil;
 import io.github.nnkwrik.imservice.service.WebSocketService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
-import javax.websocket.OnClose;
-import javax.websocket.OnMessage;
-import javax.websocket.OnOpen;
-import javax.websocket.Session;
+import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
@@ -29,12 +30,25 @@ public class ChatEndpoint {
     @Autowired
     private WebSocketService webSocketService;
 
+    @Autowired
+    private TokenSolver tokenSolver;
+
     private static ConcurrentMap<String, Session> sessionMap = new ConcurrentHashMap<>();
 
     @OnOpen
-    public void onOpen(@PathParam("openId") String openId, Session session) {
+    public void onOpen(@PathParam("openId") String openId, Session session, EndpointConfig config) throws IOException {
+        String token = (String) config.getUserProperties().get(JWTUser.class.getName());
+        JWTUser user = solveToken(token);
+
+        if (user == null || !user.getOpenId().equals(openId)) {
+            log.info("【websocket消息】token检验失败,拒绝连接, openId = [{}]", openId);
+            rejectConnect(session);
+            session.close();
+            return;
+        }
         sessionMap.put(openId, session);
-        log.info("【websocket消息】有新的连接, openId = [{}]", openId);
+        log.info("【websocket消息】有新的连接, openId = [{}],用户昵称= [{}]", openId, user.getNickName());
+
     }
 
     @OnClose
@@ -45,11 +59,37 @@ public class ChatEndpoint {
 
     @OnMessage
     public void onMessage(@PathParam("openId") String sender, String message) {
+
         log.info("【websocket消息】收到客户端发来的消息:发送者 = [{}],消息内容 = [{}]", sender, message);
-        if (webSocketService == null) {
-            log.info("webSocketService为空");
-        }
         webSocketService.OnMessage(sender, message);
+    }
+
+    private JWTUser solveToken(String token) {
+        JWTUser user = null;
+        if (StringUtils.isEmpty(token)) {
+            log.info("用户的Authorization头为空,无法获取jwt");
+        } else {
+            try {
+                user = tokenSolver.solve(token);
+            } catch (TokenExpiredException e) {
+                log.info("jwt已过期，过期时间：{}", e.getMessage());
+            } catch (Exception e) {
+                log.info("jwt解析失败,jwt={}", token);
+            }
+        }
+        return user;
+    }
+
+    private void rejectConnect(Session session) {
+        Response response = Response.fail(Response.TOKEN_IS_WRONG, "token检验失败,拒绝ws连接");
+        try {
+            session.getBasicRemote().sendText(JsonUtil.toJson(response));
+            log.info("[拒绝连接]通知发送成功");
+        } catch (IOException e) {
+            log.info("[拒绝连接]通知发送失败");
+            e.printStackTrace();
+        }
+
     }
 
     public boolean sendMessage(String openId, Response response) {
