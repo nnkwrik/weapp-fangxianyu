@@ -16,6 +16,7 @@ import java.util.List;
 public interface HistoryMapper {
     /**
      * 添加一条聊天记录
+     *
      * @param history
      */
     @Select("insert into history (chat_id, u1_to_u2, message_type, message_body, send_time)\n" +
@@ -66,6 +67,7 @@ public interface HistoryMapper {
 
     /**
      * 根据chatId获取聊天记录
+     *
      * @param chat_id
      * @return
      */

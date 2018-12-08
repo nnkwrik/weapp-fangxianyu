@@ -3,6 +3,7 @@ package io.github.nnkwrik.imservice.service.impl;
 import io.github.nnkwrik.common.dto.Response;
 import io.github.nnkwrik.common.exception.GlobalException;
 import io.github.nnkwrik.common.util.JsonUtil;
+import io.github.nnkwrik.imservice.constant.MessageType;
 import io.github.nnkwrik.imservice.dao.ChatMapper;
 import io.github.nnkwrik.imservice.dao.HistoryMapper;
 import io.github.nnkwrik.imservice.model.po.History;
@@ -98,6 +99,11 @@ public class WebSocketServiceImpl implements WebSocketService {
         } else {
             u1 = message.getSenderId();
             u2 = message.getReceiverId();
+        }
+
+        if (message.getMessageType() == MessageType.ESTABLISH_CHAT) {
+            //首次发送,设为双方可见
+            chatMapper.showToBoth(message.getChatId());
         }
 
         //添加聊天记录
