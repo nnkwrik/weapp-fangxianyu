@@ -5,18 +5,14 @@ import io.github.nnkwrik.common.exception.GlobalException;
 import io.github.nnkwrik.common.util.JsonUtil;
 import io.github.nnkwrik.imservice.constant.MessageType;
 import io.github.nnkwrik.imservice.dao.ChatMapper;
-import io.github.nnkwrik.imservice.dao.HistoryMapper;
-import io.github.nnkwrik.imservice.model.po.History;
 import io.github.nnkwrik.imservice.model.po.LastChat;
 import io.github.nnkwrik.imservice.model.vo.WsMessage;
 import io.github.nnkwrik.imservice.redis.RedisClient;
 import io.github.nnkwrik.imservice.service.WebSocketService;
 import io.github.nnkwrik.imservice.websocket.ChatEndpoint;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
@@ -34,9 +30,6 @@ public class WebSocketServiceImpl implements WebSocketService {
 
     @Autowired
     private ChatMapper chatMapper;
-
-    @Autowired
-    private HistoryMapper historyMapper;
 
     @Autowired
     private RedisClient redisClient;
@@ -60,7 +53,6 @@ public class WebSocketServiceImpl implements WebSocketService {
 
         //更新数据库
         try {
-            updateSQL(message);
             updateRedis(message);
         } catch (Exception e) {
             String msg = "添加聊天记录时发生异常,消息发送失败";
@@ -70,10 +62,16 @@ public class WebSocketServiceImpl implements WebSocketService {
             return;
         }
 
+        if (message.getMessageType() == MessageType.ESTABLISH_CHAT) {
+            //首次发送,设为双方可见
+            chatMapper.showToBoth(message.getChatId());
+        }
+
         //如果接收方在线,转发ws消息到接收方
         if (chatEndpoint.hasConnect(message.getReceiverId())) {
             chatEndpoint.sendMessage(message.getReceiverId(), Response.ok(message));
         }
+
     }
 
     private void updateRedis(WsMessage message) {
@@ -89,30 +87,6 @@ public class WebSocketServiceImpl implements WebSocketService {
         redisClient.hset(message.getReceiverId(), message.getChatId() + "", lastChat);
     }
 
-    @Transactional
-    public void updateSQL(WsMessage message) throws Exception {
-        String u1 = null;
-        String u2 = null;
-        if (message.getSenderId().compareTo(message.getReceiverId()) > 0) {
-            u1 = message.getReceiverId();
-            u2 = message.getSenderId();
-        } else {
-            u1 = message.getSenderId();
-            u2 = message.getReceiverId();
-        }
-
-        if (message.getMessageType() == MessageType.ESTABLISH_CHAT) {
-            //首次发送,设为双方可见
-            chatMapper.showToBoth(message.getChatId());
-        }
-
-        //添加聊天记录
-        History history = new History();
-        BeanUtils.copyProperties(message, history);
-        boolean u1ToU2 = u1.equals(message.getSendTime()) ? true : false;
-        history.setU1ToU2(u1ToU2);
-        historyMapper.addHistory(history);
-    }
 
     private WsMessage createWsMessage(String rawData) throws GlobalException {
         WsMessage wsMessage = JsonUtil.fromJson(rawData, WsMessage.class);

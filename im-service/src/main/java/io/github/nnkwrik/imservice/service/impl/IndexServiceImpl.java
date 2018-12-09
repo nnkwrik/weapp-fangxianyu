@@ -68,6 +68,7 @@ public class IndexServiceImpl implements IndexService {
             List<LastChat> unread = getDisplayUnread(unreadMessage, alreadyShow, size);
             dealUnread(unread, resultVoList, chatGoodsMap, chatUserMap);
 
+
             List<Integer> unreadChatIds = unread.stream()
                     .map(chat -> chat.getLastMsg().getChatId())
                     .collect(Collectors.toList());

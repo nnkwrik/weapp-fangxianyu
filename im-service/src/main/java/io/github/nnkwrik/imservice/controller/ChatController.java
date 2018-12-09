@@ -71,7 +71,6 @@ public class ChatController {
                                           @RequestParam(value = "size", defaultValue = "10") int size,
                                           @RequestParam(value = "offset", defaultValue = "0") int offset) {
         //offset,在聊天框的时候收到的消息个数
-        flushUnread(chatId, user);
         ChatForm vo = formService.showForm(chatId, user.getOpenId(), page, size, offset);
         log.info("用户openId={}获取与用户openId={}的聊天记录,展示 {} 条记录", user.getOpenId(), vo.getOtherSide().getOpenId(), vo.getHistoryList().size());
 
@@ -79,12 +78,12 @@ public class ChatController {
     }
 
     //把所有未读设为已读, 在退出聊天框时使用
-    @GetMapping("/chat/flushUnread/{chatId}")
-    public Response flushUnread(@PathVariable("chatId") int chatId,
-                                @JWT(required = true) JWTUser user) {
-        redisClient.hdel(user.getOpenId(), chatId + "");
-        log.info("用户openId={}chatId={}的所有未读消息设为已读", user.getOpenId(), chatId);
-        return Response.ok();
-    }
+//    @PostMapping("/chat/flushUnread/{chatId}")
+//    public Response flushUnread(@PathVariable("chatId") int chatId,
+//                                @JWT(required = true) JWTUser user) {
+//        formService.flushUnread(user.getOpenId(), chatId );
+//        log.info("用户openId={}chatId={}的所有未读消息设为已读", user.getOpenId(), chatId);
+//        return Response.ok();
+//    }
 
 }
