@@ -1,5 +1,6 @@
 package io.github.nnkwrik.imservice.controller;
 
+import com.fasterxml.jackson.databind.util.StdDateFormat;
 import io.github.nnkwrik.common.dto.JWTUser;
 import io.github.nnkwrik.common.dto.Response;
 import io.github.nnkwrik.common.token.injection.JWT;
@@ -10,6 +11,7 @@ import io.github.nnkwrik.imservice.service.FormService;
 import io.github.nnkwrik.imservice.service.IndexService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -51,7 +53,8 @@ public class ChatController {
     //打开消息一览时
     @GetMapping("/chat/index")
     public Response<List<ChatIndex>> getChatIndex(@JWT JWTUser user,
-                                                  @RequestParam(value = "offsetTime", required = false) Date offsetTime,
+                                                  @RequestParam(value = "offsetTime", required = false)
+                                                  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm") Date offsetTime,
                                                   @RequestParam(value = "size", defaultValue = "10") int size) {
         if (user == null) {
             return Response.ok(0);

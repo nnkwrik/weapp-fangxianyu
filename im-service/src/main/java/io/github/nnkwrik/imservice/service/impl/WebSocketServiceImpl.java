@@ -8,6 +8,7 @@ import io.github.nnkwrik.imservice.dao.ChatMapper;
 import io.github.nnkwrik.imservice.model.po.LastChat;
 import io.github.nnkwrik.imservice.model.vo.WsMessage;
 import io.github.nnkwrik.imservice.redis.RedisClient;
+import io.github.nnkwrik.imservice.service.FormService;
 import io.github.nnkwrik.imservice.service.WebSocketService;
 import io.github.nnkwrik.imservice.websocket.ChatEndpoint;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +34,9 @@ public class WebSocketServiceImpl implements WebSocketService {
 
     @Autowired
     private RedisClient redisClient;
+
+    @Autowired
+    private FormService formService;
 
     @Override
     public void OnMessage(String senderId, String rawData) {
@@ -77,6 +81,7 @@ public class WebSocketServiceImpl implements WebSocketService {
     private void updateRedis(WsMessage message) {
         LastChat lastChat = redisClient.get(message.getChatId() + "");
         if (lastChat != null) {
+            formService.addMessageToSQL(lastChat.getLastMsg());
             lastChat.setUnreadCount(lastChat.getUnreadCount() + 1);
             lastChat.setLastMsg(message);
         } else {

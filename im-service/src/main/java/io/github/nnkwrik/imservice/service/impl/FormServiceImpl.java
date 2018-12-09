@@ -1,6 +1,7 @@
 package io.github.nnkwrik.imservice.service.impl;
 
 import com.github.pagehelper.PageHelper;
+import com.google.common.collect.Lists;
 import fangxianyu.innerApi.goods.GoodsClientHandler;
 import fangxianyu.innerApi.user.UserClientHandler;
 import io.github.nnkwrik.imservice.dao.ChatMapper;
@@ -47,7 +48,11 @@ public class FormServiceImpl implements FormService {
 
     @Override
     public ChatForm showForm(int chatId, String userId, int page, int size, int offset) {
-        flushUnread(chatId, userId);
+        LastChat lastChat = null;
+        if (page == 1) {
+            lastChat = flushUnread(chatId, userId);
+        }
+
         ChatForm vo = new ChatForm();
 
         Chat chat = chatMapper.getChatById(chatId);
@@ -64,25 +69,39 @@ public class FormServiceImpl implements FormService {
         int pageOffset = (page - 1) * size + offset;
         PageHelper.offsetPage(pageOffset, size);
         List<History> chatHistory = historyMapper.getChatHistory(chatId);
+        chatHistory = Lists.reverse(chatHistory);
+
+        if (lastChat != null) {
+            History lastHistory = new History();
+            BeanUtils.copyProperties(lastChat.getLastMsg(), lastHistory);
+            if (lastChat.getLastMsg().getSenderId().compareTo(lastChat.getLastMsg().getReceiverId()) < 0) {
+                lastHistory.setU1ToU2(true);
+            }
+            chatHistory.add(lastHistory);
+        }
 
         vo.setHistoryList(chatHistory);
 
         return vo;
     }
 
-    private void flushUnread(int chatId, String userId) {
+    private LastChat flushUnread(int chatId, String userId) {
         LastChat lastChat = redisClient.get(chatId + "");
-        if (lastChat.getLastMsg().getReceiverId().equals(userId)) {
+        if (lastChat != null && lastChat.getLastMsg().getReceiverId().equals(userId)) {
             log.info("把chatId={}设为已读消息", chatId);
             addMessageToSQL(lastChat.getLastMsg());
             redisClient.del(chatId + "");
+            return null;
         }
+
+        return lastChat;    //不是receiver访问form,所以仍是未读状态,不刷入sql
     }
 
 //    public void flushWsMsgList(String userId, int chatId,List<WsMessage> wsMsgList){
 //
 //    }
 
+    @Override
     @Transactional
     public void addMessageToSQL(WsMessage message) {
         String u1 = null;

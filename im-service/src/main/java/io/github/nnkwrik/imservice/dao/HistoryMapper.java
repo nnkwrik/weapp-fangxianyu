@@ -21,7 +21,7 @@ public interface HistoryMapper {
      * @param history
      */
     @Select("insert into history (chat_id, u1_to_u2, message_type, message_body, send_time)\n" +
-            "values (#{chatId}, #{u1ToU2}, #{messageType}, #{messageBody}, #{sendTime});")
+            "values (#{chatId}, #{u1ToU2}, #{messageType}, #{messageBody}, #{sendTime})")
     void addHistory(History history);
 
     /**
@@ -84,7 +84,7 @@ public interface HistoryMapper {
      */
     @Select("select u1_to_u2, message_type, message_body, send_time\n" +
             "from history\n" +
-            "where chat_id = #{chat_id}")
+            "where chat_id = #{chat_id} order by send_time desc")
     List<History> getChatHistory(@Param("chat_id") int chat_id);
 
 

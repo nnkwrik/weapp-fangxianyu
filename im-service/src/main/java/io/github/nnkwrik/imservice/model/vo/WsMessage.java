@@ -20,6 +20,6 @@ public class WsMessage {
     private Integer messageType;    //0:系统消息,1.用户消息
     private String messageBody;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", locale = "CHINA", timezone = "Asia/Shanghai")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", locale = "CHINA", timezone = "Asia/Shanghai")
     private Date sendTime;
 }

@@ -70,7 +70,7 @@ public class IndexServiceImpl implements IndexService {
         dealRead(read, currentUser, resultVoList, chatGoodsMap, chatUserMap);
 
         //排序后删除超出size的
-        sortAndLimitMsg(size, resultVoList, chatGoodsMap, chatUserMap);
+        resultVoList = sortAndLimitMsg(size, resultVoList, chatGoodsMap, chatUserMap);
 
 
         //添加用户和商品信息
@@ -116,14 +116,16 @@ public class IndexServiceImpl implements IndexService {
         unread.stream().forEach(po -> {
             //稍后去其他服务查询
             chatGoodsMap.put(po.getLastMsg().getChatId(), po.getLastMsg().getGoodsId());
-            chatUserMap.put(po.getLastMsg().getChatId(), po.getLastMsg().getSenderId());
+
 
             //设置未读数,是自己发送的则不显示未读消息数
             ChatIndex vo = new ChatIndex();
             if (po.getLastMsg().getSenderId().equals(currentUserId)) {
+                chatUserMap.put(po.getLastMsg().getChatId(), po.getLastMsg().getReceiverId());
                 vo.setUnreadCount(0);
             } else {
                 vo.setUnreadCount(po.getUnreadCount());
+                chatUserMap.put(po.getLastMsg().getChatId(), po.getLastMsg().getSenderId());
             }
 
             //设置最后一条信息
@@ -164,11 +166,11 @@ public class IndexServiceImpl implements IndexService {
 
     }
 
-    private void sortAndLimitMsg(int size,
+    private List<ChatIndex> sortAndLimitMsg(int size,
                                 List<ChatIndex> voList,
                                 Map<Integer, Integer> chatGoodsMap,
                                 Map<Integer, String> chatUserMap) {
-        voList = voList.stream()
+        List<ChatIndex> limited = voList.stream()
                 .sorted((a, b) -> b.getLastChat().getSendTime().compareTo(a.getLastChat().getSendTime()))
                 .limit(size)
                 .collect(Collectors.toList());
@@ -187,6 +189,8 @@ public class IndexServiceImpl implements IndexService {
                 }
             }
         }
+
+        return limited;
 
     }
 

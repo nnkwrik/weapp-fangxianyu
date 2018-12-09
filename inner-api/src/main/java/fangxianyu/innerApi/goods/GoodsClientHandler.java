@@ -33,6 +33,10 @@ public class GoodsClientHandler {
 
     public Map<Integer, SimpleGoods> getSimpleGoodsList(List<Integer> goodsIdList) {
         log.info("从商品服务查询商品的简单信息");
+        if (goodsIdList.size() < 1){
+            log.info("商品idList为空,返回空的结果");
+            return new HashMap<>();
+        }
         Response<Map<Integer, SimpleGoods>> response = goodsClient.getSimpleGoodsList(goodsIdList);
         if (response.getErrno() != 0) {
             log.info("从商品服务获取商品信息列表失败,errno={},原因={}", response.getErrno(), response.getErrmsg());
