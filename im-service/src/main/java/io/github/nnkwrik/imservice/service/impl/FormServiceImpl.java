@@ -47,7 +47,7 @@ public class FormServiceImpl implements FormService {
 
     @Override
     public ChatForm showForm(int chatId, String userId, int page, int size, int offset) {
-        flushUnread(userId, chatId);
+        flushUnread(chatId, userId);
         ChatForm vo = new ChatForm();
 
         Chat chat = chatMapper.getChatById(chatId);
@@ -70,10 +70,13 @@ public class FormServiceImpl implements FormService {
         return vo;
     }
 
-    private void flushUnread(String userId, int chatId) {
-        LastChat lastChat = redisClient.hget(userId, chatId + "");
-        addMessageToSQL(lastChat.getLastMsg());
-        redisClient.hdel(userId, chatId + "");
+    private void flushUnread(int chatId, String userId) {
+        LastChat lastChat = redisClient.get(chatId + "");
+        if (lastChat.getLastMsg().getReceiverId().equals(userId)) {
+            log.info("把chatId={}设为已读消息", chatId);
+            addMessageToSQL(lastChat.getLastMsg());
+            redisClient.del(chatId + "");
+        }
     }
 
 //    public void flushWsMsgList(String userId, int chatId,List<WsMessage> wsMsgList){

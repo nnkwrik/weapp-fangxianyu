@@ -3,6 +3,8 @@ package io.github.nnkwrik.imservice.dao;
 import io.github.nnkwrik.imservice.model.po.Chat;
 import org.apache.ibatis.annotations.*;
 
+import java.util.List;
+
 /**
  * @author nnkwrik
  * @date 18/12/05 21:54
@@ -22,5 +24,9 @@ public interface ChatMapper {
 
     @Select("select u1,u2,goods_id from chat where id = #{id}")
     Chat getChatById(@Param("id") int id);
+
+    @Select("select id\n" +
+            "from chat where (u1 = #{user_id} and show_to_u1 = true) or (u2 = #{user_id} and show_to_u2 = true)")
+    List<Integer> getChatIdsByUser(@Param("user_id") String userId);
 
 }

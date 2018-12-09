@@ -2,6 +2,7 @@ package io.github.nnkwrik.imservice.service;
 
 import io.github.nnkwrik.imservice.model.vo.ChatIndex;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -9,5 +10,7 @@ import java.util.List;
  * @date 18/12/07 16:31
  */
 public interface IndexService {
-    List<ChatIndex> showIndex(String userId, int page, int size);
+    List<ChatIndex> showIndex(String userId, int size, Date offsetTime);
+
+    int getUnreadCount(String userId);
 }

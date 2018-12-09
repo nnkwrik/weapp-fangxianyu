@@ -5,6 +5,7 @@ import fangxianyu.innerApi.goods.GoodsClientHandler;
 import fangxianyu.innerApi.user.UserClientHandler;
 import io.github.nnkwrik.common.dto.SimpleGoods;
 import io.github.nnkwrik.common.dto.SimpleUser;
+import io.github.nnkwrik.imservice.dao.ChatMapper;
 import io.github.nnkwrik.imservice.dao.HistoryMapper;
 import io.github.nnkwrik.imservice.model.po.History;
 import io.github.nnkwrik.imservice.model.po.HistoryExample;
@@ -17,10 +18,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -43,69 +41,74 @@ public class IndexServiceImpl implements IndexService {
     @Autowired
     private GoodsClientHandler goodsClientHandler;
 
+    @Autowired
+    private ChatMapper chatMapper;
+
 
     @Override
-    public List<ChatIndex> showIndex(String currentUser, int page, int size) {
-        List<LastChat> unreadMessage = redisClient.hvals(currentUser);
+    public List<ChatIndex> showIndex(String currentUser, int size, Date offsetTime) {
 
         List<ChatIndex> resultVoList = new ArrayList<>();    //最终要返回的值
-        Map<Integer, Integer> chatGoodsMap = new HashMap<>();         //需要去商品服务查的id
-        Map<Integer, String> chatUserMap = new HashMap<>();           //需要去用户服务查的id
+        Map<Integer, Integer> chatGoodsMap = new HashMap<>();         //k=chatId,v=需要去商品服务查的id
+        Map<Integer, String> chatUserMap = new HashMap<>();           //k=chatId,v=需要去用户服务查的id
 
+        List<Integer> chatIds = chatMapper.getChatIdsByUser(currentUser);
+        List<LastChat> unreadMessage = redisClient.multiGet(
+                chatIds.stream()
+                        .map(id -> id + "")
+                        .collect(Collectors.toList()));
 
-        int alreadyShow = size * (page - 1);
-        int needShow = page * size;
-        if (unreadMessage.size() >= needShow) {
-            //需要展示的内容全在redis中
+        //从redis(未读)和sql(已读)中各尝试取10个
+        List<LastChat> unread = getDisplayUnread(unreadMessage, size, offsetTime);
+        dealUnread(currentUser, unread, resultVoList, chatGoodsMap, chatUserMap);
 
-            List<LastChat> unread = getDisplayUnread(unreadMessage, alreadyShow, size);
+        List<Integer> unreadChatIds = unread.stream()
+                .map(chat -> chat.getLastMsg().getChatId())
+                .collect(Collectors.toList());
+        PageHelper.offsetPage(0, size);
+        List<HistoryExample> read = historyMapper.getLastReadChat(unreadChatIds, currentUser, offsetTime);
+        dealRead(read, currentUser, resultVoList, chatGoodsMap, chatUserMap);
 
-            dealUnread(unread, resultVoList, chatGoodsMap, chatUserMap);
-        } else if (unreadMessage.size() > alreadyShow) {
-            //需要的内容的一部分在redis(未读),一部分在sql(已读)
+        //排序后删除超出size的
+        sortAndLimitMsg(size, resultVoList, chatGoodsMap, chatUserMap);
 
-            //未读消息
-            List<LastChat> unread = getDisplayUnread(unreadMessage, alreadyShow, size);
-            dealUnread(unread, resultVoList, chatGoodsMap, chatUserMap);
-
-
-            List<Integer> unreadChatIds = unread.stream()
-                    .map(chat -> chat.getLastMsg().getChatId())
-                    .collect(Collectors.toList());
-
-            //已读消息
-            int remain = needShow - unreadMessage.size();
-            PageHelper.offsetPage(0, remain);
-            List<HistoryExample> read = historyMapper.getLastReadChat(unreadChatIds);
-            dealRead(read, currentUser, resultVoList, chatGoodsMap, chatUserMap);
-
-
-        } else {
-            //需要的内容全在sql
-
-            int offset = alreadyShow - unreadMessage.size();
-            PageHelper.offsetPage(offset, size);
-            List<HistoryExample> read = historyMapper.getLastChat();
-            dealRead(read, currentUser, resultVoList, chatGoodsMap, chatUserMap);
-        }
 
         //添加用户和商品信息
         resultVoList = setGoodsAndUser4Chat(resultVoList, chatGoodsMap, chatUserMap);
 
+
         return resultVoList;
     }
 
+    @Override
+    public int getUnreadCount(String userId) {
+        //去查userId参与的chat的id
+        List chatIdList = chatMapper.getChatIdsByUser(userId);
+        List<LastChat> lastChatList = redisClient.multiGet(chatIdList);
 
-    private List<LastChat> getDisplayUnread(List<LastChat> unreadMessage, int offset, int size) {
+        //过滤自己发送的
+        int unreadCount = lastChatList.stream()
+                .filter(chat -> !chat.getLastMsg().getSenderId().equals(userId))
+                .mapToInt(LastChat::getUnreadCount)
+                .sum();
+
+        return unreadCount;
+
+    }
+
+
+    private List<LastChat> getDisplayUnread(List<LastChat> unreadMessage, int size, Date offsetTime) {
         List<LastChat> displayUnread = unreadMessage.stream()
+                .filter(msg -> msg != null && offsetTime.compareTo(msg.getLastMsg().getSendTime()) > 0)
                 .sorted((a, b) -> b.getLastMsg().getSendTime().compareTo(a.getLastMsg().getSendTime()))
-                .skip(offset)
                 .limit(size)
                 .collect(Collectors.toList());
+
         return displayUnread;
     }
 
-    private void dealUnread(List<LastChat> unread,
+    private void dealUnread(String currentUserId,
+                            List<LastChat> unread,
                             List<ChatIndex> resultVoList,
                             Map<Integer, Integer> chatGoodsMap,
                             Map<Integer, String> chatUserMap) {
@@ -115,9 +118,13 @@ public class IndexServiceImpl implements IndexService {
             chatGoodsMap.put(po.getLastMsg().getChatId(), po.getLastMsg().getGoodsId());
             chatUserMap.put(po.getLastMsg().getChatId(), po.getLastMsg().getSenderId());
 
-            //设置未读数
+            //设置未读数,是自己发送的则不显示未读消息数
             ChatIndex vo = new ChatIndex();
-            vo.setUnreadCount(po.getUnreadCount());
+            if (po.getLastMsg().getSenderId().equals(currentUserId)) {
+                vo.setUnreadCount(0);
+            } else {
+                vo.setUnreadCount(po.getUnreadCount());
+            }
 
             //设置最后一条信息
             History lastChat = new History();
@@ -154,6 +161,32 @@ public class IndexServiceImpl implements IndexService {
 
             resultVoList.add(vo);
         });
+
+    }
+
+    private void sortAndLimitMsg(int size,
+                                List<ChatIndex> voList,
+                                Map<Integer, Integer> chatGoodsMap,
+                                Map<Integer, String> chatUserMap) {
+        voList = voList.stream()
+                .sorted((a, b) -> b.getLastChat().getSendTime().compareTo(a.getLastChat().getSendTime()))
+                .limit(size)
+                .collect(Collectors.toList());
+        if (voList.size() > size) {
+            Set<Integer> addedIds = new HashSet<>();
+            addedIds.addAll(chatUserMap.keySet());
+            addedIds.addAll(chatUserMap.keySet());
+            List<Integer> needIds = voList.stream()
+                    .map(vo -> vo.getLastChat().getChatId())
+                    .collect(Collectors.toList());
+            for (Integer added : addedIds) {
+
+                if (!needIds.contains(added)) {
+                    chatGoodsMap.remove(added);
+                    chatUserMap.remove(added);
+                }
+            }
+        }
 
     }
 

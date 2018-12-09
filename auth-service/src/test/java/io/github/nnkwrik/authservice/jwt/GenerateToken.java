@@ -32,7 +32,7 @@ public class GenerateToken {
      */
     @Test
     public void generateToken() throws IllegalAccessException {
-        String openId = "1";
+        String openId = "3";
         String nickName = "测试用户";
         String avatarUrl = "https://avatars2.githubusercontent.com/u/29662114?s=460&v=4";
 

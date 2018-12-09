@@ -75,7 +75,7 @@ public class WebSocketServiceImpl implements WebSocketService {
     }
 
     private void updateRedis(WsMessage message) {
-        LastChat lastChat = redisClient.hget(message.getReceiverId(), message.getChatId() + "");
+        LastChat lastChat = redisClient.get(message.getChatId() + "");
         if (lastChat != null) {
             lastChat.setUnreadCount(lastChat.getUnreadCount() + 1);
             lastChat.setLastMsg(message);
@@ -84,7 +84,7 @@ public class WebSocketServiceImpl implements WebSocketService {
             lastChat.setUnreadCount(1);
             lastChat.setLastMsg(message);
         }
-        redisClient.hset(message.getReceiverId(), message.getChatId() + "", lastChat);
+        redisClient.set(message.getChatId() + "", lastChat);
     }
 
 

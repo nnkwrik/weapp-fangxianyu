@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -23,11 +24,12 @@ public interface HistoryMapper {
             "values (#{chatId}, #{u1ToU2}, #{messageType}, #{messageBody}, #{sendTime});")
     void addHistory(History history);
 
-
     /**
-     * 获取自己和所有人的最后一条"已读的"聊天记录,按时间倒序
+     * 获取自己和所有人的最后一条"已读的"聊天记录,取offsetTime之前的,按时间倒序
      *
      * @param unreadChatIds 未读的chatId
+     * @param userId        当前用户的id
+     * @param offsetTime    取offsetTime之前
      * @return
      */
     @Select("<script>\n" +
@@ -35,18 +37,27 @@ public interface HistoryMapper {
             "from history\n" +
             "       inner join (select chat_id, max(send_time) as max_time\n" +
             "                   from history\n" +
-            "                   where chat_id in (select id\n" +
-            "                                     from chat\n" +
-            "                                     where id not in\n" +
+            "                   where chat_id in\n" +
+            "                         (select id\n" +
+            "                          from chat\n" +
+            "                                     where " +
+            "                   <if test=\"unreadChatIds.size() > 0\">" +
+            "                       id not in\n" +
             "                       <foreach item = 'item' collection = 'unreadChatIds' open = '(' separator = ',' close = ')'>\n" +
             "                       #{item}\n" +
             "                       </foreach>\n" +
-            "                       and ((u1 = 1 and show_to_u1 = true) or (u2 = 1 and show_to_u2 = true)))\n" +
-            "                   group by chat_id) as foo on foo.chat_id = history.chat_id and foo.max_time = history.send_time\n" +
-            "        inner join chat where history.chat_id = chat.id\n" +
+            "                            and " +
+            "                   </if>" +
+            "                   ((u1 = #{user_id} and show_to_u1 = true) or (u2 = #{user_id} and show_to_u2 = true)))\n" +
+            "                   group by chat_id\n" +
+            "                   HAVING max_time &lt;= #{offset_time,jdbcType=TIMESTAMP}) as foo\n" +
+            "         on foo.chat_id = history.chat_id and foo.max_time = history.send_time\n" +
+            "       inner join chat on history.chat_id = chat.id\n" +
             "order by send_time desc" +
             "</script>")
-    List<HistoryExample> getLastReadChat(@Param("unreadChatIds") List<Integer> unreadChatIds);
+    List<HistoryExample> getLastReadChat(@Param("unreadChatIds") List<Integer> unreadChatIds,
+                                         @Param("user_id") String userId,
+                                         @Param("offset_time") Date offsetTime);
 
 
     /**

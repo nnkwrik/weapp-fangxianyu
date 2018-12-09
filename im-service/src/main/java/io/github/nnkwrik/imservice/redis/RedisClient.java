@@ -16,19 +16,21 @@ public class RedisClient {
     private RedisTemplate redisTemplate;
 
 
-    public <T> T hget(String key, String field) {
-        return (T) redisTemplate.opsForHash().get(key, field);
+    public <T> T get(String key) {
+        return (T) redisTemplate.opsForValue().get(key);
     }
 
-    public void hset(String key, String field, Object value) {
-        redisTemplate.opsForHash().put(key, field, value);
+    public <T> List<T> multiGet(List<String> keys) {
+        return redisTemplate.opsForValue().multiGet(keys);
     }
 
-    public <T> List<T> hvals(String key) {
-        return redisTemplate.opsForHash().values(key);
+    public void set(String key, Object value) {
+        redisTemplate.opsForValue().set(key, value);
     }
 
-    public void hdel(String key,String... fields){
-        redisTemplate.opsForHash().delete(key,fields);
+    public void del(String key) {
+        redisTemplate.delete(key);
     }
+
+
 }
