@@ -8,7 +8,6 @@ import io.github.nnkwrik.imservice.dao.ChatMapper;
 import io.github.nnkwrik.imservice.dao.HistoryMapper;
 import io.github.nnkwrik.imservice.model.po.Chat;
 import io.github.nnkwrik.imservice.model.po.History;
-import io.github.nnkwrik.imservice.model.po.LastChat;
 import io.github.nnkwrik.imservice.model.vo.ChatForm;
 import io.github.nnkwrik.imservice.model.vo.WsMessage;
 import io.github.nnkwrik.imservice.redis.RedisClient;
@@ -17,9 +16,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author nnkwrik
@@ -47,11 +48,8 @@ public class FormServiceImpl implements FormService {
 
 
     @Override
-    public ChatForm showForm(int chatId, String userId, int page, int size, int offset) {
-        LastChat lastChat = null;
-        if (page == 1) {
-            lastChat = flushUnread(chatId, userId);
-        }
+    public ChatForm showForm(int chatId, String userId, int size, Date offsetTime) {
+
 
         ChatForm vo = new ChatForm();
 
@@ -66,46 +64,52 @@ public class FormServiceImpl implements FormService {
         }
         vo.setGoods(goodsClientHandler.getSimpleGoods(chat.getGoodsId()));
 
-        int pageOffset = (page - 1) * size + offset;
-        PageHelper.offsetPage(pageOffset, size);
-        List<History> chatHistory = historyMapper.getChatHistory(chatId);
+        PageHelper.offsetPage(0, size);
+        List<History> chatHistory = historyMapper.getChatHistory(chatId, offsetTime);
         chatHistory = Lists.reverse(chatHistory);
 
-        if (lastChat != null) {
-            History lastHistory = new History();
-            BeanUtils.copyProperties(lastChat.getLastMsg(), lastHistory);
-            if (lastChat.getLastMsg().getSenderId().compareTo(lastChat.getLastMsg().getReceiverId()) < 0) {
-                lastHistory.setU1ToU2(true);
-            }
-            chatHistory.add(lastHistory);
-        }
+        List<History> unreadList = flushUnread(chatId, userId); //自己发送,但对方还未读的消息
 
+        if (unreadList != null && unreadList.size() > 0) {
+            chatHistory.addAll(unreadList);
+            chatHistory = chatHistory.stream()
+                    .sorted((a, b) -> a.getSendTime().compareTo(b.getSendTime()))
+                    .limit(size)
+                    .collect(Collectors.toList());
+        }
         vo.setHistoryList(chatHistory);
+        vo.setOffsetTime(chatHistory.get(0).getSendTime());
 
         return vo;
     }
 
-    private LastChat flushUnread(int chatId, String userId) {
-        LastChat lastChat = redisClient.get(chatId + "");
-        if (lastChat != null && lastChat.getLastMsg().getReceiverId().equals(userId)) {
+    private List<History> flushUnread(int chatId, String userId) {
+        List<WsMessage> unreadMsgList = redisClient.get(chatId + "");
+        List<History> unreadHistory = WsListToHisList(unreadMsgList);
+        if (unreadHistory != null && unreadHistory.size() > 0 && unreadMsgList.get(0).getReceiverId().equals(userId)) {
             log.info("把chatId={}设为已读消息", chatId);
-            addMessageToSQL(lastChat.getLastMsg());
+            //添加聊天记录
+            historyMapper.addHistoryList(unreadHistory);
             redisClient.del(chatId + "");
-            return null;
-        }
+        }//否则不是receiver访问form,所以仍是未读状态,不刷入sql
 
-        return lastChat;    //不是receiver访问form,所以仍是未读状态,不刷入sql
+        return unreadHistory;
     }
 
-//    public void flushWsMsgList(String userId, int chatId,List<WsMessage> wsMsgList){
+//    @Override
+//    @Transactional
+//    public void addMessageListToSQL(List<WsMessage> messageList) {
 //
+//
+//        //添加聊天记录
+//        historyMapper.addHistoryList(historyList);
 //    }
 
-    @Override
-    @Transactional
-    public void addMessageToSQL(WsMessage message) {
+    private List<History> WsListToHisList(List<WsMessage> wsMessageList) {
+        if (wsMessageList == null || wsMessageList.size() < 1) return null;
         String u1 = null;
         String u2 = null;
+        WsMessage message = wsMessageList.get(0);
         if (message.getSenderId().compareTo(message.getReceiverId()) > 0) {
             u1 = message.getReceiverId();
             u2 = message.getSenderId();
@@ -113,14 +117,19 @@ public class FormServiceImpl implements FormService {
             u1 = message.getSenderId();
             u2 = message.getReceiverId();
         }
+        boolean u1ToU2 = u1.equals(message.getSenderId()) ? true : false;
 
+        List<History> historyList = new ArrayList<>();
+        wsMessageList.stream().forEach(msg -> {
+            History history = new History();
+            BeanUtils.copyProperties(msg, history);
+            history.setU1ToU2(u1ToU2);
+            historyList.add(history);
 
-        //添加聊天记录
-        History history = new History();
-        BeanUtils.copyProperties(message, history);
-        boolean u1ToU2 = u1.equals(message.getSendTime()) ? true : false;
-        history.setU1ToU2(u1ToU2);
-        historyMapper.addHistory(history);
+        });
+
+        return historyList;
+
     }
 
 

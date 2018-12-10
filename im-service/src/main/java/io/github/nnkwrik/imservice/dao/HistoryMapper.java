@@ -2,6 +2,7 @@ package io.github.nnkwrik.imservice.dao;
 
 import io.github.nnkwrik.imservice.model.po.History;
 import io.github.nnkwrik.imservice.model.po.HistoryExample;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -20,9 +21,26 @@ public interface HistoryMapper {
      *
      * @param history
      */
-    @Select("insert into history (chat_id, u1_to_u2, message_type, message_body, send_time)\n" +
+    @Insert("insert into history (chat_id, u1_to_u2, message_type, message_body, send_time)\n" +
             "values (#{chatId}, #{u1ToU2}, #{messageType}, #{messageBody}, #{sendTime})")
     void addHistory(History history);
+
+    /**
+     * 添加多条聊天记录
+     * @param historyList
+     */
+    @Insert({
+            "<script>",
+            "INSERT INTO history",
+            "(chat_id, u1_to_u2, message_type, message_body, send_time)",
+            "VALUES" +
+                    "<foreach item='item' collection='historyList' open='' separator=',' close=''>" +
+                    "(" +
+                    "#{item.chatId}, #{item.u1ToU2}, #{item.messageType}, #{item.messageBody}, #{item.sendTime}" +
+                    ")" +
+                    "</foreach>",
+            "</script>"})
+    void addHistoryList(@Param("historyList") List<History> historyList);
 
     /**
      * 获取自己和所有人的最后一条"已读的"聊天记录,取offsetTime之前的,按时间倒序
@@ -84,8 +102,8 @@ public interface HistoryMapper {
      */
     @Select("select u1_to_u2, message_type, message_body, send_time\n" +
             "from history\n" +
-            "where chat_id = #{chat_id} order by send_time desc")
-    List<History> getChatHistory(@Param("chat_id") int chat_id);
+            "where chat_id = #{chat_id} and send_time &lt;= #{offset_time,jdbcType=TIMESTAMP} order by send_time desc")
+    List<History> getChatHistory(@Param("chat_id") int chatId,@Param("offset_time") Date offsetTime);
 
 
 }

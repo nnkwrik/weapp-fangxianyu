@@ -5,7 +5,6 @@ import io.github.nnkwrik.common.exception.GlobalException;
 import io.github.nnkwrik.common.util.JsonUtil;
 import io.github.nnkwrik.imservice.constant.MessageType;
 import io.github.nnkwrik.imservice.dao.ChatMapper;
-import io.github.nnkwrik.imservice.model.po.LastChat;
 import io.github.nnkwrik.imservice.model.vo.WsMessage;
 import io.github.nnkwrik.imservice.redis.RedisClient;
 import io.github.nnkwrik.imservice.service.FormService;
@@ -17,7 +16,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author nnkwrik
@@ -79,17 +80,12 @@ public class WebSocketServiceImpl implements WebSocketService {
     }
 
     private void updateRedis(WsMessage message) {
-        LastChat lastChat = redisClient.get(message.getChatId() + "");
-        if (lastChat != null) {
-            formService.addMessageToSQL(lastChat.getLastMsg());
-            lastChat.setUnreadCount(lastChat.getUnreadCount() + 1);
-            lastChat.setLastMsg(message);
-        } else {
-            lastChat = new LastChat();
-            lastChat.setUnreadCount(1);
-            lastChat.setLastMsg(message);
+        List<WsMessage> unreadList = redisClient.get(message.getChatId() + "");
+        if (unreadList != null) {
+            unreadList = new ArrayList<>();
         }
-        redisClient.set(message.getChatId() + "", lastChat);
+        unreadList.add(message);
+        redisClient.set(message.getChatId() + "", unreadList);
     }
 
 

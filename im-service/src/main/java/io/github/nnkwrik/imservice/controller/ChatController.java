@@ -54,7 +54,7 @@ public class ChatController {
     @GetMapping("/chat/index")
     public Response<List<ChatIndex>> getChatIndex(@JWT JWTUser user,
                                                   @RequestParam(value = "offsetTime", required = false)
-                                                  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm") Date offsetTime,
+                                                  @DateTimeFormat(pattern = StdDateFormat.DATE_FORMAT_STR_ISO8601) Date offsetTime,
                                                   @RequestParam(value = "size", defaultValue = "10") int size) {
         if (user == null) {
             return Response.ok(0);
@@ -72,11 +72,14 @@ public class ChatController {
     @GetMapping("/chat/form/{chatId}")
     public Response<ChatForm> getChatForm(@PathVariable("chatId") int chatId,
                                           @JWT(required = true) JWTUser user,
-                                          @RequestParam(value = "page", defaultValue = "1") int page,
-                                          @RequestParam(value = "size", defaultValue = "10") int size,
-                                          @RequestParam(value = "offset", defaultValue = "0") int offset) {
+                                          @RequestParam(value = "offsetTime", required = false)
+                                          @DateTimeFormat(pattern = StdDateFormat.DATE_FORMAT_STR_ISO8601) Date offsetTime,
+                                          @RequestParam(value = "size", defaultValue = "10") int size) {
+        if (offsetTime == null) {
+            offsetTime = new Date();
+        }
         //offset,在聊天框的时候收到的消息个数
-        ChatForm vo = formService.showForm(chatId, user.getOpenId(), page, size, offset);
+        ChatForm vo = formService.showForm(chatId, user.getOpenId(), size, offsetTime);
         log.info("用户openId={}获取与用户openId={}的聊天记录,展示 {} 条记录", user.getOpenId(), vo.getOtherSide().getOpenId(), vo.getHistoryList().size());
 
         return Response.ok(vo);
