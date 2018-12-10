@@ -32,7 +32,7 @@ public class UserClientHandler {
 
     public Map<String, SimpleUser> getSimpleUserList(List<String> openIdList) {
         log.info("从用户服务查询用户的简单信息");
-        if (openIdList.size() < 1){
+        if (openIdList == null || openIdList.size() < 1) {
             log.info("用户idList为空,返回空的结果");
             return new HashMap<>();
         }

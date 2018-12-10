@@ -1,5 +1,5 @@
 // const ApiRootUrl = 'https://5d876383.ngrok.io/';
-const ApiRootUrl = 'http://127.0.0.1:8080/';
+const ApiRootUrl = 'http://127.0.0.1:8805/';
 
 module.exports = {
   IndexUrl: ApiRootUrl + 'index/index', //首页数据接口
@@ -23,6 +23,9 @@ module.exports = {
 
   BrandList: ApiRootUrl + 'brand/list',  //品牌列表
   BrandDetail: ApiRootUrl + 'brand/detail',  //品牌详情
+
+  ChatIndex: ApiRootUrl + 'chat/index', //消息一览
+  ChatForm: ApiRootUrl + 'chat/form', //消息框
 
   CartList: ApiRootUrl + 'cart/index', //获取购物车的数据
   CartAdd: ApiRootUrl + 'cart/add', // 添加商品到购物车

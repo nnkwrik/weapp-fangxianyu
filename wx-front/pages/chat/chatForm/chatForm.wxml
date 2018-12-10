@@ -1,11 +1,11 @@
 <view class="top-pop-box">
   <view class="top-pop">
     <view class="content">
-      <image class='img' mode='aspectFill' src='http://img.alicdn.com/bao/uploaded/i4/TB2HcB9v7omBKNjSZFqXXXtqVXa_!!0-fleamarket.jpg'></image>
+      <image class='img' mode='aspectFill' bindtap='toGoods' data-id='{{goods.id}}' src='{{goods.primaryPicUrl}}'></image>
       <view class='info'>
-        <view class='name'>84青轴红轴键盘</view>
+        <view class='name' bindtap='toGoods' data-id='{{goods.id}}'>{{goods.name}}</view>
         <view class='order'>
-          <view class='price'>¥ 249</view>
+          <view class='price' bindtap='toGoods' data-id='{{goods.id}}'>¥ {{goods.price}}</view>
           <view class='btn'>立即购买</view>
         </view>
         <view class='msg'>交易前聊一聊</view>
@@ -17,46 +17,51 @@
 
 
 <view class='news'>
-  <scroll-view scroll-y="true" scroll-top="5000" wx:key='' class='scroll'>
+  <scroll-view scroll-y="true" bindscrolltoupper="more" scroll-top="{{scrollTop}}" wx:key='' class='scroll' >
     <view class="historycon">
+      <!-- <view id="hei"></view> -->
 
-      <!-- 一条记录 -->
-      <view class='history'>
-        <view>
-          <text class='time'>2018-12-12 11:21</text>
-        </view>
+      <view wx:for="{{historyList}}" wx:key="{{index}}">
 
-        <view class='my_right'>
-          <view class='page_row'>
-            <text class='new_txt'> item.conten</text>
-            <view class='sanjiao my'></view>
-            <image class='new_img' mode='aspectFill' src='https://avatars2.githubusercontent.com/u/29662114?s=460&v=4'></image>
+        <!-- 自己发送 -->
+        <view class='history' wx:if="{{((isU1 && item.u1ToU2) || (!isU1 && !item.u1ToU2)) && item.messageType!=2}}">
+          <view class='time-view'>
+            <text class='time'>{{item.sendTime}}</text>
+          </view>
+
+          <view class='my_right'>
+            <view class='page_row'>
+              <text class='new_txt'>{{item.messageBody}}</text>
+              <view class='sanjiao my'></view>
+              <image class='new_img' mode='aspectFill' src='{{myAvatar}}'></image>
+            </view>
           </view>
         </view>
-      </view>
-<!-- 一条记录结束 -->
 
+        <!-- 对方发送 -->
+        <view class='history' wx:elif="{{item.messageType!=2}}" id="msg{{item.sendTime}}">
+          <view class='time-view'>
+            <text class='time'>{{item.sendTime}}</text>
+          </view>
 
-      <view class='history'>
-        <view>
-          <text class='time'>2018-12-12 11:21</text>
-        </view>
+          <view class='you_left'>
+            <view class='page_row'>
+              <image class='new_img' mode='aspectFill' src='{{otherSide.avatarUrl}}'></image>
+              <view class='sanjiao you'></view>
+              <text class='new_txt'>{{item.messageBody}}</text>
 
-        <view class='you_left'>
-          <view class='page_row'>
-
-            <image class='new_img' mode='aspectFill' src='https://avatars2.githubusercontent.com/u/29662114?s=460&v=4'></image>
-            <view class='sanjiao you'></view>
-            <text  class='new_txt'> 您正在与 tabdata.nickname 进行沟通您正在与 tabdata.nickname 进行沟通您正在与 tabdata.nickname 进行沟通您正在与 tabdata.nickname 进行沟通您正在与 tabdata.nickname 进行沟通您正在与 tabdata.nickname 进行沟通您正在与 tabdata.nickname 进行沟通</text>
-
+            </view>
           </view>
         </view>
+
       </view>
+      <view id="hei"></view>
     </view>
 
 
   </scroll-view>
 </view>
+
 
 
 <view class="input-pop-box">

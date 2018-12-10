@@ -81,7 +81,7 @@ public class WebSocketServiceImpl implements WebSocketService {
 
     private void updateRedis(WsMessage message) {
         List<WsMessage> unreadList = redisClient.get(message.getChatId() + "");
-        if (unreadList != null) {
+        if (unreadList == null) {
             unreadList = new ArrayList<>();
         }
         unreadList.add(message);

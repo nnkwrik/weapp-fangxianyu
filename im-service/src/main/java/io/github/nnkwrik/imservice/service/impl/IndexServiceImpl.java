@@ -104,11 +104,11 @@ public class IndexServiceImpl implements IndexService {
                                              int size, Date offsetTime) {
         if (ObjectUtils.isEmpty(unreadMessage)) return new ArrayList<>();
         List<WsMessage> displayUnread = unreadMessage.stream()
+                .filter(msgList -> msgList != null && offsetTime.compareTo(msgList.get(msgList.size() - 1).getSendTime()) > 0)
                 .map(msgList -> {
                     unreadCount.put(msgList.get(0).getChatId(), msgList.size());
                     return msgList.get(msgList.size() - 1);
                 })
-                .filter(msg -> msg != null && offsetTime.compareTo(msg.getSendTime()) > 0)
                 .sorted((a, b) -> b.getSendTime().compareTo(a.getSendTime()))
                 .limit(size)
                 .collect(Collectors.toList());

@@ -95,8 +95,6 @@ page {
   border-top: 1rpx solid #ddd;
 }
 
-
-
 .result-list .item .avatar-item {
   float: left;
   /* width:190rpx; */

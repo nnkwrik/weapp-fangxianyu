@@ -68,7 +68,7 @@ public interface HistoryMapper {
             "                   </if>" +
             "                   ((u1 = #{user_id} and show_to_u1 = true) or (u2 = #{user_id} and show_to_u2 = true)))\n" +
             "                   group by chat_id\n" +
-            "                   HAVING max_time &lt;= #{offset_time,jdbcType=TIMESTAMP}) as foo\n" +
+            "                   HAVING max_time &lt; #{offset_time,jdbcType=TIMESTAMP}) as foo\n" +
             "         on foo.chat_id = history.chat_id and foo.max_time = history.send_time\n" +
             "       inner join chat on history.chat_id = chat.id\n" +
             "order by send_time desc" +
@@ -102,7 +102,7 @@ public interface HistoryMapper {
      */
     @Select("select u1_to_u2, message_type, message_body, send_time\n" +
             "from history\n" +
-            "where chat_id = #{chat_id} and send_time &lt;= #{offset_time,jdbcType=TIMESTAMP} order by send_time desc")
+            "where chat_id = #{chat_id} and send_time < #{offset_time,jdbcType=TIMESTAMP} order by send_time desc")
     List<History> getChatHistory(@Param("chat_id") int chatId,@Param("offset_time") Date offsetTime);
 
 

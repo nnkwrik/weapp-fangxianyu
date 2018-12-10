@@ -33,7 +33,7 @@ public class GoodsClientHandler {
 
     public Map<Integer, SimpleGoods> getSimpleGoodsList(List<Integer> goodsIdList) {
         log.info("从商品服务查询商品的简单信息");
-        if (goodsIdList.size() < 1){
+        if (goodsIdList == null || goodsIdList.size() < 1){
             log.info("商品idList为空,返回空的结果");
             return new HashMap<>();
         }
