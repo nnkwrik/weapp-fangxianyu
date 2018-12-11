@@ -82,22 +82,6 @@ public class IndexServiceImpl implements IndexService {
         return resultVoList;
     }
 
-    @Override
-    public int getUnreadCount(String userId) {
-        //去查userId参与的chat的id
-        List chatIdList = chatMapper.getChatIdsByUser(userId);
-        List<List<WsMessage>> lastChatList = redisClient.multiGet(chatIdList);
-
-        //过滤自己发送的
-        int unreadCount = lastChatList.stream()
-                .filter(chat -> !chat.get(0).getSenderId().equals(userId))
-                .mapToInt(List::size)
-                .sum();
-
-        return unreadCount;
-
-    }
-
 
     private List<WsMessage> getDisplayUnread(List<List<WsMessage>> unreadMessage,
                                              Map<Integer, Integer> unreadCount,

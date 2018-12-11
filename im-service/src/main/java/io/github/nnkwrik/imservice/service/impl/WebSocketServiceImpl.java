@@ -19,6 +19,7 @@ import org.springframework.util.StringUtils;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author nnkwrik
@@ -38,6 +39,23 @@ public class WebSocketServiceImpl implements WebSocketService {
 
     @Autowired
     private FormService formService;
+
+    @Override
+    public int getUnreadCount(String userId) {
+        //去查userId参与的chat的id
+        List<Integer> chatIdList = chatMapper.getChatIdsByUser(userId);
+        List<List<WsMessage>> lastChatList = redisClient.multiGet(chatIdList.stream()
+                .map(id -> id + "")
+                .collect(Collectors.toList()));
+
+        //过滤自己发送的
+        int unreadCount = lastChatList.stream()
+                .filter(chat -> chat != null && !chat.get(0).getSenderId().equals(userId))
+                .mapToInt(List::size)
+                .sum();
+
+        return unreadCount;
+    }
 
     @Override
     public void OnMessage(String senderId, String rawData) {

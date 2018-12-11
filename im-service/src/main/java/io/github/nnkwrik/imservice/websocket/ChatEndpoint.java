@@ -5,6 +5,8 @@ import io.github.nnkwrik.common.dto.JWTUser;
 import io.github.nnkwrik.common.dto.Response;
 import io.github.nnkwrik.common.token.TokenSolver;
 import io.github.nnkwrik.common.util.JsonUtil;
+import io.github.nnkwrik.imservice.constant.MessageType;
+import io.github.nnkwrik.imservice.model.vo.WsMessage;
 import io.github.nnkwrik.imservice.service.WebSocketService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
+import java.util.Date;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -47,9 +50,15 @@ public class ChatEndpoint {
 //            return;
 //        }
         sessionMap.put(openId, session);
-//        log.info("【websocket消息】有新的连接, openId = [{}],用户昵称= [{}]", openId, user.getNickName());
-        log.info("【websocket消息】有新的连接, openId = [{}],用户昵称= [{}]", openId);
+//        log.info("【websocket消息】有新的连接, openId = [{}],用户昵称= [{}],未读消息数={}", openId, user.getNickName(),);
+        int unreadCount = webSocketService.getUnreadCount(openId);
+        log.info("【websocket消息】有新的连接, openId = [{}],用户昵称= [{}],未读消息数={}", openId, "", unreadCount);
 
+        WsMessage wsMessage = new WsMessage();
+        wsMessage.setMessageType(MessageType.UNREAD_NUM);
+        wsMessage.setMessageBody(unreadCount + "");
+        wsMessage.setSendTime(new Date());
+        sendMessage(openId, Response.ok(wsMessage));
     }
 
     @OnClose

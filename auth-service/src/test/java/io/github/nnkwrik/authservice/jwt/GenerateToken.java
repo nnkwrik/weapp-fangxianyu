@@ -32,9 +32,9 @@ public class GenerateToken {
      */
     @Test
     public void generateToken() throws IllegalAccessException {
-        String openId = "3";
-        String nickName = "测试用户";
-        String avatarUrl = "https://avatars2.githubusercontent.com/u/29662114?s=460&v=4";
+        String openId = "1";
+        String nickName = "测试用户1";
+        String avatarUrl = "https://4.bp.blogspot.com/-gKPdnJWscyI/VCIkF3Po4DI/AAAAAAAAmjo/fAKkTMyf8hM/s170/monster01.png";
 
         JWTUser jwtUser = new JWTUser(openId, nickName, avatarUrl);
         String token = creator.create(jwtUser);
@@ -59,6 +59,20 @@ public class GenerateToken {
         System.out.println("\n=========================================================");
     }
 
+    @Test
+    public void generateNoExpiredToken() throws IllegalAccessException {
+        String openId = "1";
+        String nickName = "测试用户1";
+        String avatarUrl = "https://4.bp.blogspot.com/-gKPdnJWscyI/VCIkF3Po4DI/AAAAAAAAmjo/fAKkTMyf8hM/s170/monster01.png";
+
+        JWTUser jwtUser = new JWTUser(openId, nickName, avatarUrl);
+        String token = createNoExpiredToken(jwtUser);
+
+        System.out.println("==================== 生成的Token =========================\n");
+        System.out.println(token);
+        System.out.println("\n=========================================================");
+    }
+
 
     private String createExpiredToken(JWTUser jwtUser) throws IllegalAccessException {
         Algorithm algorithm = Algorithm.RSA256(creator.keyProvider);
@@ -75,6 +89,23 @@ public class GenerateToken {
             builder.withClaim(name, value);
         }
         String token = builder.withExpiresAt(expire).sign(algorithm);
+
+        return "Bearer " + token;
+    }
+
+    private String createNoExpiredToken(JWTUser jwtUser) throws IllegalAccessException {
+        Algorithm algorithm = Algorithm.RSA256(creator.keyProvider);
+
+        JWTCreator.Builder builder = JWT.create();
+
+        //通过反射构造token字符串
+        for (Field field : jwtUser.getClass().getDeclaredFields()) {
+            field.setAccessible(true);
+            String value = (String) field.get(jwtUser);
+            String name = field.getName();
+            builder.withClaim(name, value);
+        }
+        String token = builder.sign(algorithm);
 
         return "Bearer " + token;
     }

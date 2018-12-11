@@ -12,5 +12,4 @@ import java.util.List;
 public interface IndexService {
     List<ChatIndex> showIndex(String userId, int size, Date offsetTime);
 
-    int getUnreadCount(String userId);
 }

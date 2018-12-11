@@ -66,15 +66,6 @@ Page({
             title: that.data.otherSide.nickName
           })
 
-          // that.culScroll();   
-          // setTimeout(function () {
-          //   that.setData({
-          //     scrollTop: 5000,
-          //     scrollHeight: that.data.newScrollHeight
-          //   })
-
-          // }, 100);
-
           let _this = that
           that.getScrollHeight().then((res) => {
             var scroll = res - _this.data.scrollHeight
@@ -84,25 +75,9 @@ Page({
             })
           })
 
-
         } else {
-          console.log("加载了么")
-          // that.queryMultipleNodes();   
-          // setTimeout(function() {
-          //   var scroll = that.data.newScrollHeight - that.data.scrollHeight
-          //   console.log("加载了么: scrollTop " + scroll)
-          //   console.log("加载了么: newScrollHeight " + that.data.newScrollHeight)
-          //   console.log("加载了么: scrollHeight " + that.data.scrollHeight)
-          //   that.setData({
-          //     scrollTop: scroll,
-          //     scrollHeight: that.data.newScrollHeight,
-          //   })
-
-
-          // }, 100);
-
+          //重新设置scroll,scrollTop = 之前的scrollHeigth - 加入了数据后的scrollHeigth
           let _this=that
-   
           that.getScrollHeight().then((res) => {
             var scroll = res - _this.data.scrollHeight
             _this.setData({
@@ -111,27 +86,11 @@ Page({
             })
           })
 
-
         }
       } else {
         console.log(res)
       }
     })
-  },
-  culScroll: function() {
-    let that = this
-
-    var query = wx.createSelectorQuery()
-    query.select('#hei').boundingClientRect()
-    query.selectViewport().scrollOffset()
-    query.exec(function(res) {
-      console.log("同步设置newScrollHeight" + res[0].top)
-      that.setData({
-        newScrollHeight: res[0].top
-      })
-
-    })
-
   },
   toGoods: function(event) {
     let goodsId = event.target.dataset.id;
@@ -144,6 +103,19 @@ Page({
     if (!this.data.noMore) {
       this.getHistory()
     }
+  },
+  getScrollHeight: function () {
+    let that = this
+    return new Promise(function (resolve, reject) {
+      var query = wx.createSelectorQuery()
+      //#hei是位于scroll最低端的元素,求它离scroll顶部的距离,得出ScrollHeight
+      query.select('#hei').boundingClientRect()
+      query.selectViewport().scrollOffset()
+      query.exec(function (res) {
+        console.log("异步设置ScrollHeight" + res[0].top)
+        resolve(res[0].top);
+      })
+    });
   },
 
   /**
@@ -194,18 +166,6 @@ Page({
   onShareAppMessage: function() {
 
   },
-  getScrollHeight: function() {
-    let that = this
-    return new Promise(function(resolve, reject) {
-      var query = wx.createSelectorQuery()
-      query.select('#hei').boundingClientRect()
-      query.selectViewport().scrollOffset()
-      query.exec(function(res) {
-        console.log("异步设置newScrollHeight" + res[0].top)
-        resolve(res[0].top);
-      })
-    });
 
-  }
 
 })

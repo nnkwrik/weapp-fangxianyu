@@ -1,5 +1,6 @@
 // const ApiRootUrl = 'https://5d876383.ngrok.io/';
 const ApiRootUrl = 'http://127.0.0.1:8805/';
+const WebSocktUrl = 'ws://localhost:8805/'
 
 module.exports = {
   IndexUrl: ApiRootUrl + 'index/index', //首页数据接口
@@ -26,6 +27,7 @@ module.exports = {
 
   ChatIndex: ApiRootUrl + 'chat/index', //消息一览
   ChatForm: ApiRootUrl + 'chat/form', //消息框
+  ChatWs: WebSocktUrl+'ws',  //消息WebSocket连接
 
   CartList: ApiRootUrl + 'cart/index', //获取购物车的数据
   CartAdd: ApiRootUrl + 'cart/add', // 添加商品到购物车

@@ -37,18 +37,6 @@ public class ChatController {
     @Autowired
     private FormService formService;
 
-    //用于打开小程序时
-    @GetMapping("/chat/unreadCount")
-    public Response<Integer> getUnreadCount(@JWT JWTUser user) {
-
-        if (user == null) {
-            return Response.ok(0);
-        }
-        int unreadCount = indexService.getUnreadCount(user.getOpenId());
-        log.info("已登录用户查询未读消息个数, {} 条未读信息.用户id = {},用户昵称 = {}", unreadCount, user.getOpenId(), user.getNickName());
-
-        return Response.ok(unreadCount);
-    }
 
     //打开消息一览时
     @GetMapping("/chat/index")
