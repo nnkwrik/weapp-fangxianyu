@@ -100,7 +100,7 @@ public interface HistoryMapper {
      * @param chat_id
      * @return
      */
-    @Select("select u1_to_u2, message_type, message_body, send_time\n" +
+    @Select("select chat_id,u1_to_u2, message_type, message_body, send_time\n" +
             "from history\n" +
             "where chat_id = #{chat_id} and send_time < #{offset_time,jdbcType=TIMESTAMP} order by send_time desc")
     List<History> getChatHistory(@Param("chat_id") int chatId,@Param("offset_time") Date offsetTime);

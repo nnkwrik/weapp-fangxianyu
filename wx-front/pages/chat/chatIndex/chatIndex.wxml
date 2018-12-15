@@ -14,7 +14,7 @@
 
   <view class="result-list" wx:if="{{chatList.length > 0}}">
 
-    <navigator class="chat" url='/pages/chat/chatForm/chatForm?id={{item.lastChat.chatId}}' wx:for="{{chatList}}">
+    <view class="chat" bindtap='navForm' data-id='{{item.lastChat.chatId}}' data-index='{{index}}'  wx:for="{{chatList}}" wx:key="{{index}}">
       <view class="item">
         <view class='avatar-item'>
           <image class="avatar" mode='aspectFill' src="{{item.otherSide.avatarUrl}}"></image>
@@ -34,7 +34,7 @@
         </view>
         <image class="img" mode='aspectFill' src="{{item.goods.primaryPicUrl}}"></image>
       </view>
-    </navigator>
+    </view>
     
 
   </view>

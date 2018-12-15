@@ -1,6 +1,7 @@
 var util = require('../../../utils/util.js');
 var api = require('../../../config/api.js');
-// pages/chat/chatForm/chatForm.js
+var websocket = require('../../../services/websocket.js');
+// 参考:
 // https://blog.csdn.net/qq_35713752/article/details/78688311
 // https://blog.csdn.net/qq_35713752/article/details/80811397
 Page({
@@ -21,6 +22,7 @@ Page({
     scrollHeight: 0,
     newScrollHeight: 0,
     noMore: false,
+    input: '',
   },
 
   /**
@@ -33,8 +35,9 @@ Page({
       myAvatar: wx.getStorageSync('userInfo').avatarUrl,
       offsetTime: now.toISOString()
     })
-    this.getHistory();
 
+    this.getHistory();
+    this.openListen();
 
   },
 
@@ -46,21 +49,21 @@ Page({
     }).then(function(res) {
       if (res.errno === 0) {
         console.log(res.data);
+        
         that.setData({
           otherSide: res.data.otherSide,
           historyList: res.data.historyList.concat(that.data.historyList),
           goods: res.data.goods,
           isU1: res.data.isU1,
-          offsetTime: res.data.offsetTime,
+          offsetTime: res.data.offsetTime+"",
         });
+        
 
         if (res.data.historyList.length < that.data.size) {
           that.setData({
             noMore: true
           })
         }
-
-        console.log(that.data.historyList.length)
         if (that.data.historyList.length < 11) {
           wx.setNavigationBarTitle({
             title: that.data.otherSide.nickName
@@ -77,7 +80,7 @@ Page({
 
         } else {
           //重新设置scroll,scrollTop = 之前的scrollHeigth - 加入了数据后的scrollHeigth
-          let _this=that
+          let _this = that
           that.getScrollHeight().then((res) => {
             var scroll = res - _this.data.scrollHeight
             _this.setData({
@@ -92,6 +95,21 @@ Page({
       }
     })
   },
+  openListen:function(){
+    let that = this
+    websocket.listenChatForm(this.data.id).then(res => {
+      var newHistory = [{
+        chatId: res.chatId,
+        u1ToU2: res.senderId < res.receiverId ? true : false,
+        messageType: res.messageType,
+        messageBody: res.messageBody,
+        sendTime: res.sendTime,
+      }]
+      that.addHistoryList(newHistory)
+      that.openListen()
+
+    })
+  },
   toGoods: function(event) {
     let goodsId = event.target.dataset.id;
     wx.navigateTo({
@@ -104,18 +122,90 @@ Page({
       this.getHistory()
     }
   },
-  getScrollHeight: function () {
+  getScrollHeight: function() {
     let that = this
-    return new Promise(function (resolve, reject) {
+    return new Promise(function(resolve, reject) {
       var query = wx.createSelectorQuery()
       //#hei是位于scroll最低端的元素,求它离scroll顶部的距离,得出ScrollHeight
       query.select('#hei').boundingClientRect()
       query.selectViewport().scrollOffset()
-      query.exec(function (res) {
+      query.exec(function(res) {
         console.log("异步设置ScrollHeight" + res[0].top)
         resolve(res[0].top);
       })
     });
+  },
+  inputChange: function(e) {
+    console.log(e.detail.value)
+    this.setData({
+      input: e.detail.value
+    })
+  },
+  sendMsg: function() {
+    if (this.data.input.trim() == '') {
+      this.setData({
+        input: '',
+      })
+      return
+    }
+    let that = this
+    var data = this.createMsg()
+    //通过webSocket发送消息
+    websocket.sendMessage(data).then(res => {
+      console.log(res)
+
+      var newHistory = [{
+        chatId: this.data.id,
+        u1ToU2: wx.getStorageSync('userInfo').openId < this.data.otherSide.openId ? true : false,
+        messageType: 1,
+        messageBody: this.data.input,
+        sendTime: util.formatTime(new Date()),
+      }]
+
+      that.addHistoryList(newHistory)
+
+    }).catch((res) => {
+      console.log(res)
+      util.showErrorToast('发送失败')
+    });
+
+  },
+  addHistoryList: function(historyList) {
+    //把新的数据加入目前的对话框
+    var newHistoryList = this.data.historyList.concat(historyList)
+    this.setData({
+      input: '',
+      historyList: newHistoryList,
+    })
+
+    //重新设置scroll
+    let _this = this
+    this.getScrollHeight().then((res) => {
+      var scroll = res - _this.data.scrollHeight
+      _this.setData({
+        scrollTop: 100000000,
+        scrollHeight: res,
+      })
+    })
+  },
+  createMsg: function() {
+    var msgType;
+  
+    if (this.data.historyList.length>1) {
+      msgType = 1
+    } else {
+      msgType = 2
+    }
+
+    var data = JSON.stringify({
+      chatId: this.data.id,
+      receiverId: this.data.otherSide.openId,
+      senderId: wx.getStorageSync('userInfo').openId,
+      goodsId: this.data.goods.id,
+      messageType: msgType,
+      messageBody: this.data.input
+    })
+    return data
   },
 
   /**
@@ -143,7 +233,8 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload: function() {
-
+    websocket.stopListenForm(this.data.id)
+    websocket.listenBadge()
   },
 
   /**

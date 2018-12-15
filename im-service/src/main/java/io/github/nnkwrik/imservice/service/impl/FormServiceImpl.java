@@ -74,9 +74,10 @@ public class FormServiceImpl implements FormService {
             chatHistory.addAll(unreadList);
             chatHistory = chatHistory.stream()
                     .filter(a -> offsetTime.compareTo(a.getSendTime()) > 0)
-                    .sorted((a, b) -> a.getSendTime().compareTo(b.getSendTime()))
+                    .sorted((a, b) -> b.getSendTime().compareTo(a.getSendTime()))
                     .limit(size)
                     .collect(Collectors.toList());
+            chatHistory = Lists.reverse(chatHistory);
         }
         vo.setHistoryList(chatHistory);
         if (chatHistory.size() > 1) {
@@ -86,7 +87,8 @@ public class FormServiceImpl implements FormService {
         return vo;
     }
 
-    private List<History> flushUnread(int chatId, String userId) {
+    @Override
+    public List<History> flushUnread(int chatId, String userId) {
         List<WsMessage> unreadMsgList = redisClient.get(chatId + "");
         List<History> unreadHistory = WsListToHisList(unreadMsgList);
         if (unreadHistory != null && unreadHistory.size() > 0 && unreadMsgList.get(0).getReceiverId().equals(userId)) {

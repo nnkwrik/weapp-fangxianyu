@@ -64,9 +64,12 @@ public class IndexServiceImpl implements IndexService {
         List<WsMessage> unread = getDisplayUnread(unreadMessage, unreadCount, size, offsetTime);
         dealUnread(currentUser, unread, unreadCount, resultVoList, chatGoodsMap, chatUserMap);
 
-        List<Integer> unreadChatIds = unread.stream()
-                .map(chat -> chat.getChatId())
+
+        List<Integer> unreadChatIds = unreadMessage.stream()
+                .filter(unreadList -> unreadList != null && unreadList.size() > 0)
+                .map(unreadList -> unreadList.get((0)).getChatId())
                 .collect(Collectors.toList());
+
         PageHelper.offsetPage(0, size);
         List<HistoryExample> read = historyMapper.getLastReadChat(unreadChatIds, currentUser, offsetTime);
         dealRead(read, currentUser, resultVoList, chatGoodsMap, chatUserMap);

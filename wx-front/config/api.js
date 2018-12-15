@@ -27,6 +27,7 @@ module.exports = {
 
   ChatIndex: ApiRootUrl + 'chat/index', //消息一览
   ChatForm: ApiRootUrl + 'chat/form', //消息框
+  ChatFlushUnread: ApiRootUrl + 'chat/flushUnread', //把所有未读设为已读
   ChatWs: WebSocktUrl+'ws',  //消息WebSocket连接
 
   CartList: ApiRootUrl + 'cart/index', //获取购物车的数据

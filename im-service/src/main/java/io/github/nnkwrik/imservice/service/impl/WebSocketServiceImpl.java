@@ -37,8 +37,6 @@ public class WebSocketServiceImpl implements WebSocketService {
     @Autowired
     private RedisClient redisClient;
 
-    @Autowired
-    private FormService formService;
 
     @Override
     public int getUnreadCount(String userId) {
@@ -85,7 +83,7 @@ public class WebSocketServiceImpl implements WebSocketService {
             return;
         }
 
-        if (message.getMessageType() == MessageType.ESTABLISH_CHAT) {
+        if (message.getMessageType() == MessageType.FIRST_CHAT) {
             //首次发送,设为双方可见
             chatMapper.showToBoth(message.getChatId());
         }

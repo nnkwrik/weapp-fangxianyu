@@ -12,10 +12,7 @@ import io.github.nnkwrik.imservice.service.IndexService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
@@ -73,13 +70,13 @@ public class ChatController {
         return Response.ok(vo);
     }
 
-    //把所有未读设为已读, 在退出聊天框时使用
-//    @PostMapping("/chat/flushUnread/{chatId}")
-//    public Response flushUnread(@PathVariable("chatId") int chatId,
-//                                @JWT(required = true) JWTUser user) {
-//        formService.flushUnread(user.getOpenId(), chatId );
-//        log.info("用户openId={}chatId={}的所有未读消息设为已读", user.getOpenId(), chatId);
-//        return Response.ok();
-//    }
+    //把所有未读设为已读, 通过ws实时阅读到消息时
+    @PostMapping("/chat/flushUnread/{chatId}")
+    public Response flushUnread(@PathVariable("chatId") int chatId,
+                                @JWT(required = true) JWTUser user) {
+        formService.flushUnread(chatId ,user.getOpenId());
+        log.info("用户openId={}chatId={}的所有未读消息设为已读", user.getOpenId(), chatId);
+        return Response.ok();
+    }
 
 }

@@ -10,7 +10,9 @@ public class MessageType {
 
     public static final int USER_MESSAGE = 1;
 
-    public static final int ESTABLISH_CHAT = 2;
+    public static final int FIRST_CHAT = 2;
 
     public static final int UNREAD_NUM = 3;
+
+    public static final int ESTABLISH_CHAT = 4;
 }
