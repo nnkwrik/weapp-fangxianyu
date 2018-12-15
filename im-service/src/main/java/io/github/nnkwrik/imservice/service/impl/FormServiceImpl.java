@@ -73,7 +73,7 @@ public class FormServiceImpl implements FormService {
         if (unreadList != null && unreadList.size() > 0) {
             chatHistory.addAll(unreadList);
             chatHistory = chatHistory.stream()
-                    .filter(a -> offsetTime.compareTo(a.getSendTime()) > 1)
+                    .filter(a -> offsetTime.compareTo(a.getSendTime()) > 0)
                     .sorted((a, b) -> a.getSendTime().compareTo(b.getSendTime()))
                     .limit(size)
                     .collect(Collectors.toList());
