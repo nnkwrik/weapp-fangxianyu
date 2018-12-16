@@ -58,6 +58,12 @@ zuul:
       serviceId: goods-service
       strip-prefix: false
       sensitiveHeaders:
+    #chat
+    chat:
+      path: /chat/**
+      serviceId: im-service
+      strip-prefix: false
+      sensitiveHeaders:
 
 
 

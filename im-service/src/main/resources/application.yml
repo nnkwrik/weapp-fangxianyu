@@ -26,10 +26,6 @@ server:
 mybatis:
   configuration:
     map-underscore-to-camel-case: true
-#
-#logging:
-#  level:
-#    org.springframework.web: info
-#    io.github.nnkwrik.goodsservice: debug
+
 jwt:
   pub-key-file-name: RSA.pub

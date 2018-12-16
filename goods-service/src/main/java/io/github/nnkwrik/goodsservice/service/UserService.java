@@ -24,4 +24,6 @@ public interface UserService {
     List<Goods> getUserPosted(String userId, int page, int size);
 
     LinkedHashMap<String, List<Goods>> getUserHistoryList(String userId, int page, int size);
+
+    void addWant(int goodsId, String userId);
 }

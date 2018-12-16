@@ -5,9 +5,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
-@SpringBootApplication(scanBasePackages = {"io.github.nnkwrik", "fangxianyu.innerApi.user"})
+@SpringBootApplication(scanBasePackages = {"io.github.nnkwrik", "fangxianyu.innerApi.user", "fangxianyu.innerApi.im"})
 @EnableEurekaClient
-@EnableFeignClients(basePackages = "fangxianyu.innerApi.user")
+@EnableFeignClients(basePackages = {"fangxianyu.innerApi.user", "fangxianyu.innerApi.im"})
 public class GoodsServiceApplication {
 
     public static void main(String[] args) {

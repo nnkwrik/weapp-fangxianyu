@@ -233,7 +233,7 @@ page {
   font-size: 24rpx;
   background: #f94b4b;
   color: #fff;
-  margin-left: 120px;
+  margin-left:110px;
   padding: 10rpx;
 }
 

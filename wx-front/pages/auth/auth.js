@@ -2,6 +2,8 @@
 var app = getApp();
 var api = require('../../config/api.js');
 var util = require('../../utils/util.js');
+var websocket = require('../../services/websocket.js');
+  
 Page({
 
   /**
@@ -27,6 +29,7 @@ Page({
         userInfo: userInfo,
         hasUserInfo: true
       })
+      websocket.wsConnect()
     });
   },
   

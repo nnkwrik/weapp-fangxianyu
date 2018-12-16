@@ -61,7 +61,7 @@ public class IndexServiceImpl implements IndexService {
 
         //从redis(未读)和sql(已读)中各尝试取10个
         Map<Integer, Integer> unreadCount = new HashMap<>();
-        List<WsMessage> unread = getDisplayUnread(unreadMessage, unreadCount, size, offsetTime);
+        List<WsMessage> unread = getDisplayUnread(currentUser,unreadMessage, unreadCount, size, offsetTime);
         dealUnread(currentUser, unread, unreadCount, resultVoList, chatGoodsMap, chatUserMap);
 
 
@@ -86,14 +86,26 @@ public class IndexServiceImpl implements IndexService {
     }
 
 
-    private List<WsMessage> getDisplayUnread(List<List<WsMessage>> unreadMessage,
+    private List<WsMessage> getDisplayUnread(String currentUserId,
+                                             List<List<WsMessage>> unreadMessage,
                                              Map<Integer, Integer> unreadCount,
                                              int size, Date offsetTime) {
         if (ObjectUtils.isEmpty(unreadMessage)) return new ArrayList<>();
+//        List<WsMessage> displayUnread = unreadMessage.stream()
+//                .filter(msgList -> !ObjectUtils.isEmpty(msgList) && offsetTime.compareTo(msgList.get(msgList.size() - 1).getSendTime()) > 0)
+//                .map(msgList -> {
+//                    unreadCount.put(msgList.get(0).getChatId(), msgList.size());
+//                    return msgList.get(msgList.size() - 1);
+//                })
+//                .sorted((a, b) -> b.getSendTime().compareTo(a.getSendTime()))
+//                .limit(size)
+//                .collect(Collectors.toList());
+
         List<WsMessage> displayUnread = unreadMessage.stream()
-                .filter(msgList -> msgList != null && offsetTime.compareTo(msgList.get(msgList.size() - 1).getSendTime()) > 0)
+                .filter(msgList -> !ObjectUtils.isEmpty(msgList) && offsetTime.compareTo(msgList.get(msgList.size() - 1).getSendTime()) > 0)
                 .map(msgList -> {
-                    unreadCount.put(msgList.get(0).getChatId(), msgList.size());
+                    long count =  msgList.stream().filter(msg -> msg.getReceiverId().equals(currentUserId)).count();
+                    unreadCount.put(msgList.get(0).getChatId(), Math.toIntExact(count));
                     return msgList.get(msgList.size() - 1);
                 })
                 .sorted((a, b) -> b.getSendTime().compareTo(a.getSendTime()))

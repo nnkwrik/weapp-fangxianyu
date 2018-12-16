@@ -5,7 +5,6 @@ const util = require('../utils/util.js');
 var SocketTask
 var socketOpen = false
 var badge = 0
-var newMsgList  = []
 
 
 /**
@@ -19,9 +18,9 @@ function wsConnect() {
   return new Promise(function(resolve, reject) {
     SocketTask = wx.connectSocket({
       url: api.ChatWs + '/' + openId,
-      data: 'data',
       header: {
-        'content-type': 'application/json'
+        'content-type': 'application/json',
+        'Authorization': wx.getStorageSync('token')
       },
       method: 'post',
       success: function(res) {
@@ -43,6 +42,9 @@ function wsConnect() {
   })
 }
 
+function wsClose() {
+  wx.closeSocket()
+}
 /**
  * 监听websocket状态
  */
@@ -56,14 +58,14 @@ function socketTask(SocketTask) {
   SocketTask.onClose(onClose => {
     console.log('监听 WebSocket 连接关闭事件。', onClose)
     socketOpen = false;
-    that.wsConnect()
+    // that.wsConnect()
   })
   SocketTask.onError(onError => {
     console.log('监听 WebSocket 错误。错误信息', onError)
     socketOpen = false
   })
   SocketTask.onMessage(onMessage => {
-    // console.log('监听WebSocket接受到服务器的消息事件。服务器返回的消息', JSON.parse(onMessage.data))
+    console.log('监听WebSocket接受到服务器的消息事件。服务器返回的消息', JSON.parse(onMessage.data))
   })
 }
 
@@ -88,56 +90,53 @@ function sendMessage(data) {
   })
 }
 
-/**
- * 初始化badge未读数
- */
-function initBadge() {
-  return new Promise(function(resolve, reject) {
-    wx.onSocketMessage(onMessage => {
-      var res = JSON.parse(onMessage.data)
-      if (res.errno === 0) {
-        if (res.data.messageType == 3 && res.data.messageBody != 0) {
-          badge = res.data.messageBody
-          wx.setTabBarBadge({
-            index: 3,
-            text: badge
-          })
 
-          resolve("初始化未读数badge : " + badge)
-        }
-      } else {
-        console.log(res)
-        reject(res)
-      }
-    })
-  })
-}
+
+
 function listenBadge() {
   // return new Promise(function (resolve, reject) {
-    wx.onSocketMessage(onMessage => {
-      var res = JSON.parse(onMessage.data)
-      if (res.errno === 0) {
-        if (res.data.messageType == 3 && res.data.messageBody != 0) {
-          badge = res.data.messageBody
-          wx.setTabBarBadge({
-            index: 3,
-            text: badge+""
-          })
+  wx.onSocketMessage(onMessage => {
+    var res = JSON.parse(onMessage.data)
+    if (res.errno === 0) {
+      if (res.data.messageType == 3 && res.data.messageBody != 0) {
+        badge = res.data.messageBody
+        wx.setTabBarBadge({
+          index: 3,
+          text: badge + ""
+        })
 
-          console.log("初始化未读数badge : " + badge)
-        } else if (res.data.messageType == 1){
-          badge++
-          wx.setTabBarBadge({
-            index: 3,
-            text: badge + ""
-          })
-          console.log("接收到新消息,更新badge : " + badge)
-        }
-      } else {
-        console.log(res)
-        reject(res)
+        console.log("初始化未读数badge : " + badge)
+      } else if (res.data.messageType == 1) {
+        badge++
+        wx.setTabBarBadge({
+          index: 3,
+          text: badge + ""
+        })
+        console.log("接收到新消息,更新badge : " + badge)
       }
-    })
+    } else if (res.errno == 3002 || res.errno == 3003 || res.errno == 3004 || res.errno == 3005) {
+      console.log(res.errmsg)
+      //TOKEN_IS_EMPTY
+      //需要登录后才可以操作
+      wx.getSetting({
+        success: res => {
+          if (res.authSetting['scope.userInfo']) {
+            // // 已经授权，可以直接调用 getUserInfo 获取头像昵称，不会弹框
+            util.getUserInfo().then((res) => {
+              util.backendLogin(res).then((res) => {
+                wsConnect()
+                console.log('再次请求')
+              })
+            })
+
+          }
+        }
+      })
+    }else {
+      console.log(res)
+      reject(res)
+    }
+  })
   // })
 }
 
@@ -151,12 +150,21 @@ function listenChatForm(chatId) {
       if (res.errno === 0) {
         if (res.data.messageType == 1 && res.data.chatId == chatId) {
           console.log("消息Form监听到新消息 : " + res.data.messageBody)
-          var newMsg = res.data
-          newMsgList.push(newMsg)
-          console.log(newMsgList)
-          resolve(newMsg)
+          // var newMsg = res.data
+          // newMsgList.push(newMsg)
+          // console.log(newMsgList)
+          //test
+          util.request(api.ChatFlushUnread + '/' + chatId, {}, "POST").then((res) => {
+            if (res.errno == 0) {
+              console.log("把unread刷入数据库成功")
+
+            } else {
+              console.log(res)
+            }
+          })
+          resolve(res.data)
         }
-      } else {
+      }  else {
         console.log(res)
         reject(res)
       }
@@ -164,22 +172,22 @@ function listenChatForm(chatId) {
   })
 }
 
-/**
- * 关闭对form页的监听,其实就是把期间收到的消息刷入数据库
- */
-function stopListenForm(chatId){
-  if (newMsgList.length > 0){
-    newMsgList = []
-    util.request(api.ChatFlushUnread + '/' + chatId, {},"POST").then((res) => {
-      if(res.errno == 0){
-        console.log("把unread刷入数据库成功")
-        
-      }else{
-        console.log(res)
-      }
-    })
-  }
-}
+// /**
+//  * 关闭对form页的监听,其实就是把期间收到的消息刷入数据库
+//  */
+// function stopListenForm(chatId) {
+//   if (newMsgList.length > 0) {
+//     newMsgList = []
+//     util.request(api.ChatFlushUnread + '/' + chatId, {}, "POST").then((res) => {
+//       if (res.errno == 0) {
+//         console.log("把unread刷入数据库成功")
+
+//       } else {
+//         console.log(res)
+//       }
+//     })
+//   }
+// }
 
 /**
  * 消息列表页监听消息
@@ -209,7 +217,8 @@ function listenChatIndex() {
 
 function lessBadge(less) {
   badge = badge - less
-  if (badge == 0) {
+  if (badge <= 0) {
+    badge = 0
     wx.removeTabBarBadge({
       index: 3,
     })
@@ -230,5 +239,5 @@ module.exports = {
   listenChatIndex,
   lessBadge,
   listenBadge,
-  stopListenForm,
+  // stopListenForm,
 };

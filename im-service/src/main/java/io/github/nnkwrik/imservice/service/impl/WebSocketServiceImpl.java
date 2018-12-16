@@ -48,7 +48,7 @@ public class WebSocketServiceImpl implements WebSocketService {
 
         //过滤自己发送的
         int unreadCount = lastChatList.stream()
-                .filter(chat -> chat != null && !chat.get(0).getSenderId().equals(userId))
+                .filter(chat -> !ObjectUtils.isEmpty(chat) && !chat.get(0).getSenderId().equals(userId))
                 .mapToInt(List::size)
                 .sum();
 

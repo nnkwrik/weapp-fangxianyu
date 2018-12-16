@@ -23,10 +23,9 @@ import java.util.List;
  */
 @RestController
 @Slf4j
+@RequestMapping("/chat")
 public class ChatController {
 
-    @Autowired
-    private RedisClient redisClient;
 
     @Autowired
     private IndexService indexService;
@@ -36,7 +35,7 @@ public class ChatController {
 
 
     //打开消息一览时
-    @GetMapping("/chat/index")
+    @GetMapping("/index")
     public Response<List<ChatIndex>> getChatIndex(@JWT JWTUser user,
                                                   @RequestParam(value = "offsetTime", required = false)
                                                   @DateTimeFormat(pattern = StdDateFormat.DATE_FORMAT_STR_ISO8601) Date offsetTime,
@@ -54,7 +53,7 @@ public class ChatController {
     }
 
     //打开聊天框时
-    @GetMapping("/chat/form/{chatId}")
+    @GetMapping("/form/{chatId}")
     public Response<ChatForm> getChatForm(@PathVariable("chatId") int chatId,
                                           @JWT(required = true) JWTUser user,
                                           @RequestParam(value = "offsetTime", required = false)
@@ -71,7 +70,7 @@ public class ChatController {
     }
 
     //把所有未读设为已读, 通过ws实时阅读到消息时
-    @PostMapping("/chat/flushUnread/{chatId}")
+    @PostMapping("/flushUnread/{chatId}")
     public Response flushUnread(@PathVariable("chatId") int chatId,
                                 @JWT(required = true) JWTUser user) {
         formService.flushUnread(chatId ,user.getOpenId());

@@ -43,16 +43,16 @@ public class ChatEndpoint {
         String token = (String) config.getUserProperties().get(JWTUser.class.getName());
         JWTUser user = solveToken(token);
 
-//        if (user == null || !user.getOpenId().equals(openId)) {
-//            log.info("【websocket消息】token检验失败,拒绝连接, openId = [{}]", openId);
-//            rejectConnect(session);
-//            session.close();
-//            return;
-//        }
+        if (user == null || !user.getOpenId().equals(openId)) {
+            log.info("【websocket消息】token检验失败,拒绝连接, openId = [{}]", openId);
+            rejectConnect(session);
+            session.close();
+            return;
+        }
         sessionMap.put(openId, session);
-//        log.info("【websocket消息】有新的连接, openId = [{}],用户昵称= [{}],未读消息数={}", openId, user.getNickName(),);
         int unreadCount = webSocketService.getUnreadCount(openId);
-        log.info("【websocket消息】有新的连接, openId = [{}],用户昵称= [{}],未读消息数={}", openId, "", unreadCount);
+        log.info("【websocket消息】有新的连接, openId = [{}],用户昵称= [{}],未读消息数={}", openId, user.getNickName(),unreadCount);
+//        log.info("【websocket消息】有新的连接, openId = [{}],用户昵称= [{}],未读消息数={}", openId, "", unreadCount);
 
         WsMessage wsMessage = new WsMessage();
         wsMessage.setMessageType(MessageType.UNREAD_NUM);

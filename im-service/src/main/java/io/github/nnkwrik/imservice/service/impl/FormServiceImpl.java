@@ -90,15 +90,25 @@ public class FormServiceImpl implements FormService {
     @Override
     public List<History> flushUnread(int chatId, String userId) {
         List<WsMessage> unreadMsgList = redisClient.get(chatId + "");
-        List<History> unreadHistory = WsListToHisList(unreadMsgList);
-        if (unreadHistory != null && unreadHistory.size() > 0 && unreadMsgList.get(0).getReceiverId().equals(userId)) {
+        if (unreadMsgList != null && unreadMsgList.size() > 0) {
+            List<WsMessage> myUnreadMsgList = unreadMsgList.stream()
+                    .filter(unread -> unread.getReceiverId().equals(userId))
+                    .collect(Collectors.toList());
+            if (myUnreadMsgList == null || myUnreadMsgList.size() == 0 ){
+                return null;
+            }
             log.info("把chatId={}设为已读消息", chatId);
             //添加聊天记录
-            historyMapper.addHistoryList(unreadHistory);
-            redisClient.del(chatId + "");
-        }//否则不是receiver访问form,所以仍是未读状态,不刷入sql
+            List<History> myUnreadHistory = WsListToHisList(myUnreadMsgList);
+            historyMapper.addHistoryList(myUnreadHistory);
+            unreadMsgList.removeAll(myUnreadMsgList);
+            redisClient.set(chatId + "", unreadMsgList);
 
-        return unreadHistory;
+            return myUnreadHistory;
+        } else {
+            return null;//否则不是receiver访问form,所以仍是未读状态,不刷入sql
+        }
+
     }
 
 //    @Override

@@ -19,81 +19,20 @@ App({
       console.log('app login')
       this.globalData.userInfo = wx.getStorageSync('userInfo');
       this.globalData.token = wx.getStorageSync('token');
+
       
-      websocket.wsConnect()
-      
+
     }).catch(() => {
 
     });
 
 
   },
-  // socketTask: function() {
-  //   var that = this;
-  //   SocketTask.onOpen(res => {
-  //     that.globalData.websocket.socketOpen = true;
-  //     console.log('监听 WebSocket 连接打开事件。', res)
-  //   })
-  //   SocketTask.onClose(onClose => {
-  //     console.log('监听 WebSocket 连接关闭事件。', onClose)
-  //     that.globalData.websocket.socketOpen = false;
-  //     this.webSocket()
-  //   })
-  //   SocketTask.onError(onError => {
-  //     console.log('监听 WebSocket 错误。错误信息', onError)
-  //     that.globalData.websocket.socketOpen = false
-  //   })
-  //   SocketTask.onMessage(onMessage => {
-  //     // console.log('监听WebSocket接受到服务器的消息事件。服务器返回的消息', JSON.parse(onMessage.data))
-  //   })
-  // },
-  // wsConnect: function() {
-  //   // 创建Socket
-  //   let that = this
-  //   SocketTask = wx.connectSocket({
-  //     url: api.ChatWs + '/' + this.globalData.userInfo.openId,
-  //     data: 'data',
-  //     header: {
-  //       'content-type': 'application/json'
-  //     },
-  //     method: 'post',
-  //     success: function(res) {
-  //       console.log('WebSocket连接创建', res)
-  //       that.wsOnMessage();
-  //     },
-  //     fail: function(err) {
-  //       wx.showToast({
-  //         title: '网络异常！',
-  //       })
-  //       console.log(err)
-  //     },
-  //   })
-  // },
-  wsOnMessage:function(){
-    if (!this.globalData.websocket.changeBadge){
-        console.log("不监听badge")
-        return
-    }
-    wx.onSocketMessage(onMessage => {
-      console.log('监听WebSocket接受到服务器的消息事件。服务器返回的消息', JSON.parse(onMessage.data))
-      var res = JSON.parse(onMessage.data)
-      if (res.errno === 0) {
-        console.log(res.data)
-        if (res.data.messageType == 3) {
-          if (res.data.messageBody != 0) {
-            wx.setTabBarBadge({
-              index: 3,
-              text: res.data.messageBody
-            })
-          }
-        } else if (res.data.messageType == 1){
-          
-        }
-      } else {
-        console.log(res)
-      }
-
-    })
+  onShow:function(){
+    websocket.wsConnect()
+  },
+  onHide: function() {
+    websocket.wsClose()
   },
 
 
@@ -108,8 +47,8 @@ App({
       socketOpen: false,
       changeBadge: true,
     }
-    
-    
+
+
   },
   testData: {
     userInfo: {

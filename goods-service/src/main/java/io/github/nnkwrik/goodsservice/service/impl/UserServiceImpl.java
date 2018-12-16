@@ -96,6 +96,13 @@ public class UserServiceImpl implements UserService {
         return result;
     }
 
+    @Override
+    public void addWant(int goodsId, String userId) {
+        if (!userMapper.userHasWant(userId, goodsId)) {
+            userMapper.setUserWant(userId, goodsId);
+        }
+    }
+
     private LocalDate getDay(Date date) {
         return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     }

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @author nnkwrik
  * @date 18/12/08 19:23
  */
-@FeignClient(name = "chat-service")
+@FeignClient(name = "im-service")
 @RequestMapping("/chat-service")
 public interface ImClient {
 

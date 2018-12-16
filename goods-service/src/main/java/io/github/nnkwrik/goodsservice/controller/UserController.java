@@ -1,5 +1,6 @@
 package io.github.nnkwrik.goodsservice.controller;
 
+import fangxianyu.innerApi.im.ImClientHandler;
 import fangxianyu.innerApi.user.UserClientHandler;
 import io.github.nnkwrik.common.dto.JWTUser;
 import io.github.nnkwrik.common.dto.Response;
@@ -32,6 +33,9 @@ public class UserController {
 
     @Autowired
     private UserClientHandler userClientHandler;
+
+    @Autowired
+    private ImClientHandler imClientHandler;
 
     /**
      * 收藏或取消收藏某个商品
@@ -139,6 +143,19 @@ public class UserController {
         log.info("浏览用户id=[{}]的首页,搜索到{}天的记录", userId, userHistory.size());
 
         return Response.ok(userHistory);
+    }
+
+    @PostMapping("/goods/want/{goodsId}/{sellerId}")
+    public Response<Integer> want(@JWT(required = true) JWTUser user,
+                                  @PathVariable("goodsId") int goodsId,
+                                  @PathVariable("sellerId") String sellerId){
+
+        userService.addWant(goodsId,user.getOpenId());
+        //创建对话
+        Integer chatId = imClientHandler.createChat(goodsId, user.getOpenId(), sellerId);
+        log.info("用户id=[{}],将商品id=[{}]标记为想要.并创建对话,chatId=[{}]",user.getOpenId(),goodsId,chatId);
+
+        return Response.ok(chatId);
     }
 
 

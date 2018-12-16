@@ -10,7 +10,7 @@ Page({
     goods: {},
     gallery: [],
     comment: [],
-    isSeller:false,
+    isSeller: false,
     seller: {},
     sellerDates: 0,
     sellerHistory: 0,
@@ -19,7 +19,7 @@ Page({
     userHasCollect: 0,
 
     openComment: false,
-    openDelete:false,
+    openDelete: false,
     replyId: '',
     replyUserId: '',
     replyUserName: '',
@@ -38,12 +38,12 @@ Page({
         if (res.data.info.isDelete) {
           util.showErrorToast('商品不存在')
           setTimeout(function callback() {
-            
+
             wx.navigateBack({
               delta: 1
             })
           }, 1000)
-          return 
+          return
         }
 
         //计算卖家来平台第几天
@@ -70,7 +70,7 @@ Page({
           });
         }
 
-        if (that.data.seller.openId == wx.getStorageSync('userInfo').openId){
+        if (that.data.seller.openId == wx.getStorageSync('userInfo').openId) {
           console.log("当前用户是卖家")
           that.setData({
             isSeller: true
@@ -98,9 +98,9 @@ Page({
     });
 
   },
-  deleteGoods: function () {
+  deleteGoods: function() {
     let that = this;
-    util.request(api.GoodsDelete + '/' + that.data.id,{},'DELETE').then(function (res) {
+    util.request(api.GoodsDelete + '/' + that.data.id, {}, 'DELETE').then(function(res) {
       if (res.errno === 0) {
 
         setTimeout(function goback() {
@@ -112,7 +112,7 @@ Page({
         wx.showToast({
           title: '删除成功'
         })
-      }else{
+      } else {
         console.log(res.errmsg)
       }
     });
@@ -159,32 +159,32 @@ Page({
   },
 
   switchCommentPop: function(event) {
-    if(event.currentTarget.dataset.disable){
+    if (event.currentTarget.dataset.disable) {
       console.log("disable")
       return
     }
-      let that = this
+    let that = this
 
-      this.setData({
-        replyId: event.currentTarget.dataset.replyId,
-        replyUserId: event.currentTarget.dataset.replyUserId,
-        replyUserName: event.currentTarget.dataset.replyUserName
+    this.setData({
+      replyId: event.currentTarget.dataset.replyId,
+      replyUserId: event.currentTarget.dataset.replyUserId,
+      replyUserName: event.currentTarget.dataset.replyUserName
 
-      })
+    })
 
-      user.checkLoginAndNav().then(() => {
-        if (this.data.openComment == false) {
-          this.setData({
-            openComment: !this.data.openComment
-          });
-        }
-      })
-    
+    user.checkLoginAndNav().then(() => {
+      if (this.data.openComment == false) {
+        this.setData({
+          openComment: !this.data.openComment
+        });
+      }
+    })
+
 
 
   },
 
-  switchDeletetPop: function (event) {
+  switchDeletetPop: function(event) {
     let that = this
     user.checkLoginAndNav().then(() => {
       if (this.data.openDelete == false) {
@@ -204,7 +204,7 @@ Page({
     });
   },
 
-  closeDelete: function () {
+  closeDelete: function() {
     this.setData({
 
       openDelete: false,
@@ -275,10 +275,10 @@ Page({
         });
     })
   },
-  preview: function (event) {
+  preview: function(event) {
     let url = event.currentTarget.dataset.url
     let urls = []
-    for (var i in this.data.gallery){
+    for (var i in this.data.gallery) {
       urls.push(this.data.gallery[i].imgUrl)
     }
 
@@ -287,6 +287,18 @@ Page({
       urls: urls // 需要预览的图片http链接列表
     })
     console.log(url)
+  },
+  want: function() {
+    util.request(api.GoodsWant + '/' + this.data.id + '/' + this.data.seller.openId, {}, "POST")
+    .then(function(res) {
+      if (res.errno == 0) {
+        wx.navigateTo({
+          url: '/pages/chat/chatForm/chatForm?id=' + res.data,
+        })
+      }else{
+        console.log(res)
+      }
+    })
   },
 
   onReachBottom: function() {
