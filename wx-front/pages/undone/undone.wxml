@@ -1,0 +1,7 @@
+<view class="container">
+
+  <view class="result-empty" >
+    <image class="icon" src="http://yanxuan.nosdn.127.net/hxm/yanxuan-wap/p/20161201/style/img/icon-normal/noSearchResult-7572a94f32.png"></image>
+    <text class="text">功能正在开发中..</text>
+  </view>
+</view>

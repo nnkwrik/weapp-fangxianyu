@@ -79,7 +79,7 @@ Page({
   uploadFile(url, i) {
     let that = this;
     wx.uploadFile({
-      url: '	https://sm.ms/api/upload',
+      url: 'https://sm.ms/api/upload',
       filePath: url,
       name: 'smfile',
       success(res) {

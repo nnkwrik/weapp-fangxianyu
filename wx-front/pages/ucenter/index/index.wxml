@@ -47,14 +47,14 @@
     </view>
 
         <view class="item ">
-      <navigator url="/pages/ucenter/order/order" class="a">
+      <navigator url="/pages/undone/undone" class="a">
         <text class="icon order"></text>
         <text class="txt">我的订单</text>
       </navigator>
     </view>
 
     <view class="item item-bottom">
-      <navigator url="../address/address" class="a">
+      <navigator url="/pages/undone/undone" class="a">
         <text class="icon map"></text>
         <text class="txt">地址管理</text>
       </navigator>

@@ -82,7 +82,7 @@
               </view>
               <view class="time">{{iitem.createTime}}</view>
             </view>
-            <view class="reply-content" bindtap="switchCommentPop" data-reply-id="{{iitem.id}}" data-reply-user-id="{{iitem.simpleUser.openId}}" data-reply-user-name='{{iitem.simpleUser.nickName}}'>
+            <view class="reply-content" bindtap="switchCommentPop" data-reply-id="{{item.id}}" data-reply-user-id="{{iitem.simpleUser.openId}}" data-reply-user-name='{{iitem.simpleUser.nickName}}'>
               回复@{{iitem.replyUserName}}:{{iitem.content}}
             </view>
           </view>
@@ -131,7 +131,7 @@
       </view>
 
       <view class="content">
-        <input id='comment-input' class='' focus='{{openComment}}' placeholder="输入文本" maxlength='100' bindblur='closeComment' bindconfirm='postComment' value='{{commentContent}}' />
+        <input id='comment-input' class='' focus='{{showInput}}' placeholder="输入文本" maxlength='100' bindblur='closeComment' bindconfirm='postComment' value='{{commentContent}}' />
       </view>
 
     </view>

@@ -23,6 +23,7 @@ Page({
     newScrollHeight: 0,
     noMore: false,
     input: '',
+    typing: '',
   },
 
   /**
@@ -142,14 +143,17 @@ Page({
     })
   },
   sendMsg: function() {
-    if (this.data.input.trim() == '') {
-      this.setData({
-        input: '',
-      })
-      return
-    }
+
     let that = this
     var data = this.createMsg()
+    var input = this.data.input
+    this.setData({
+      typing: '',
+      input: '',
+    })
+    if (input.trim() == '') {
+      return
+    }
     //通过webSocket发送消息
     websocket.sendMessage(data).then(res => {
       console.log(res)
@@ -158,11 +162,12 @@ Page({
         chatId: this.data.id,
         u1ToU2: wx.getStorageSync('userInfo').openId < this.data.otherSide.openId ? true : false,
         messageType: 1,
-        messageBody: this.data.input,
+        messageBody: input,
         sendTime: util.formatTime(new Date()),
       }]
 
       that.addHistoryList(newHistory)
+
 
     }).catch((res) => {
       console.log(res)
@@ -174,9 +179,9 @@ Page({
     //把新的数据加入目前的对话框
     var newHistoryList = this.data.historyList.concat(historyList)
     this.setData({
-      input: '',
       historyList: newHistoryList,
     })
+
 
     //重新设置scroll
     let _this = this
@@ -206,6 +211,9 @@ Page({
       messageBody: this.data.input
     })
     return data
+  },
+  buy:function(){
+    util.showErrorToast('功能开发中')
   },
 
   /**

@@ -61,9 +61,10 @@ Page({
       offsetTime: now.toISOString(),
       chatList: []
     })
-
-    this.getChatList();
-    this.openListen();
+    if (wx.getStorageSync('token')){
+      this.getChatList();
+      this.openListen();
+    }
   },
   onHide: function() {
     // 页面隐藏

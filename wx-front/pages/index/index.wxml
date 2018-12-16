@@ -11,15 +11,10 @@
 
   <!-- 首页分类 -->
   <view class="m-menu">
-    <navigator class="item" url="{{item.url}}" wx:for="{{channel}}" wx:key="{{item.id}}">
+    <navigator open-type="{{item.url == '/pages/catalog/catalog' ? 'reLaunch':'navigate'}}" class="item" url="{{item.url}}" wx:for="{{channel}}" wx:key="{{item.id}}">
       <image src="{{item.iconUrl}}" background-size="cover"></image>
       <text>{{item.name}}</text>
     </navigator>
-    <navigator open-type="reLaunch" class="item" url="/pages/catalog/catalog">
-      <image src="https://i.postimg.cc/x17Z3PJd/visualization.png" background-size="cover"></image>
-      <text>全部分类</text>
-    </navigator>
-
   </view>
 
 

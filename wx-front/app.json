@@ -39,7 +39,8 @@
     "pages/ucenter/about/about",
     "pages/user/user",
     "pages/chat/chatIndex/chatIndex",
-    "pages/chat/chatForm/chatForm"
+    "pages/chat/chatForm/chatForm",
+    "pages/undone/undone"
   ],
   "window": {
     "backgroundTextStyle": "dark",

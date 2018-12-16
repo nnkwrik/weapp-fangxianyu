@@ -12,7 +12,8 @@ Page({
   data: {
     userInfo: app.globalData.userInfo,
     hasUserInfo: false,
-    canIUse: wx.canIUse('button.open-type.getUserInfo')
+    canIUse: wx.canIUse('button.open-type.getUserInfo'),
+    load:false
   },
 
   /**
@@ -24,6 +25,9 @@ Page({
 
   startLogin: function(e) {
     console.log(e);
+    this.setData({
+      load:true
+    })
     util.backendLogin(e.detail).then((userInfo) => {
       this.setData({
         userInfo: userInfo,

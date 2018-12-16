@@ -1,5 +1,5 @@
 .container {
-  margin-bottom: 100rpx;
+  padding-bottom: 100rpx;
 }
 
 .goodsimgs {
@@ -684,7 +684,7 @@
   width: 100%;
   height: auto;
   max-height: 780rpx;
-  padding: 10rpx;
+  padding: 15rpx;
   background: #fff;
   position: fixed;
   z-index: 9;

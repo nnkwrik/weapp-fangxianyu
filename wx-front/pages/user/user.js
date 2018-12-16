@@ -49,6 +49,7 @@ Page({
 
         //计算卖家来平台第几天
         let registerTime = res.data.user.registerTime
+        registerTime = registerTime.replace('T', ' ').replace(/-/g, '/').split(".")[0];
         let duration = new Date().getTime() - new Date(registerTime).getTime();
         let dates = parseInt(Math.floor(duration) / (1000 * 60 * 60 * 24));
 

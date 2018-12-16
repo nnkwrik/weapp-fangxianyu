@@ -13,9 +13,13 @@ var badge = 0
 function wsConnect() {
 
   let that = this
-  var openId = wx.getStorageSync('userInfo').openId
+  let userInfo = wx.getStorageSync('userInfo')
   // 创建Socket
   return new Promise(function(resolve, reject) {
+    if (!userInfo){
+      reject("未登录")
+    }
+    var openId = userInfo.openId
     SocketTask = wx.connectSocket({
       url: api.ChatWs + '/' + openId,
       header: {
@@ -239,5 +243,6 @@ module.exports = {
   listenChatIndex,
   lessBadge,
   listenBadge,
+  wsClose,
   // stopListenForm,
 };

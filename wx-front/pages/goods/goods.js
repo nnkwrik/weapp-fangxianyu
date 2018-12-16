@@ -20,6 +20,7 @@ Page({
 
     openComment: false,
     openDelete: false,
+    showInput: false,
     replyId: '',
     replyUserId: '',
     replyUserName: '',
@@ -35,6 +36,7 @@ Page({
     let that = this;
     util.request(api.GoodsDetail + '/' + that.data.id).then(function(res) {
       if (res.errno === 0) {
+        console.log(res.data)
         if (res.data.info.isDelete) {
           util.showErrorToast('商品不存在')
           setTimeout(function callback() {
@@ -45,11 +47,13 @@ Page({
           }, 1000)
           return
         }
-
+        
         //计算卖家来平台第几天
         let registerTime = res.data.seller.registerTime
+        registerTime = registerTime.replace('T', ' ').replace(/-/g, '/').split(".")[0];
         let duration = new Date().getTime() - new Date(registerTime).getTime();
         let dates = parseInt(Math.floor(duration) / (1000 * 60 * 60 * 24));
+        console.log("dates " + dates)
         that.setData({
           goods: res.data.info,
           gallery: res.data.gallery,
@@ -177,6 +181,12 @@ Page({
         this.setData({
           openComment: !this.data.openComment
         });
+        let that = this
+        setTimeout(function callback() {
+          that.setData({
+            showInput: true
+          })
+        }, 100)
       }
     })
 

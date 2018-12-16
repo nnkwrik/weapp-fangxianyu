@@ -6,7 +6,7 @@
         <view class='name' bindtap='toGoods' data-id='{{goods.id}}'>{{goods.name}}</view>
         <view class='order'>
           <view class='price' bindtap='toGoods' data-id='{{goods.id}}'>¥ {{goods.price}}</view>
-          <view class='btn'>立即购买</view>
+          <view class='btn' bindtap='buy'>立即购买</view>
         </view>
         <view class='msg'>交易前聊一聊</view>
       </view>
@@ -70,7 +70,7 @@
     <view class="input">
 
       <view class="content">
-        <input class='' focus='{{openComment}}' placeholder="" maxlength='800' confirm-type="done" bindconfirm='done' value='{{input}}' bindinput="inputChange" />
+        <input class='' confirm-hold="true" placeholder="" maxlength='800' confirm-type="done" bindconfirm='done' value='{{typing}}' bindinput="inputChange" bindconfirm='sendMsg'/>
 
       </view>
       <view class='send' bindtap='sendMsg'>发送</view>

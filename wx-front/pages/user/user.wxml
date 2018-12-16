@@ -32,7 +32,7 @@
     </view>
   </view>
   <view class="result-empty" wx:else>
-    <image class="icon" src="http://yanxuan.nosdn.127.net/hxm/yanxuan-wap/p/20161201/style/img/icon-normal/noSearchResult-7572a94f32.png"></image>
+    <!-- <image class="icon" src="http://yanxuan.nosdn.127.net/hxm/yanxuan-wap/p/20161201/style/img/icon-normal/noSearchResult-7572a94f32.png"></image> -->
     <text class="text">该用户还没发布过宝贝</text>
   </view>
 </view>

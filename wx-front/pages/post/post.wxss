@@ -129,7 +129,7 @@ page, .container {
 }
 
 .img .blur {
-  filter: blur(1rpx) contrast(50%);
+  filter: blur(1rpx);
   background-size: cover;
   background-position: center center;
 }
