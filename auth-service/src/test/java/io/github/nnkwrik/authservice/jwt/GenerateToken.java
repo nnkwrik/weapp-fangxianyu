@@ -17,6 +17,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
 /**
+ * 生产环境下可以用这个生成Token进行测试
+ *
  * @author nnkwrik
  * @date 18/11/19 9:47
  */
@@ -28,7 +30,7 @@ public class GenerateToken {
     private TokenCreator creator;
 
     /**
-     * 生产环境下可以用这个生成Token进行测试
+     * 生成测试用JWT
      */
     @Test
     public void generateToken() throws IllegalAccessException {
@@ -45,6 +47,11 @@ public class GenerateToken {
 
     }
 
+    /**
+     * 生成已过期的JWT
+     *
+     * @throws IllegalAccessException
+     */
     @Test
     public void generateExpiredToken() throws IllegalAccessException {
         String openId = "1";
@@ -59,6 +66,11 @@ public class GenerateToken {
         System.out.println("\n=========================================================");
     }
 
+    /**
+     * 生成不会过期的JWT
+     *
+     * @throws IllegalAccessException
+     */
     @Test
     public void generateNoExpiredToken() throws IllegalAccessException {
         String openId = "1";
