@@ -6,15 +6,14 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.RSAKeyProvider;
 import io.github.nnkwrik.common.dto.JWTUser;
 import io.github.nnkwrik.common.token.RSAKeysReader;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
+import java.time.Duration;
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
 
@@ -27,6 +26,9 @@ public class TokenCreator {
 
     @Value("${jwt.pvt-key-file-name}")
     private String pvtFile;
+
+    @Value("${jwt.duration}")
+    private Duration duration;
 
     public RSAKeyProvider keyProvider = new RSAKeyProvider() {
 
@@ -49,10 +51,17 @@ public class TokenCreator {
         }
     };
 
+    /**
+     * 构造JWT Token
+     *
+     * @param jwtUser
+     * @return
+     * @throws IllegalAccessException
+     */
     public String create(JWTUser jwtUser) throws IllegalAccessException {
         Algorithm algorithm = Algorithm.RSA256(keyProvider);
-        //一天后过期
-        Date expire = Date.from(Instant.now().plus(1, ChronoUnit.DAYS));
+
+        Date expire = Date.from(Instant.now().plus(duration));
 
         JWTCreator.Builder builder = JWT.create();
 

@@ -11,6 +11,4 @@ public interface AuthService {
 
     AuthVo createToken(String userData);
 
-//    boolean isExpiredToken(String token, String loginOpenId);
-
 }

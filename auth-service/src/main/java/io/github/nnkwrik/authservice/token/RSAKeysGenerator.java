@@ -12,6 +12,7 @@ import java.util.Base64;
 /**
  * 生成rsa的公钥和私钥
  * 需要把生成的公钥(.pub)拷贝到需要使用jwt的所有模块的resources目录下
+ *
  * @author nnkwrik
  * @date 18/11/12 11:35
  */
@@ -27,6 +28,7 @@ public class RSAKeysGenerator {
     }
 
     public static void generateRSAKeys(String location, String filePrefix) {
+        //生成RSA对
         KeyPairGenerator kpg = null;
         try {
             kpg = KeyPairGenerator.getInstance("RSA");
@@ -44,6 +46,7 @@ public class RSAKeysGenerator {
 
         Writer out = null;
         try {
+            //输出RSA私钥
             if (outFile != null) out = new FileWriter(outFile + ".key");
             else out = new OutputStreamWriter(System.out);
 
@@ -53,6 +56,7 @@ public class RSAKeysGenerator {
             out.write(encoder.encodeToString(pvt.getEncoded()));
             out.write("\n-----END RSA PRIVATE KEY-----\n");
 
+            //输出RSA公钥
             if (outFile != null) {
                 out.close();
                 out = new FileWriter(outFile + ".pub");
@@ -77,7 +81,6 @@ public class RSAKeysGenerator {
             }
         }
     }
-
 
 
     public static void main(String[] args) {

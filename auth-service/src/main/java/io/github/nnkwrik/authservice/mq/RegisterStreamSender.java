@@ -20,7 +20,7 @@ public class RegisterStreamSender {
     private UserRegisterStream streamClient;
 
     public void send(String userDate) {
-        log.info("向【用户服务】发起【用户注册】的消息，消息内容：{}",userDate);
+        log.info("向【用户服务】发起【用户注册】的消息，消息内容：{}", userDate);
         streamClient.output().send(MessageBuilder.withPayload(userDate).build());
     }
 }

@@ -8,6 +8,9 @@ spring:
   application:
     name: api-gateway
 zuul:
+  ribbon:
+    ReadTimeout: 60000
+    ConnectTimeout: 60000
   routes:
     #auth-service
     auth:

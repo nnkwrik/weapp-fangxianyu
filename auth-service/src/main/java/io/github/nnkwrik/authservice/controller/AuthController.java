@@ -2,8 +2,6 @@ package io.github.nnkwrik.authservice.controller;
 
 import cn.binarywang.wx.miniapp.api.WxMaUserService;
 import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.nnkwrik.authservice.config.WxMaConfiguration;
 import io.github.nnkwrik.authservice.dto.AuthDTO;
 import io.github.nnkwrik.authservice.dto.DetailAuthDTO;
@@ -11,15 +9,13 @@ import io.github.nnkwrik.authservice.model.vo.AuthVo;
 import io.github.nnkwrik.authservice.mq.RegisterStreamSender;
 import io.github.nnkwrik.authservice.service.AuthService;
 import io.github.nnkwrik.common.dto.Response;
-import io.github.nnkwrik.common.mq.UserRegisterStream;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.error.WxErrorException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.stream.annotation.EnableBinding;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author nnkwrik
@@ -27,7 +23,6 @@ import java.util.Map;
  */
 @Slf4j
 @RestController
-@EnableBinding(UserRegisterStream.class)
 @RequestMapping("/auth")
 public class AuthController {
 
@@ -39,14 +34,20 @@ public class AuthController {
     @Autowired
     private RegisterStreamSender registerSender;
 
-
+    /**
+     * 微信后台登录
+     *
+     * @param authDTO code : jsCode(通过wx.login()获取)
+     *                detail : userInfo(通过open-type="getUserInfo"或wx.wx.getUserInfo()获取)
+     * @return JWT Token和自定义的userInfo
+     */
     @PostMapping("/loginByWeixin")
-    public Response loginByWeixin(@RequestBody AuthDTO authDTO) {
+    public Response<AuthVo> loginByWeixin(@RequestBody AuthDTO authDTO) {
 
         log.info("用户登录 ： {}", authDTO);
         WxMaUserService wxUserService = WxMaConfiguration.getMaServices().getUserService();
 
-        //验证用户登录凭证
+        //验证jscode
         WxMaJscode2SessionResult sessionInfo = null;
         try {
             sessionInfo = wxUserService.getSessionInfo(authDTO.getCode());
@@ -66,8 +67,8 @@ public class AuthController {
             return Response.fail(Response.CHECK_USER_WITH_SESSION_FAIL, message);
         }
 
+        //异步消息调用user-service注册到数据库
         String userData = authService.setOpenId4Data(detail.getRawData(), openId);
-        //异步调用user-service注册到数据库
         registerSender.send(userData);
 
         //构造JWT token
@@ -75,27 +76,6 @@ public class AuthController {
 
         log.info("认证成功,用户信息 ： {}", vo);
         return Response.ok(vo);
-    }
-
-    /**
-     * 测试环境专用
-     *
-     * @param
-     * @return
-     */
-    @PostMapping("/loginByWeixinDev")
-    public Response loginByWeixinDev(@RequestBody Map<String, String> jsonMap, @RequestHeader("Authorization") String token) throws JsonProcessingException {
-        log.info("用户登录 ： {}", "测试");
-//        JsonUtil.fromJson()
-        ObjectMapper mapper = new ObjectMapper();
-        String userData = mapper.writeValueAsString(jsonMap);
-
-        //异步调用user-service注册到数据库
-        registerSender.send(userData);
-
-        AuthVo vo = authService.createToken(userData);
-        return Response.ok(vo);
-
     }
 
 

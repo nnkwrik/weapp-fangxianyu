@@ -21,12 +21,19 @@ spring:
           destination: register
           content-type: application/json
 
-
 server:
   port: 8803
+
+#写入你的小程序信息
+wx:
+  miniapp:
+    appid:  #微信小程序的appid
+    secret: #微信小程序的Secret
+    msgDataFormat: JSON
 
 jwt:
   pvt-key-file-name: RSA.key
   pub-key-file-name: RSA.pub
+  duration: 1D  #JWT 1天过期
 
 

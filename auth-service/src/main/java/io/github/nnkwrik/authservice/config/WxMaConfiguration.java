@@ -33,7 +33,7 @@ public class WxMaConfiguration {
     @Bean
     public Object services() {
         WxMaInMemoryConfig config = new WxMaInMemoryConfig();
-        BeanUtils.copyProperties(properties,config);
+        BeanUtils.copyProperties(properties, config);
         maServices = new WxMaServiceImpl();
         maServices.setWxMaConfig(config);
 
