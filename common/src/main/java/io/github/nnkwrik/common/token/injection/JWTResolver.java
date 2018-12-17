@@ -18,6 +18,8 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * 给Controller中的@JWT注解注入参数
+ *
  * @author nnkwrik
  * @date 18/11/24 9:43
  */
@@ -25,6 +27,7 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class JWTResolver implements HandlerMethodArgumentResolver {
 
+    //缓存
     private static Cache<String, JWTUser> cache =
             CacheBuilder.newBuilder().maximumSize(10000).expireAfterWrite(3, TimeUnit.MINUTES).build();
 
@@ -54,12 +57,12 @@ public class JWTResolver implements HandlerMethodArgumentResolver {
                 cache.put(token, user);
             } catch (TokenExpiredException e) {
                 log.info("jwt已过期，过期时间：{}", e.getMessage());
-                if (parameter.getParameterAnnotation(JWT.class).checkExpired()){
+                if (parameter.getParameterAnnotation(JWT.class).checkExpired()) {
                     throw new JWTException(JWTException.TOKEN_IS_EXPIRED, "凭证已过期");
                 }
             } catch (Exception e) {
                 log.info("jwt解析失败");
-                if (parameter.getParameterAnnotation(JWT.class).required()){
+                if (parameter.getParameterAnnotation(JWT.class).required()) {
                     throw new JWTException(JWTException.TOKEN_IS_WRONG, "用户的Authorization头错误,无法获取jwt");
                 }
             }

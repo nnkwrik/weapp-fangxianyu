@@ -19,6 +19,11 @@ public class RegisterStreamSender {
     @Autowired
     private UserRegisterStream streamClient;
 
+    /**
+     * 通过消息队列注册用户
+     *
+     * @param userDate
+     */
     public void send(String userDate) {
         log.info("向【用户服务】发起【用户注册】的消息，消息内容：{}", userDate);
         streamClient.output().send(MessageBuilder.withPayload(userDate).build());

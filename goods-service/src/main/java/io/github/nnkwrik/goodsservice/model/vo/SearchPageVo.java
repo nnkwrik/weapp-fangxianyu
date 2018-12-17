@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 /**
+ * 搜索主页
+ *
  * @author nnkwrik
  * @date 18/11/18 21:14
  */
@@ -14,6 +16,10 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SearchPageVo {
+
+    /*搜索历史*/
     private List<String> historyKeywordList;
+
+    /*热门关键字*/
     private List<String> hotKeywordList;
 }

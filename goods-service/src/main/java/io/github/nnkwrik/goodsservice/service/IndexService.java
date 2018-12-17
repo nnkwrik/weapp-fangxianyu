@@ -2,7 +2,6 @@ package io.github.nnkwrik.goodsservice.service;
 
 import io.github.nnkwrik.goodsservice.model.po.Category;
 import io.github.nnkwrik.goodsservice.model.po.Goods;
-import io.github.nnkwrik.goodsservice.model.po.Region;
 import io.github.nnkwrik.goodsservice.model.vo.CatalogPageVo;
 import io.github.nnkwrik.goodsservice.model.vo.IndexPageVo;
 
@@ -21,12 +20,5 @@ public interface IndexService {
     CatalogPageVo getCatalogIndex();
 
     List<Category> getSubCatalogById(int id);
-
-
-    void addComment(int goodsId, String userId, int replyCommentId, String replyUserId, String content);
-
-    List<Region> getRegionList(int regionId);
-
-    List<Category> getPostCateList(int cateId);
 
 }

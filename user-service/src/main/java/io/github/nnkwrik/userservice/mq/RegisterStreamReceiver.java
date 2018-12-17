@@ -22,8 +22,13 @@ public class RegisterStreamReceiver {
     @Autowired
     private UserService userService;
 
+    /**
+     * 通过消息队列注册用户
+     *
+     * @param userData
+     */
     @StreamListener(target = UserRegisterStream.INPUT)
-    public void receive(String userData){
+    public void receive(String userData) {
         if (userData == null) return;
         User user = JsonUtil.fromJson(userData, User.class);
 

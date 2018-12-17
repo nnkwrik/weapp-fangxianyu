@@ -13,7 +13,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 /**
- * 热门关键字的缓存,超出缓存大小时会优先顶替掉最久没更新value的key
+ * 热门关键字的缓存
  *
  * @author nnkwrik
  * @date 18/11/20 15:23
@@ -22,17 +22,20 @@ import java.util.stream.Collectors;
 @Component
 public class SearchCache {
     /**
+     * 热门关键字的缓存
+     *
      * @key 搜索关键字
      * @value 搜索次数
      */
     private Cache<String, AtomicInteger> cache =
             CacheBuilder.newBuilder()
-                    .maximumSize(10000) //超出大小时,替换最久没更新value的key
+                    .maximumSize(10000) //超出大小时,会替换最久没被搜索的key
                     .expireAfterWrite(30, TimeUnit.DAYS)
                     .build();
 
     /**
      * 增加某个关键字在缓存中的次数
+     *
      * @param keyword
      */
     public void add(String keyword) {
@@ -41,7 +44,7 @@ public class SearchCache {
         if (browseCount != null) {
             count = browseCount.incrementAndGet();
         } else {
-            count =1;
+            count = 1;
             cache.put(keyword, new AtomicInteger(1));
         }
 
@@ -50,6 +53,7 @@ public class SearchCache {
 
     /**
      * 获取热门的关键字列表
+     *
      * @param num
      * @return
      */

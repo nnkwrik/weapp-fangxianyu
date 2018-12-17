@@ -1,23 +1,23 @@
 package io.github.nnkwrik.goodsservice.controller;
 
-import io.github.nnkwrik.common.dto.JWTUser;
 import io.github.nnkwrik.common.dto.Response;
-import io.github.nnkwrik.common.token.injection.JWT;
 import io.github.nnkwrik.goodsservice.model.po.Category;
 import io.github.nnkwrik.goodsservice.model.po.Goods;
-import io.github.nnkwrik.goodsservice.model.po.GoodsComment;
-import io.github.nnkwrik.goodsservice.model.po.Region;
 import io.github.nnkwrik.goodsservice.model.vo.CatalogPageVo;
 import io.github.nnkwrik.goodsservice.model.vo.IndexPageVo;
 import io.github.nnkwrik.goodsservice.service.IndexService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 /**
+ * 首页和分类页api
+ *
  * @author nnkwrik
  * @date 18/11/17 19:49
  */
@@ -45,6 +45,7 @@ public class IndexController {
 
     /**
      * 首页展示更多推荐商品
+     *
      * @param page
      * @param size
      * @return
@@ -84,61 +85,6 @@ public class IndexController {
         log.info("浏览分类页,筛选分类 : 展示{}个子分类", subCatalog.size());
 
         return Response.ok(subCatalog);
-    }
-
-    /**
-     * 发表评论
-     *
-     * @param goodsId
-     * @param comment
-     * @param user
-     * @return
-     */
-    @PostMapping("/comment/post/{goodsId}")
-    public Response postComment(@PathVariable("goodsId") int goodsId,
-                                @RequestBody GoodsComment comment,
-                                @JWT(required = true) JWTUser user) {
-        if (StringUtils.isEmpty(user.getOpenId()) ||
-                StringUtils.isEmpty(comment.getReplyUserId()) ||
-                StringUtils.isEmpty(comment.getContent()) ||
-                comment.getReplyCommentId() == null) {
-            String msg = "用户发表评论失败，信息不完整";
-            log.info(msg);
-            return Response.fail(Response.COMMENT_INFO_INCOMPLETE, msg);
-        }
-
-        indexService.addComment(goodsId, user.getOpenId(), comment.getReplyCommentId(), comment.getReplyUserId(), comment.getContent());
-
-        log.info("用户添加评论：用户昵称=【{}】，回复评论id=【{}】，回复内容=【{}】", user.getNickName(), comment.getReplyCommentId(), comment.getContent());
-        return Response.ok();
-
-    }
-
-    /**
-     * 获取发布商品时需要填选的发货地区
-     *
-     * @param regionId
-     * @return
-     */
-    @GetMapping("/region/list/{regionId}")
-    public Response getRegionList(@PathVariable("regionId") int regionId) {
-        List<Region> regionList = indexService.getRegionList(regionId);
-        log.info("通过地区id=【{}】，搜索地区子列表。搜索到{}个结果", regionId, regionList.size());
-        return Response.ok(regionList);
-
-    }
-
-    /**
-     * 获取发布商品时需要填选的分类
-     *
-     * @param cateId
-     * @return
-     */
-    @GetMapping("/category/post/{cateId}")
-    public Response getPostCateList(@PathVariable("cateId") int cateId) {
-        List<Category> cateList = indexService.getPostCateList(cateId);
-        log.info("通过分类id=【{}】，搜索分类子列表。搜索到{}个结果", cateId, cateList.size());
-        return Response.ok(cateList);
     }
 
 

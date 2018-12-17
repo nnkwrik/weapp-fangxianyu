@@ -7,6 +7,7 @@ import io.github.nnkwrik.goodsservice.model.po.Goods;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -28,6 +29,12 @@ public class GoodsServiceController {
     private GoodsServiceMapper goodsServiceMapper;
 
 
+    /**
+     * 获取简单商品信息
+     *
+     * @param goodsId
+     * @return
+     */
     @GetMapping("/simpleGoods/{goodsId}")
     Response<SimpleGoods> getSimpleGoods(@PathVariable("goodsId") Integer goodsId) {
         Goods goods = goodsServiceMapper.getSimpleGoods(goodsId);
@@ -44,6 +51,12 @@ public class GoodsServiceController {
     }
 
 
+    /**
+     * 获取简单商品信息列表
+     *
+     * @param goodsIdList
+     * @return
+     */
     @GetMapping("/simpleGoodsList")
     Response<Map<Integer, SimpleGoods>> getSimpleGoodsList(@RequestParam List<Integer> goodsIdList) {
         List<Goods> godosList = goodsServiceMapper.getSimpleGoodsList(goodsIdList);
@@ -54,7 +67,7 @@ public class GoodsServiceController {
             dtoMap.put(goods.getId(), simpleGoods);
         });
 
-        if (dtoMap == null) {
+        if (ObjectUtils.isEmpty(dtoMap)) {
             log.info("其他服务通过goodsId : [{}] 查询商品基本信息，没有查询到该商品", goodsIdList);
             return Response.fail(Response.GOODS_IN_NOT_EXIST, "不存在的商品");
         }

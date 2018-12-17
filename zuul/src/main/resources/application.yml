@@ -9,17 +9,24 @@ spring:
     name: api-gateway
 zuul:
   ribbon:
-    ReadTimeout: 60000
+    ReadTimeout: 60000  #超时时间
     ConnectTimeout: 60000
   routes:
+
     #auth-service
     auth:
       path: /auth/**
       serviceId: auth-service
       strip-prefix: false
-      #过滤hearder的黑名单，默认为 sensitiveHeaders：Cookie，Set-Cookie，Authorization
-      #手动把它设置为空，否则包含JWT信息的Authorization头无法传递到下游服务
+      sensitiveHeaders: #需要手动把它设置为空，否则包含JWT信息的Authorization头无法传递到下游服务
+
+    #chat
+    chat:
+      path: /chat/**
+      serviceId: im-service
+      strip-prefix: false
       sensitiveHeaders:
+
     #goods-service
     goods:
       path: /goods/**
@@ -41,32 +48,36 @@ zuul:
       serviceId: goods-service
       strip-prefix: false
       sensitiveHeaders:
-    collect:
-      path: /collect/**
+    post:
+      path: /post/**
       serviceId: goods-service
       strip-prefix: false
       sensitiveHeaders:
-    comment:
-      path: /comment/**
+    goodsUser:
+      path: /goodsUser/**
       serviceId: goods-service
       strip-prefix: false
       sensitiveHeaders:
-    region:
-      path: /region/**
-      serviceId: goods-service
-      strip-prefix: false
-      sensitiveHeaders:
-    category:
-      path: /category/**
-      serviceId: goods-service
-      strip-prefix: false
-      sensitiveHeaders:
-    #chat
-    chat:
-      path: /chat/**
-      serviceId: im-service
-      strip-prefix: false
-      sensitiveHeaders:
+#    collect:
+#      path: /collect/**
+#      serviceId: goods-service
+#      strip-prefix: false
+#      sensitiveHeaders:
+#    comment:
+#      path: /comment/**
+#      serviceId: goods-service
+#      strip-prefix: false
+#      sensitiveHeaders:
+#    region:
+#      path: /region/**
+#      serviceId: goods-service
+#      strip-prefix: false
+#      sensitiveHeaders:
+#    category:
+#      path: /category/**
+#      serviceId: goods-service
+#      strip-prefix: false
+#      sensitiveHeaders:
 
 
 

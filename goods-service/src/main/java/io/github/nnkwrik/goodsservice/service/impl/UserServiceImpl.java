@@ -67,13 +67,21 @@ public class UserServiceImpl implements UserService {
         return userMapper.getUserPosted(userId);
     }
 
-
+    /**
+     * 用户历史
+     *
+     * @param userId
+     * @param page
+     * @param size
+     * @return key=日期 , value=对哪些商品进行了操作
+     */
     @Override
     public LinkedHashMap<String, List<Goods>> getUserHistoryList(String userId, int page, int size) {
         PageHelper.startPage(page, size);
         List<GoodsExample> userHistoryList = userMapper.getUserHistoryList(userId);
         if (userHistoryList.size() < 1) return null;
 
+        //把数据分割成 K=日期,V=商品List 的map
         LinkedHashMap<String, List<Goods>> result = new LinkedHashMap<>();
 
         LocalDate lastDay = getDay(userHistoryList.get(0).getTime());
@@ -83,6 +91,7 @@ public class UserServiceImpl implements UserService {
             if (lastDay.equals(getDay(goods.getTime()))) {
                 lastValue.add(goods);
             } else {
+                //不是同一天操作的商品.把之前的加入map,设置为新的key
                 String key = dateFormat(lastDay);
                 result.put(key, lastValue);
                 lastDay = getDay(goods.getTime());

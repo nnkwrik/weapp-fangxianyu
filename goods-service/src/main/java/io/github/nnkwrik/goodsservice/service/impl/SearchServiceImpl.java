@@ -45,6 +45,7 @@ public class SearchServiceImpl implements SearchService {
     @Transactional
     public void updateUserHistory(String openId, String keyword) {
         if (searchMapper.isExistedHistory(openId, keyword)) {
+            //之前搜索过,更新搜索时间
             searchMapper.updateSearchTime(openId, keyword);
         } else {
             searchMapper.insertHistory(openId, keyword);

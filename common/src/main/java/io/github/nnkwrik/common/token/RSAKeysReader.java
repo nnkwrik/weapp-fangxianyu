@@ -16,6 +16,8 @@ import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 
 /**
+ * 读取RSA秘钥
+ *
  * @author nnkwrik
  * @date 18/11/18 21:38
  */
@@ -68,11 +70,11 @@ public class RSAKeysReader {
         return (RSAPublicKey) pub;
     }
 
-    private static String getData(String fileName){
+    private static String getData(String fileName) {
         String data = "";
         try {
             File file = new ClassPathResource(fileName).getFile();
-            log.info("试图读取秘钥文件, 文件路径 : [{}]",file.getPath());
+            log.info("试图读取秘钥文件, 文件路径 : [{}]", file.getPath());
             data = new String(Files.readAllBytes(file.toPath()));
         } catch (IOException e) {
             log.info("文件读取失败");

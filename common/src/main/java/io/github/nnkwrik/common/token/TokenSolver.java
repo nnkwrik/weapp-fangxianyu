@@ -12,7 +12,6 @@ import org.springframework.util.StringUtils;
 import java.lang.reflect.Field;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
-import java.util.Arrays;
 
 /**
  * @author nnkwrik
@@ -45,6 +44,13 @@ public class TokenSolver {
         }
     };
 
+    /**
+     * JWT Token转JWTUser
+     *
+     * @param token
+     * @return
+     * @throws Exception
+     */
     public JWTUser solve(String token) throws Exception {
         if (StringUtils.isEmpty(token)) return null;
         token = token.replace("Bearer ", "");

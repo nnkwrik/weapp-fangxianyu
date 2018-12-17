@@ -1,9 +1,7 @@
 package io.github.nnkwrik.goodsservice.service;
 
-import io.github.nnkwrik.common.dto.SimpleUser;
 import io.github.nnkwrik.goodsservice.model.po.Goods;
 import io.github.nnkwrik.goodsservice.model.po.GoodsGallery;
-import io.github.nnkwrik.goodsservice.model.po.PostExample;
 import io.github.nnkwrik.goodsservice.model.vo.CategoryPageVo;
 import io.github.nnkwrik.goodsservice.model.vo.CommentVo;
 
@@ -29,7 +27,6 @@ public interface GoodsService {
 
     List<CommentVo> getGoodsComment(int goodsId);
 
-    void postGoods(PostExample post);
+    void addComment(int goodsId, String userId, int replyCommentId, String replyUserId, String content);
 
-    void deleteGoods(int goodsId, String userId) throws Exception;
 }

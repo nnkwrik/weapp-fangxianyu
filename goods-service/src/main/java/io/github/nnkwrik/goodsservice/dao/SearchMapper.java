@@ -28,6 +28,11 @@ public interface SearchMapper {
     List<SearchHistory> findSearchHistory(@Param("user_id") String userId);
 
 
+    /**
+     * 通过关键字列表搜索商品
+     * @param keywords
+     * @return
+     */
     @Select("<script>\n" +
             "select id, `name`, primary_pic_url, price\n" +
             "from goods\n" +
@@ -50,6 +55,12 @@ public interface SearchMapper {
             "where id in (select id from (select id from search_history where user_id = #{user_id} order by search_time asc limit #{limit}) as tmp)")
     void deleteOldHistory(@Param("user_id") String userId, @Param("limit") int limit);
 
+    /**
+     * 之前是否搜索过该关键字
+     * @param userId
+     * @param keyword
+     * @return
+     */
     @Select("SELECT EXISTS(SELECT 1 FROM search_history WHERE user_id = #{user_id}\n" +
             "                                             and keyword = #{keyword})")
     Boolean isExistedHistory(@Param("user_id") String userId, @Param("keyword") String keyword);

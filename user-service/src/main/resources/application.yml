@@ -2,9 +2,6 @@ eureka:
   client:
     service-url:
       defaultZone: http://localhost:8801/eureka/
-#  instance:
-#    hostname: clientName
-
 
 spring:
   application:
@@ -34,7 +31,6 @@ logging:
   level:
     org.springframework.web: info
     io.github.nnkwrik.userservice: debug
-
 
 server:
   port: 8802

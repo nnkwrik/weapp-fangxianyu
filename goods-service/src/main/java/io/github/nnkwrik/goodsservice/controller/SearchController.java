@@ -16,8 +16,6 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * search相关的借口依赖openId,
- *
  * @author nnkwrik
  * @date 18/11/18 21:17
  */
@@ -37,6 +35,7 @@ public class SearchController {
 
     /**
      * 搜索页,展示热门关键字和当前用户的搜索历史
+     *
      * @param jwtUser
      * @return
      */
@@ -58,6 +57,7 @@ public class SearchController {
 
     /**
      * 清空搜索历史
+     *
      * @param jwtUser
      * @return
      */
@@ -70,6 +70,7 @@ public class SearchController {
 
     /**
      * 获取搜索结果,并把关键字加入SearchCache
+     *
      * @param keyword 搜索的关键字,可以用空格分割多个关键字
      * @param page
      * @param size

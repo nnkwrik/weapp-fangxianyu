@@ -2,19 +2,20 @@ package io.github.nnkwrik.goodsservice.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import fangxianyu.innerApi.user.UserClientHandler;
-import io.github.nnkwrik.common.dto.Response;
 import io.github.nnkwrik.common.dto.SimpleUser;
 import io.github.nnkwrik.common.util.BeanListUtils;
 import io.github.nnkwrik.goodsservice.dao.CategoryMapper;
 import io.github.nnkwrik.goodsservice.dao.GoodsMapper;
-import io.github.nnkwrik.goodsservice.model.po.*;
+import io.github.nnkwrik.goodsservice.model.po.Category;
+import io.github.nnkwrik.goodsservice.model.po.Goods;
+import io.github.nnkwrik.goodsservice.model.po.GoodsComment;
+import io.github.nnkwrik.goodsservice.model.po.GoodsGallery;
 import io.github.nnkwrik.goodsservice.model.vo.CategoryPageVo;
 import io.github.nnkwrik.goodsservice.model.vo.CommentVo;
 import io.github.nnkwrik.goodsservice.service.GoodsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -71,6 +72,13 @@ public class GoodsServiceImpl implements GoodsService {
         return goodsMapper.findGalleryByGoodsId(goodsId);
     }
 
+    /**
+     * 获取与goodsId相关的商品
+     * @param goodsId
+     * @param page
+     * @param size
+     * @return
+     */
     @Override
     public List<Goods> getGoodsRelated(int goodsId, int page, int size) {
         //获取同一子分类下
@@ -86,70 +94,45 @@ public class GoodsServiceImpl implements GoodsService {
         return simpleGoods;
     }
 
-    @Override
-    @Transactional
-    public void postGoods(PostExample post) {
-        List<String> images = post.getImages();
-        List<GoodsGallery> galleryList = new ArrayList<>();
-        post.setPrimaryPicUrl(images.get(0)); //TODO 对PrimaryImage进行压缩
-
-        //insert并获取id
-        goodsMapper.addGoods(post);
-        int goodsId = post.getId();
-
-        images.stream()
-                .forEach(url -> {
-                    GoodsGallery gallery = new GoodsGallery();
-                    gallery.setGoodsId(goodsId);
-                    gallery.setImgUrl(url);
-                    galleryList.add(gallery);
-                });
-        goodsMapper.addGalleryList(galleryList);
-    }
-
-    @Override
-    public void deleteGoods(int goodsId, String userId) throws Exception {
-        if (goodsMapper.validateSeller(goodsId, userId)) {
-            goodsMapper.deleteGoods(goodsId);
-        } else {
-            throw new Exception(Response.SELLER_AND_GOODS_IS_NOT_MATCH + "");
-        }
-    }
-
+    /**
+     * 获取goodsId商品的评论(2级)
+     * @param goodsId
+     * @return
+     */
     @Override
     public List<CommentVo> getGoodsComment(int goodsId) {
         List<GoodsComment> baseCommentPo = goodsMapper.findBaseComment(goodsId);
         if (baseCommentPo == null || baseCommentPo.size() <= 0) return null;
 
-//        List<CommentVo> baseComment = createCommentVoList(baseCommentPo);
         List<CommentVo> baseComment = BeanListUtils.copyListProperties(baseCommentPo, CommentVo.class);
         Set<String> userIdSet = new HashSet<>();
 
-
+        //把回复评论的评论加入baseComment
         baseComment.stream()
-                .map(base -> {
-                    //待会通过用户服务查找评论的用户信息
+                .forEach(base -> {
                     userIdSet.add(base.getUserId());
                     //查找回复评论的评论
                     List<GoodsComment> replyListPo = goodsMapper.findReplyComment(base.getId());
                     List<CommentVo> replyList = BeanListUtils.copyListProperties(replyListPo, CommentVo.class);
+                    replyList.stream().forEach(reply -> userIdSet.add(reply.getUserId()));
                     base.setReplyList(replyList);
-                    return replyList;
-                })
-                .flatMap(reply -> reply.stream())
-                //待会通过用户服务查找回复评论的用户信息
-                .forEach(reply -> userIdSet.add(reply.getUserId()));
+                });
 
-
+        //去用户服务查找评论用户的信息
         Map<String, SimpleUser> simpleUserMap
                 = userClientHandler.getSimpleUserList(new ArrayList<>(userIdSet));
 
-        //加入评论中的用户信息
+        //把用户信息加到评论中
         baseComment.stream().map(base -> setUser4Comment(simpleUserMap, base).getReplyList())
                 .flatMap(List::stream)
                 .forEach(reply -> setUser4Comment(simpleUserMap, reply));
 
         return baseComment;
+    }
+
+    @Override
+    public void addComment(int goodsId, String userId, int replyCommentId, String replyUserId, String content) {
+        goodsMapper.addComment(goodsId, userId, replyCommentId, replyUserId, content);
     }
 
 

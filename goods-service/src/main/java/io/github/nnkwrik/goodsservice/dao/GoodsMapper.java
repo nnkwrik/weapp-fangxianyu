@@ -140,6 +140,14 @@ public interface GoodsMapper {
             "order by create_time asc")
     List<GoodsComment> findReplyComment(@Param("reply_comment_id") int commentId);
 
+    @Insert("insert into goods_comment (goods_id, user_id, reply_comment_id, reply_user_id, content)\n" +
+            "values (#{goods_id}, #{user_id}, #{reply_comment_id}, #{reply_user_id}, #{content})")
+    void addComment(@Param("goods_id") int goodsId,
+                    @Param("user_id") String userId,
+                    @Param("reply_comment_id") int replyCommentId,
+                    @Param("reply_user_id") String replyUserId,
+                    @Param("content") String content);
+
 
     @Insert("insert into goods (category_id,\n" +
             "                   seller_id,\n" +
@@ -175,6 +183,11 @@ public interface GoodsMapper {
             "</script>"})
     void addGalleryList(@Param("galleryList") List<GoodsGallery> galleryList);
 
+    /**
+     * 用户卖出的商品
+     * @param sellerId
+     * @return
+     */
     @Select("select COUNT(*)\n" +
             "from goods\n" +
             "where seller_id = #{seller_id}\n" +
@@ -182,9 +195,17 @@ public interface GoodsMapper {
             "  and is_delete = false")
     Integer getSellerHistory(@Param("seller_id") String sellerId);
 
+    /**
+     * 确认是用户发布的商品
+     * @param goodsId
+     * @param userId
+     * @return
+     */
     @Select("SELECT EXISTS(SELECT 1 FROM goods WHERE seller_id=#{seller_id} and id=#{goods_id})")
     Boolean validateSeller(@Param("goods_id") int goodsId, @Param("seller_id") String userId);
 
-    @Delete("delete from goods where id = ${goods_id}")
+    @Update("update goods set is_selling = false where id = #{goods_id}")
     void deleteGoods(@Param("goods_id") int goodsId);
+
+
 }

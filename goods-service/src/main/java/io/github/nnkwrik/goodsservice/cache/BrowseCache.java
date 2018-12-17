@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * 商品浏览量的缓存,过期(10天)/超出缓存大小/超过10个时更新数据库
+ * 商品浏览量的缓存,过期(1天)/超出缓存大小/超过5个时更新数据库
  *
  * @author nnkwrik
  * @date 18/11/20 12:03
@@ -27,7 +27,7 @@ public class BrowseCache {
     private GoodsMapper goodsMapper;
 
 
-    //过期(1天)/超出缓存队列大小(1000)/缓存超过10个时 会触发
+    //过期(1天)/超出缓存队列大小(1000)/缓存超过5个时 会触发
     private RemovalListener<Integer, AtomicInteger> listener =
             notification -> {
                 log.info("BrowseCache缓存刷入数据库，原因 ：【{}】,数据 ：【key={} , value={}】",
@@ -37,6 +37,8 @@ public class BrowseCache {
 
 
     /**
+     * 浏览量缓存
+     *
      * @key 商品id
      * @value 缓存的浏览量
      */
@@ -51,6 +53,7 @@ public class BrowseCache {
 
     /**
      * 在缓存中增加某商品的浏览次数
+     *
      * @param goodsId
      */
     public void add(Integer goodsId) {
@@ -59,7 +62,7 @@ public class BrowseCache {
         if (browseCount != null) {
             count = browseCount.incrementAndGet();
             if (count > 5) {
-                //手动移除缓存，让他触发removalListener，刷新数据库
+                //手动使缓存失效，让他触发removalListener
                 cache.invalidate(goodsId);
             }
         } else {
@@ -67,8 +70,7 @@ public class BrowseCache {
             cache.put(goodsId, new AtomicInteger(1));
         }
         log.debug("BrowseCache更新商品id【{}】的浏览次数为【{}】", goodsId, count);
-        //用cleanUp()检查过期的缓存,让他触发removalListener
-        //必须执行这个cache才会去检查是否过期, 否则尽管过期他也不会触发removalListener
+        //用cleanUp()手动检查过期的缓存,让他触发removalListener.否则尽管过期他也不会触发removalListener
         cache.cleanUp();
     }
 

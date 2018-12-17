@@ -18,11 +18,14 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
+ * 用户信息相关api
+ *
  * @author nnkwrik
  * @date 18/11/27 20:33
  */
 @RestController
 @Slf4j
+@RequestMapping("/goodsUser")
 public class UserController {
 
     @Autowired
@@ -62,7 +65,7 @@ public class UserController {
      * @param user
      * @return
      */
-    @GetMapping("/collect/list")
+    @GetMapping("/collect")
     public Response<List<Goods>> getCollectList(@JWT(required = true) JWTUser user,
                                                 @RequestParam(value = "page", defaultValue = "1") int page,
                                                 @RequestParam(value = "size", defaultValue = "10") int size) {
@@ -77,7 +80,7 @@ public class UserController {
      * @param user
      * @return
      */
-    @GetMapping("goods/bought")
+    @GetMapping("/bought")
     public Response<List<Goods>> getUserBought(@JWT(required = true) JWTUser user,
                                                @RequestParam(value = "page", defaultValue = "1") int page,
                                                @RequestParam(value = "size", defaultValue = "10") int size) {
@@ -92,7 +95,7 @@ public class UserController {
      * @param user
      * @return
      */
-    @GetMapping("goods/sold")
+    @GetMapping("/sold")
     public Response<List<Goods>> getUserSold(@JWT(required = true) JWTUser user,
                                              @RequestParam(value = "page", defaultValue = "1") int page,
                                              @RequestParam(value = "size", defaultValue = "10") int size) {
@@ -107,7 +110,7 @@ public class UserController {
      * @param user
      * @return
      */
-    @GetMapping("goods/posted")
+    @GetMapping("/posted")
     public Response getUserPosted(@JWT(required = true) JWTUser user,
                                   @RequestParam(value = "page", defaultValue = "1") int page,
                                   @RequestParam(value = "size", defaultValue = "10") int size) {
@@ -116,7 +119,15 @@ public class UserController {
         return Response.ok(vo);
     }
 
-    @GetMapping("goods/user/{userId}")
+    /**
+     * 用户主页
+     *
+     * @param userId
+     * @param page
+     * @param size
+     * @return
+     */
+    @GetMapping("/user/{userId}")
     public Response getUserPage(@PathVariable("userId") String userId,
                                 @RequestParam(value = "page", defaultValue = "1") int page,
                                 @RequestParam(value = "size", defaultValue = "10") int size) {
@@ -134,7 +145,15 @@ public class UserController {
         return Response.ok(vo);
     }
 
-    @GetMapping("goods/user/more/{userId}")
+    /**
+     * 用户主页,获取更多
+     *
+     * @param userId
+     * @param page
+     * @param size
+     * @return
+     */
+    @GetMapping("/user/more/{userId}")
     public Response<LinkedHashMap<String, List<Goods>>> getUserPageMore(@PathVariable("userId") String userId,
                                                                         @RequestParam(value = "page", defaultValue = "1") int page,
                                                                         @RequestParam(value = "size", defaultValue = "10") int size) {
@@ -145,15 +164,23 @@ public class UserController {
         return Response.ok(userHistory);
     }
 
-    @PostMapping("/goods/want/{goodsId}/{sellerId}")
+    /**
+     * 标记为想要,创建chat
+     *
+     * @param user
+     * @param goodsId
+     * @param sellerId
+     * @return
+     */
+    @PostMapping("/want/{goodsId}/{sellerId}")
     public Response<Integer> want(@JWT(required = true) JWTUser user,
                                   @PathVariable("goodsId") int goodsId,
-                                  @PathVariable("sellerId") String sellerId){
+                                  @PathVariable("sellerId") String sellerId) {
 
-        userService.addWant(goodsId,user.getOpenId());
+        userService.addWant(goodsId, user.getOpenId());
         //创建对话
         Integer chatId = imClientHandler.createChat(goodsId, user.getOpenId(), sellerId);
-        log.info("用户id=[{}],将商品id=[{}]标记为想要.并创建对话,chatId=[{}]",user.getOpenId(),goodsId,chatId);
+        log.info("用户id=[{}],将商品id=[{}]标记为想要.并创建对话,chatId=[{}]", user.getOpenId(), goodsId, chatId);
 
         return Response.ok(chatId);
     }

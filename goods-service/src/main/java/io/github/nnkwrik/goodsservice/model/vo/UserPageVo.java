@@ -10,6 +10,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
+ * 用户主页
  * @author nnkwrik
  * @date 18/12/02 15:12
  */
@@ -17,7 +18,13 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserPageVo {
+
+    /*用户基本信息*/
     private SimpleUser user;
+
+    /*用户历史*/
     private LinkedHashMap<String, List<Goods>> userHistory;
+
+    /*出售过几件商品*/
     private Integer soldCount;
 }

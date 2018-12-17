@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 使用user-service的api
+ * user-service的内部api
  *
  * @author nnkwrik
  * @date 18/11/23 18:06

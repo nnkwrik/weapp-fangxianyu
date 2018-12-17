@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 /**
+ * 通过分类查询商品时的页面
+ *
  * @author nnkwrik
  * @date 18/11/17 20:07
  */
@@ -16,8 +18,12 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CategoryPageVo {
-    private List<Category> brotherCategory; //同一个父分类下的兄弟分类
-    private List<Goods> goodsList;    //当前分类的商品列表
+
+    /*同一个父分类下的兄弟分类*/
+    private List<Category> brotherCategory;
+
+    /*当前分类的商品列表*/
+    private List<Goods> goodsList;
 }
 
 

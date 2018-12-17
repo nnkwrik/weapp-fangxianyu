@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * goods-service的内部api
+ *
  * @author nnkwrik
  * @date 18/12/07 21:08
  */

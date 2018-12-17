@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
+ * im-service的内部api
+ *
  * @author nnkwrik
  * @date 18/12/08 19:23
  */

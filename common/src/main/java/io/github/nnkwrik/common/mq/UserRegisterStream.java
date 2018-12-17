@@ -6,6 +6,8 @@ import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.SubscribableChannel;
 
 /**
+ * 注册用户的消息队列
+ *
  * @author nnkwrik
  * @date 18/11/19 16:19
  */

@@ -74,6 +74,11 @@ public interface UserMapper {
     List<Goods> getUserPosted(@Param("seller_id") String sellerId);
 
 
+    /**
+     * 搜索用户对商品的操作历史,需要分别搜索发布和卖出
+     * @param userId
+     * @return
+     */
     @Select("select goods.id,\n" +
             "       name,\n" +
             "       primary_pic_url,\n" +

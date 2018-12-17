@@ -1,9 +1,7 @@
 package io.github.nnkwrik.userservice.model;
 
 import lombok.Data;
-import org.apache.ibatis.annotations.Param;
 
-import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**

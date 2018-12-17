@@ -7,8 +7,8 @@ import io.github.nnkwrik.common.dto.SimpleUser;
 import io.github.nnkwrik.common.token.injection.JWT;
 import io.github.nnkwrik.goodsservice.cache.BrowseCache;
 import io.github.nnkwrik.goodsservice.model.po.Goods;
+import io.github.nnkwrik.goodsservice.model.po.GoodsComment;
 import io.github.nnkwrik.goodsservice.model.po.GoodsGallery;
-import io.github.nnkwrik.goodsservice.model.po.PostExample;
 import io.github.nnkwrik.goodsservice.model.vo.CategoryPageVo;
 import io.github.nnkwrik.goodsservice.model.vo.CommentVo;
 import io.github.nnkwrik.goodsservice.model.vo.GoodsDetailPageVo;
@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
+ * 商品浏览相关api
+ *
  * @author nnkwrik
  * @date 18/11/14 18:42
  */
@@ -48,7 +50,7 @@ public class GoodsController {
      * @param categoryId
      * @return
      */
-    @GetMapping("/category/{categoryId}")
+    @GetMapping("/category/index/{categoryId}")
 
     public Response<CategoryPageVo> getCategoryPage(@PathVariable("categoryId") int categoryId,
                                                     @RequestParam(value = "page", defaultValue = "1") int page,
@@ -69,7 +71,7 @@ public class GoodsController {
      * @param size
      * @return
      */
-    @GetMapping("/list/{categoryId}")
+    @GetMapping("/category/{categoryId}")
     public Response<Goods> getGoodsByCategory(@PathVariable("categoryId") int categoryId,
                                               @RequestParam(value = "page", defaultValue = "1") int page,
                                               @RequestParam(value = "size", defaultValue = "10") int size) {
@@ -133,51 +135,32 @@ public class GoodsController {
         return Response.ok(goodsList);
     }
 
-
     /**
-     * 发布商品
+     * 发表评论
      *
-     * @param post
+     * @param goodsId
+     * @param comment
      * @param user
      * @return
      */
-    @PostMapping("/post")
-    public Response postGoods(@RequestBody PostExample post,
-                              @JWT(required = true) JWTUser user) {
-
-        if (StringUtils.isEmpty(post.getName()) ||
-                StringUtils.isEmpty(post.getDesc()) ||
-                StringUtils.isEmpty(post.getRegion()) ||
-                post.getCategoryId() == null ||
-                post.getRegionId() == null ||
-                post.getPrice() == null ||
-                post.getImages() == null || post.getImages().size() < 1) {
-            String msg = "用户发布商品失败，信息不完整";
+    @PostMapping("/comment/post/{goodsId}")
+    public Response postComment(@PathVariable("goodsId") int goodsId,
+                                @RequestBody GoodsComment comment,
+                                @JWT(required = true) JWTUser user) {
+        if (StringUtils.isEmpty(user.getOpenId()) ||
+                StringUtils.isEmpty(comment.getReplyUserId()) ||
+                StringUtils.isEmpty(comment.getContent()) ||
+                comment.getReplyCommentId() == null) {
+            String msg = "用户发表评论失败，信息不完整";
             log.info(msg);
-            return Response.fail(Response.POST_INFO_INCOMPLETE, msg);
+            return Response.fail(Response.COMMENT_INFO_INCOMPLETE, msg);
         }
-        post.setSellerId(user.getOpenId());
-        goodsService.postGoods(post);
-        log.info("用户发布商品：用户昵称=【{}】，商品名=【{}】，{}张图片", user.getNickName(), post.getName(), post.getImages().size());
 
+        goodsService.addComment(goodsId, user.getOpenId(), comment.getReplyCommentId(), comment.getReplyUserId(), comment.getContent());
+
+        log.info("用户添加评论：用户昵称=【{}】，回复评论id=【{}】，回复内容=【{}】", user.getNickName(), comment.getReplyCommentId(), comment.getContent());
         return Response.ok();
-    }
 
-    @DeleteMapping("/delete/{goodsId}")
-    public Response postGoods(@PathVariable int goodsId,
-                              @JWT(required = true) JWTUser user) {
-        try {
-            goodsService.deleteGoods(goodsId, user.getOpenId());
-        } catch (Exception e) {
-            if (e.getMessage().equals(Response.SELLER_AND_GOODS_IS_NOT_MATCH + "")) {
-                String msg = "删除商品失败.当前用户信息和卖家信息不匹配";
-                return Response.fail(Response.SELLER_AND_GOODS_IS_NOT_MATCH, msg);
-            }
-            e.printStackTrace();
-
-        }
-        log.info("用户删除商品: 用户id=【{}】，商品Id=【{}】", user.getOpenId(), goodsId);
-        return Response.ok();
     }
 
 

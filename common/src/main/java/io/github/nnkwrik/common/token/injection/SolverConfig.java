@@ -16,6 +16,7 @@ public class SolverConfig implements WebMvcConfigurer {
 
     @Autowired
     private JWTResolver jwtResolver;
+
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
         resolvers.add(jwtResolver);
