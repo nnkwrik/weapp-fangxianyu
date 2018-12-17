@@ -10,13 +10,15 @@ Page({
     offsetTime: null,
     size: 10,
   },
-  onLoad: function(options) {
+  onLoad: function (options) {
     // 页面初始化 options为页面跳转所带来的参数
 
   },
-  openListen: function() {
+  openListen: function () {
     let that = this
     websocket.listenChatIndex().then(res => {
+      console.log("chatIndex监听到消息:" + res)
+
 
       //存在与目前list中
       let chatList = this.data.chatList
@@ -33,7 +35,6 @@ Page({
           target.lastChat.sendTime = res.sendTime
 
           chatList.splice(i, 1);
-          console.log("splice")
           console.log(chatList)
 
           newChatList.push(target)
@@ -50,48 +51,49 @@ Page({
       that.onShow()
     })
   },
-  onReady: function() {
+  onReady: function () {
     // 页面渲染完成
 
   },
-  onShow: function() {
+  onShow: function () {
     // 页面显示
     let now = new Date();
     this.setData({
       offsetTime: now.toISOString(),
       chatList: []
     })
-    if (wx.getStorageSync('token')){
+    if (wx.getStorageSync('token')) {
       this.getChatList();
       this.openListen();
     }
   },
-  onHide: function() {
+  onHide: function () {
     // 页面隐藏
     websocket.listenBadge()
 
   },
-  onUnload: function() {
+  onUnload: function () {
     // 页面关闭
 
   },
-  getChatList: function() {
+  getChatList: function () {
     let that = this;
     util.request(api.ChatIndex, {
       size: this.data.size,
       offsetTime: this.data.offsetTime
-    }).then(function(res) {
+    }).then(function (res) {
       if (res.errno === 0) {
         console.log(res.data);
         that.setData({
-          chatList: that.data.chatList.concat(res.data),
+          chatList: that.data.chatList.concat(res.data.chats),
+          offsetTime: res.data.offsetTime
         });
       } else {
         console.log(res)
       }
     })
   },
-  navForm: function(e) {
+  navForm: function (e) {
     var chatId = e.currentTarget.dataset.id
     var index = e.currentTarget.dataset.index
     var chatList = this.data.chatList
@@ -111,7 +113,7 @@ Page({
     })
 
   },
-  onPullDownRefresh: function() {
+  onPullDownRefresh: function () {
     console.log("上拉刷新")
     this.setData({
       chatList: [],
@@ -125,13 +127,8 @@ Page({
 
 
   },
-  onReachBottom: function() {
+  onReachBottom: function () {
     console.log("拉到底")
-    let chatList = this.data.chatList;
-    let offsetTime = chatList[chatList.length - 1].offsetTime;
-    this.setData({
-      offsetTime: offsetTime,
-    })
 
     this.getChatList()
   },

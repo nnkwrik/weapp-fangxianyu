@@ -24,7 +24,7 @@
       <view wx:for="{{historyList}}" wx:key="{{index}}">
 
         <!-- 自己发送 -->
-        <view class='history' wx:if="{{((isU1 && item.u1ToU2) || (!isU1 && !item.u1ToU2)) && item.messageType!=4}}">
+        <view class='history' wx:if="{{((isU1 && item.u1ToU2) || (!isU1 && !item.u1ToU2)) && item.messageType!=2}}">
           <view class='time-view'>
             <text class='time'>{{item.sendTime}}</text>
           </view>
@@ -39,7 +39,7 @@
         </view>
 
         <!-- 对方发送 -->
-        <view class='history' wx:elif="{{item.messageType!=4}}" id="msg{{item.sendTime}}">
+        <view class='history' wx:elif="{{item.messageType!=2}}" id="msg{{item.sendTime}}">
           <view class='time-view'>
             <text class='time'>{{item.sendTime}}</text>
           </view>

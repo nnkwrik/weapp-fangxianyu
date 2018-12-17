@@ -8,8 +8,8 @@ var SocketTask
 App({
   onLaunch: function() {
     //!!生产环境专用测试数据
-    wx.setStorageSync('userInfo', this.testData.userInfo);
-    wx.setStorageSync('token', this.testData.token);
+    // wx.setStorageSync('userInfo', this.testData.userInfo);
+    // wx.setStorageSync('token', this.testData.token);
 
     // wx.setStorageSync('userInfo', null);
     // wx.setStorageSync('token', null);

@@ -22,6 +22,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 /**
+ * websocket接口
+ *
  * @author nnkwrik
  * @date 18/12/05 11:34
  */
@@ -38,35 +40,55 @@ public class ChatEndpoint {
 
     private static ConcurrentMap<String, Session> sessionMap = new ConcurrentHashMap<>();
 
+    /**
+     * 客户端创建ws连接
+     *
+     * @param openId
+     * @param session
+     * @param config
+     * @throws IOException
+     */
     @OnOpen
     public void onOpen(@PathParam("openId") String openId, Session session, EndpointConfig config) throws IOException {
         String token = (String) config.getUserProperties().get(JWTUser.class.getName());
         JWTUser user = solveToken(token);
 
-        if (user == null || !user.getOpenId().equals(openId)) {
-            log.info("【websocket消息】token检验失败,拒绝连接, openId = [{}]", openId);
-            rejectConnect(session);
-            session.close();
-            return;
-        }
+//        if (user == null || !user.getOpenId().equals(openId)) {
+//            log.info("【websocket消息】token检验失败,拒绝连接, openId = [{}]", openId);
+//            rejectConnect(session);
+//            session.close();
+//            return;
+//        }
         sessionMap.put(openId, session);
-        int unreadCount = webSocketService.getUnreadCount(openId);
-        log.info("【websocket消息】有新的连接, openId = [{}],用户昵称= [{}],未读消息数={}", openId, user.getNickName(),unreadCount);
-//        log.info("【websocket消息】有新的连接, openId = [{}],用户昵称= [{}],未读消息数={}", openId, "", unreadCount);
 
+        //发送未读消息数给新连接的客户端
+        int unreadCount = webSocketService.getUnreadCount(openId);
         WsMessage wsMessage = new WsMessage();
         wsMessage.setMessageType(MessageType.UNREAD_NUM);
         wsMessage.setMessageBody(unreadCount + "");
         wsMessage.setSendTime(new Date());
         sendMessage(openId, Response.ok(wsMessage));
+
+//        log.info("【websocket消息】有新的连接, openId = [{}],用户昵称= [{}],未读消息数={}", openId, user.getNickName(), unreadCount);
     }
 
+    /**
+     * 客户端关闭ws连接
+     *
+     * @param openId
+     */
     @OnClose
     public void onClose(@PathParam("openId") String openId) {
         sessionMap.remove(openId);
         log.info("【websocket消息】连接断开, openId = [{}]", openId);
     }
 
+    /**
+     * 接收客户端发送的消息
+     *
+     * @param sender
+     * @param message
+     */
     @OnMessage
     public void onMessage(@PathParam("openId") String sender, String message) {
 
@@ -99,7 +121,6 @@ public class ChatEndpoint {
             log.info("[拒绝连接]通知发送失败");
             e.printStackTrace();
         }
-
     }
 
     public boolean sendMessage(String openId, Response response) {

@@ -102,7 +102,7 @@ function listenBadge() {
   wx.onSocketMessage(onMessage => {
     var res = JSON.parse(onMessage.data)
     if (res.errno === 0) {
-      if (res.data.messageType == 3 && res.data.messageBody != 0) {
+      if (res.data.messageType == 4 && res.data.messageBody != 0) {
         badge = res.data.messageBody
         wx.setTabBarBadge({
           index: 3,
@@ -201,7 +201,6 @@ function listenChatIndex() {
     wx.onSocketMessage(onMessage => {
       var res = JSON.parse(onMessage.data)
       if (res.errno === 0) {
-        if (res.data.messageType == 1) {
           console.log("消息列表监听到新消息 : " + res.data.messageBody)
           badge++
           wx.setTabBarBadge({
@@ -209,7 +208,6 @@ function listenChatIndex() {
             text: badge + ""
           })
           resolve(res.data)
-        }
       } else {
         console.log(res)
         reject(res)

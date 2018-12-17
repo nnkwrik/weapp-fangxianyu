@@ -7,7 +7,6 @@ import io.github.nnkwrik.imservice.constant.MessageType;
 import io.github.nnkwrik.imservice.dao.ChatMapper;
 import io.github.nnkwrik.imservice.model.vo.WsMessage;
 import io.github.nnkwrik.imservice.redis.RedisClient;
-import io.github.nnkwrik.imservice.service.FormService;
 import io.github.nnkwrik.imservice.service.WebSocketService;
 import io.github.nnkwrik.imservice.websocket.ChatEndpoint;
 import lombok.extern.slf4j.Slf4j;
@@ -38,28 +37,41 @@ public class WebSocketServiceImpl implements WebSocketService {
     private RedisClient redisClient;
 
 
+    /**
+     * 未读消息数
+     *
+     * @param userId
+     * @return
+     */
     @Override
     public int getUnreadCount(String userId) {
         //去查userId参与的chat的id
         List<Integer> chatIdList = chatMapper.getChatIdsByUser(userId);
-        List<List<WsMessage>> lastChatList = redisClient.multiGet(chatIdList.stream()
+        List<List<WsMessage>> unreadChats = redisClient.multiGet(chatIdList.stream()
                 .map(id -> id + "")
                 .collect(Collectors.toList()));
 
         //过滤自己发送的
-        int unreadCount = lastChatList.stream()
-                .filter(chat -> !ObjectUtils.isEmpty(chat) && !chat.get(0).getSenderId().equals(userId))
-                .mapToInt(List::size)
-                .sum();
+        long unreadCount = unreadChats.stream()
+                .filter(messageList -> !ObjectUtils.isEmpty(messageList))
+                .flatMap(messageList -> messageList.stream())
+                .filter(message -> message.getReceiverId().equals(userId))
+                .count();
 
-        return unreadCount;
+        return Math.toIntExact(unreadCount);
     }
 
+    /**
+     * 对客户端发送的websocket消息做处理
+     *
+     * @param senderId
+     * @param rawData
+     */
     @Override
     public void OnMessage(String senderId, String rawData) {
         WsMessage message = null;
         try {
-            message = createWsMessage(rawData);
+            message = castWsMessage(rawData);
         } catch (GlobalException e) {
             chatEndpoint.sendMessage(senderId, Response.fail(e.getErrno(), e.getErrmsg()));
             return;
@@ -72,16 +84,8 @@ public class WebSocketServiceImpl implements WebSocketService {
         }
 
 
-        //更新数据库
-        try {
-            updateRedis(message);
-        } catch (Exception e) {
-            String msg = "添加聊天记录时发生异常,消息发送失败";
-            log.info(msg);
-            e.printStackTrace();
-            chatEndpoint.sendMessage(senderId, Response.fail(Response.UPDATE_HISTORY_TO_SQL_FAIL, msg));
-            return;
-        }
+        //作为未读消息添加到redis
+        updateRedis(message);
 
         if (message.getMessageType() == MessageType.FIRST_CHAT) {
             //首次发送,设为双方可见
@@ -105,7 +109,7 @@ public class WebSocketServiceImpl implements WebSocketService {
     }
 
 
-    private WsMessage createWsMessage(String rawData) throws GlobalException {
+    private WsMessage castWsMessage(String rawData) throws GlobalException {
         WsMessage wsMessage = JsonUtil.fromJson(rawData, WsMessage.class);
         if (wsMessage == null) {
             String msg = "消息反序列化失败";

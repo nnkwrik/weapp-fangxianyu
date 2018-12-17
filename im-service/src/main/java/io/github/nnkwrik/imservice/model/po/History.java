@@ -13,7 +13,9 @@ public class History {
     private Integer id;
     private Integer chatId;
     private Boolean u1ToU2;
-    private Integer messageType;    //   0:系统消息,1.用户消息,2.单方建立会话
+
+    /*参考 constant.MessageType类*/
+    private Integer messageType;
     private String messageBody;
     private Date sendTime;
 }

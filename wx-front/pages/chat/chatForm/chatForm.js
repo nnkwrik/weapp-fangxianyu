@@ -199,7 +199,7 @@ Page({
     if (this.data.historyList.length>1) {
       msgType = 1
     } else {
-      msgType = 2
+      msgType = 3
     }
 
     var data = JSON.stringify({
@@ -234,14 +234,14 @@ Page({
    * 生命周期函数--监听页面隐藏
    */
   onHide: function() {
-
+    websocket.listenBadge()
   },
 
   /**
    * 生命周期函数--监听页面卸载
    */
   onUnload: function() {
-    websocket.listenBadge()
+    
   },
 
   /**

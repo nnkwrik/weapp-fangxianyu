@@ -1,17 +1,12 @@
 package io.github.nnkwrik.imservice.websocket;
 
-import com.auth0.jwt.exceptions.TokenExpiredException;
 import io.github.nnkwrik.common.dto.JWTUser;
-import io.github.nnkwrik.common.token.TokenSolver;
-import io.github.nnkwrik.imservice.service.WebSocketService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
 
 import javax.websocket.HandshakeResponse;
 import javax.websocket.server.HandshakeRequest;
@@ -20,6 +15,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 自定义ServerEndpoint配置
+ * 1. 使Endpoint能autowire spring的bean
+ * 2. 获取Authorization头
+ *
  * @author nnkwrik
  * @date 18/12/06 20:34
  */
@@ -29,7 +28,14 @@ public class ChatEndpointConfigure extends ServerEndpointConfig.Configurator imp
 
     private static volatile BeanFactory context;
 
-    //在ChatEndpoint中autowire spring的Bean
+    /**
+     * 在ChatEndpoint中autowire spring的Bean
+     *
+     * @param clazz
+     * @param <T>
+     * @return
+     * @throws InstantiationException
+     */
     @Override
     public <T> T getEndpointInstance(Class<T> clazz) throws InstantiationException {
         return context.getBean(clazz);
@@ -40,14 +46,20 @@ public class ChatEndpointConfigure extends ServerEndpointConfig.Configurator imp
         ChatEndpointConfigure.context = applicationContext;
     }
 
-    //在@onOpen中获取token
+    /**
+     * 在@onOpen中获取token
+     *
+     * @param config
+     * @param request
+     * @param response
+     */
     @Override
     public void modifyHandshake(ServerEndpointConfig config, HandshakeRequest request, HandshakeResponse response) {
         Map<String, List<String>> headers = request.getHeaders();
         List<String> authHeader = headers.get("Authorization");
         if (authHeader == null) {
             config.getUserProperties().put(JWTUser.class.getName(), "");
-        }else {
+        } else {
             config.getUserProperties().put(JWTUser.class.getName(), authHeader.get(0));
         }
 

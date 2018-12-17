@@ -5,11 +5,13 @@ import fangxianyu.innerApi.goods.GoodsClientHandler;
 import fangxianyu.innerApi.user.UserClientHandler;
 import io.github.nnkwrik.common.dto.SimpleGoods;
 import io.github.nnkwrik.common.dto.SimpleUser;
+import io.github.nnkwrik.common.util.ListUtil;
 import io.github.nnkwrik.imservice.dao.ChatMapper;
 import io.github.nnkwrik.imservice.dao.HistoryMapper;
 import io.github.nnkwrik.imservice.model.po.History;
 import io.github.nnkwrik.imservice.model.po.HistoryExample;
 import io.github.nnkwrik.imservice.model.vo.ChatIndex;
+import io.github.nnkwrik.imservice.model.vo.ChatIndexEle;
 import io.github.nnkwrik.imservice.model.vo.WsMessage;
 import io.github.nnkwrik.imservice.redis.RedisClient;
 import io.github.nnkwrik.imservice.service.IndexService;
@@ -47,199 +49,164 @@ public class IndexServiceImpl implements IndexService {
 
 
     @Override
-    public List<ChatIndex> showIndex(String currentUser, int size, Date offsetTime) {
+    public ChatIndex showIndex(String currentUser, int size, Date offsetTime) {
 
-        List<ChatIndex> resultVoList = new ArrayList<>();    //最终要返回的值
-        Map<Integer, Integer> chatGoodsMap = new HashMap<>();         //k=chatId,v=需要去商品服务查的id
-        Map<Integer, String> chatUserMap = new HashMap<>();           //k=chatId,v=需要去用户服务查的id
-
+        //用户参与的所有chatId
         List<Integer> chatIds = chatMapper.getChatIdsByUser(currentUser);
+
         List<List<WsMessage>> unreadMessage = redisClient.multiGet(
                 chatIds.stream()
                         .map(id -> id + "")
                         .collect(Collectors.toList()));
 
-        //从redis(未读)和sql(已读)中各尝试取10个
-        Map<Integer, Integer> unreadCount = new HashMap<>();
-        List<WsMessage> unread = getDisplayUnread(currentUser,unreadMessage, unreadCount, size, offsetTime);
-        dealUnread(currentUser, unread, unreadCount, resultVoList, chatGoodsMap, chatUserMap);
-
+        //从redis(未读)和sql(已读)中各尝试取size个
+        List<ChatIndexEle> unread = getDisplayUnread(currentUser, unreadMessage, size, offsetTime);
 
         List<Integer> unreadChatIds = unreadMessage.stream()
                 .filter(unreadList -> unreadList != null && unreadList.size() > 0)
                 .map(unreadList -> unreadList.get((0)).getChatId())
                 .collect(Collectors.toList());
 
-        PageHelper.offsetPage(0, size);
-        List<HistoryExample> read = historyMapper.getLastReadChat(unreadChatIds, currentUser, offsetTime);
-        dealRead(read, currentUser, resultVoList, chatGoodsMap, chatUserMap);
+        List<ChatIndexEle> read = getDisplayRead(currentUser, unreadChatIds, size, offsetTime);
 
         //排序后删除超出size的
-        resultVoList = sortAndLimitMsg(size, resultVoList, chatGoodsMap, chatUserMap);
+        List<ChatIndexEle> limited = sortAndLimit(unread, read, size);
 
+        //添加用户和商品信息
+        List<ChatIndexEle> chats = setGoodsAndUser(limited);
 
-        //添加用户和商品信息,offsetTime
-        resultVoList = setGoodsAndUser4Chat(resultVoList, chatGoodsMap, chatUserMap);
+        ChatIndex vo = new ChatIndex();
+        vo.setChats(chats);
+        if (!ObjectUtils.isEmpty(chats)) {
+            vo.setOffsetTime(ListUtil.getLast(chats).getLastChat().getSendTime());
+        }
 
-
-        return resultVoList;
+        return vo;
     }
 
 
-    private List<WsMessage> getDisplayUnread(String currentUserId,
-                                             List<List<WsMessage>> unreadMessage,
-                                             Map<Integer, Integer> unreadCount,
-                                             int size, Date offsetTime) {
-        if (ObjectUtils.isEmpty(unreadMessage)) return new ArrayList<>();
-//        List<WsMessage> displayUnread = unreadMessage.stream()
-//                .filter(msgList -> !ObjectUtils.isEmpty(msgList) && offsetTime.compareTo(msgList.get(msgList.size() - 1).getSendTime()) > 0)
-//                .map(msgList -> {
-//                    unreadCount.put(msgList.get(0).getChatId(), msgList.size());
-//                    return msgList.get(msgList.size() - 1);
-//                })
-//                .sorted((a, b) -> b.getSendTime().compareTo(a.getSendTime()))
-//                .limit(size)
-//                .collect(Collectors.toList());
+    private List<ChatIndexEle> getDisplayUnread(String currentUserId,
+                                                List<List<WsMessage>> unreadMessage,
+                                                int size, Date offsetTime) {
 
-        List<WsMessage> displayUnread = unreadMessage.stream()
-                .filter(msgList -> !ObjectUtils.isEmpty(msgList) && offsetTime.compareTo(msgList.get(msgList.size() - 1).getSendTime()) > 0)
-                .map(msgList -> {
-                    long count =  msgList.stream().filter(msg -> msg.getReceiverId().equals(currentUserId)).count();
-                    unreadCount.put(msgList.get(0).getChatId(), Math.toIntExact(count));
-                    return msgList.get(msgList.size() - 1);
-                })
-                .sorted((a, b) -> b.getSendTime().compareTo(a.getSendTime()))
+
+
+        List<ChatIndexEle> unread = unreadMessage.stream()
+                .filter(msgList -> !ObjectUtils.isEmpty(msgList) && offsetTime.compareTo(ListUtil.getLast(msgList).getSendTime()) > 0)
+                .sorted((a, b) -> ListUtil.getLast(b).getSendTime().compareTo(ListUtil.getLast(a).getSendTime()))
                 .limit(size)
-                .collect(Collectors.toList());
+                .map(msgList -> {
 
-        return displayUnread;
+                    WsMessage lastMsg = ListUtil.getLast(msgList);
 
-    }
+                    ChatIndexEle indexEle = new ChatIndexEle();
+                    indexEle.setGoodsId(lastMsg.getGoodsId());
+                    //设置未读数,是自己发送的则不显示未读消息数
+                    if (lastMsg.getSenderId().equals(currentUserId)) {
+                        indexEle.setUnreadCount(0);
+                        indexEle.setUserId(lastMsg.getReceiverId());
+                    } else {
+                        long count = msgList.stream().filter(msg -> msg.getReceiverId().equals(currentUserId)).count();
+                        indexEle.setUnreadCount(Math.toIntExact(count));
+                        indexEle.setUserId(lastMsg.getSenderId());
+                    }
 
-    private void dealUnread(String currentUserId,
-                            List<WsMessage> unread,
-                            Map<Integer, Integer> unreadCount,
-                            List<ChatIndex> resultVoList,
-                            Map<Integer, Integer> chatGoodsMap,
-                            Map<Integer, String> chatUserMap) {
+                    //设置最后一条信息
+                    History lastHistory = new History();
+                    BeanUtils.copyProperties(lastMsg, lastHistory);
+                    indexEle.setLastChat(lastHistory);
 
-        unread.stream().forEach(po -> {
-            //稍后去其他服务查询
-            chatGoodsMap.put(po.getChatId(), po.getGoodsId());
+                    return indexEle;
+                }).collect(Collectors.toList());
 
-
-            //设置未读数,是自己发送的则不显示未读消息数
-            ChatIndex vo = new ChatIndex();
-            if (po.getSenderId().equals(currentUserId)) {
-                chatUserMap.put(po.getChatId(), po.getReceiverId());
-                vo.setUnreadCount(0);
-            } else {
-                vo.setUnreadCount(unreadCount.get(po.getChatId()));
-                chatUserMap.put(po.getChatId(), po.getSenderId());
-            }
-
-            //设置最后一条信息
-            History lastChat = new History();
-            BeanUtils.copyProperties(po, lastChat);
-            vo.setLastChat(lastChat);
-
-            resultVoList.add(vo);
-        });
+        return unread;
 
     }
 
-    private void dealRead(List<HistoryExample> read, String userId,
-                          List<ChatIndex> resultVoList,
-                          Map<Integer, Integer> chatGoodsMap,
-                          Map<Integer, String> chatUserMap) {
+    private List<ChatIndexEle> getDisplayRead(String currentUser,
+                                              List<Integer> unreadChatIds,
+                                              int size, Date offsetTime) {
+        PageHelper.offsetPage(0, size);
+        List<HistoryExample> readHistory = historyMapper.getLastReadChat(unreadChatIds, currentUser, offsetTime);
 
-        read.stream().forEach(po -> {
+        List<ChatIndexEle> read = readHistory.stream()
+                .map(history -> {
+                    ChatIndexEle indexEle = new ChatIndexEle();
+                    indexEle.setGoodsId(history.getGoodsId());
+                    if (currentUser.equals(history.getU1())) {
+                        indexEle.setUserId(history.getU2());
+                    } else {
+                        indexEle.setUserId(history.getU1());
+                    }
 
-            chatGoodsMap.put(po.getChatId(), po.getGoodsId());
-            if (userId.equals(po.getU1())) {
-                chatUserMap.put(po.getChatId(), po.getU2());
-            } else {
-                chatUserMap.put(po.getChatId(), po.getU1());
-            }
+                    //设置未读数
+                    indexEle.setUnreadCount(0);
 
-            //设置未读数
-            ChatIndex vo = new ChatIndex();
-            vo.setUnreadCount(0);
+                    //设置最后一条信息
+                    History lastChat = new History();
+                    BeanUtils.copyProperties(history, lastChat);
+                    indexEle.setLastChat(lastChat);
 
-            //设置最后一条信息
-            History lastChat = new History();
-            BeanUtils.copyProperties(po, lastChat);
-            vo.setLastChat(lastChat);
+                    return indexEle;
+                }).collect(Collectors.toList());
 
-            resultVoList.add(vo);
-        });
+        return read;
 
     }
 
-    private List<ChatIndex> sortAndLimitMsg(int size,
-                                            List<ChatIndex> voList,
-                                            Map<Integer, Integer> chatGoodsMap,
-                                            Map<Integer, String> chatUserMap) {
-        List<ChatIndex> limited = voList.stream()
+
+    private List<ChatIndexEle> sortAndLimit(List<ChatIndexEle> unread, List<ChatIndexEle> read, int size) {
+        List<ChatIndexEle> display = new ArrayList<>();
+        display.addAll(unread);
+        display.addAll(read);
+
+        List<ChatIndexEle> limited = display.stream()
                 .sorted((a, b) -> b.getLastChat().getSendTime().compareTo(a.getLastChat().getSendTime()))
                 .limit(size)
                 .collect(Collectors.toList());
-        if (voList.size() > size) {
-            Set<Integer> addedIds = new HashSet<>();
-            addedIds.addAll(chatUserMap.keySet());
-            addedIds.addAll(chatUserMap.keySet());
-            List<Integer> needIds = voList.stream()
-                    .map(vo -> vo.getLastChat().getChatId())
-                    .collect(Collectors.toList());
-            for (Integer added : addedIds) {
-
-                if (!needIds.contains(added)) {
-                    chatGoodsMap.remove(added);
-                    chatUserMap.remove(added);
-                }
-            }
-        }
-
         return limited;
 
     }
 
-    private List<ChatIndex> setGoodsAndUser4Chat(List<ChatIndex> voList,
-                                                 Map<Integer, Integer> chatGoodsMap,
-                                                 Map<Integer, String> chatUserMap) {
+    private List<ChatIndexEle> setGoodsAndUser(List<ChatIndexEle> eleList) {
+        Set<Integer> goodsIds = new HashSet<>();
+        Set<String> userIds = new HashSet<>();
+
+        eleList.stream().forEach(ele -> {
+            goodsIds.add(ele.getGoodsId());
+            userIds.add(ele.getUserId());
+        });
 
         //去商品服务查商品图片
         Map<Integer, SimpleGoods> simpleGoodsMap
-                = goodsClientHandler.getSimpleGoodsList(new ArrayList<>(chatGoodsMap.values()));
+                = goodsClientHandler.getSimpleGoodsList(new ArrayList<>(goodsIds));
 
         //去用户服务查用户名字头像
         Map<String, SimpleUser> simpleUserMap
-                = userClientHandler.getSimpleUserList(new ArrayList<>(chatUserMap.values()));
+                = userClientHandler.getSimpleUserList(new ArrayList<>(userIds));
 
 
-        voList.stream().forEach(vo -> {
+        eleList.stream().forEach(ele -> {
 
-            String userId = chatUserMap.get(vo.getLastChat().getChatId());
-
+            String userId = ele.getUserId();
             SimpleUser simpleUser = simpleUserMap.get(userId);
             if (simpleUser == null) {
                 simpleUser = SimpleUser.unknownUser();
+            } else {
+                ele.setOtherSide(simpleUser);
             }
-            vo.setOtherSide(simpleUser);
 
-            Integer goodsId = chatGoodsMap.get(vo.getLastChat().getChatId());
-
+            Integer goodsId = ele.getGoodsId();
             SimpleGoods simpleGoods = simpleGoodsMap.get(goodsId);
             if (simpleGoods == null) {
                 simpleGoods = SimpleGoods.unknownGoods();
+            } else {
+                ele.setGoods(simpleGoods);
             }
-            vo.setGoods(simpleGoods);
-
-            vo.setOffsetTime(vo.getLastChat().getSendTime());
-
         });
 
-        return voList;
+
+        return eleList;
     }
 
 }

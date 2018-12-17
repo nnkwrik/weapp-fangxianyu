@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
+ * 对于内部服务开放的api
+ *
  * @author nnkwrik
  * @date 18/12/08 18:51
  */
@@ -28,6 +30,14 @@ public class ImServiceController {
     @Autowired
     private HistoryMapper historyMapper;
 
+    /**
+     * 创建对话
+     *
+     * @param goodsId
+     * @param senderId
+     * @param receiverId
+     * @return
+     */
     @PostMapping("/createChat/{goodsId}/{senderId}/{receiverId}")
     public Response<Integer> createChat(@PathVariable("goodsId") int goodsId,
                                         @PathVariable("senderId") String senderId,
@@ -46,14 +56,16 @@ public class ImServiceController {
             chat.setShowToU1(false);
             chat.setShowToU2(true);
         }
+        //确认是否已存在对话
         Integer chatId = chatMapper.getChatIdByChat(chat);
-        if (chatId == null){
+        if (chatId == null) {
             chatMapper.addChat(chat);
             chatId = chat.getId();
 
+            //创建一条聊天记录,让展示消息列表时能取得到
             History history = new History();
             history.setChatId(chatId);
-            history.setU1ToU2(senderId.compareTo(receiverId) < 0?true:false);
+            history.setU1ToU2(senderId.compareTo(receiverId) < 0 ? true : false);
             history.setMessageType(MessageType.ESTABLISH_CHAT);
             historyMapper.addHistory(history);
         }

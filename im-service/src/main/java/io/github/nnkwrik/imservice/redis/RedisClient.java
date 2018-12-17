@@ -7,11 +7,14 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 /**
+ * redis client
+ *
  * @author nnkwrik
  * @date 18/12/06 15:08
  */
 @Component
 public class RedisClient {
+
     @Autowired
     private RedisTemplate redisTemplate;
 

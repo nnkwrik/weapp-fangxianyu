@@ -1,6 +1,7 @@
 package io.github.nnkwrik.imservice.model.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.util.StdDateFormat;
 import io.github.nnkwrik.common.dto.SimpleGoods;
 import io.github.nnkwrik.common.dto.SimpleUser;
@@ -8,16 +9,18 @@ import io.github.nnkwrik.imservice.model.po.History;
 import lombok.Data;
 
 import java.util.Date;
-import java.util.List;
 
 /**
- * 聊天框页面
+ * 消息列表页面的各个消息.
  *
  * @author nnkwrik
- * @date 18/12/07 22:33
+ * @date 18/12/07 15:56
  */
 @Data
-public class ChatForm {
+public class ChatIndexEle {
+
+    /*未读数*/
+    private Integer unreadCount;
 
     /*对方用户信息*/
     private SimpleUser otherSide;
@@ -25,13 +28,15 @@ public class ChatForm {
     /*与本次聊天相关的商品的信息*/
     private SimpleGoods goods;
 
-    /*当前用户是否时u1*/
-    private Boolean isU1;
+    /*最后一条聊天记录*/
+    private History lastChat;
 
-    /*聊天记录*/
-    private List<History> historyList;
+    /*方便调用其他服务进行查询,不传前端*/
+    @JsonIgnore
+    private String userId;
 
-    /*本次展示的聊天记录中最早一条的发送时间,用于上拉获取更早之前的聊天记录时使用.设置为ISO8601能传递更准确的时间*/
-    @JsonFormat(pattern = StdDateFormat.DATE_FORMAT_STR_ISO8601)
-    private Date offsetTime;
+    @JsonIgnore
+    private Integer goodsId;
+
 }
+
