@@ -1,15 +1,15 @@
 <scroll-view class="container" style="height: 100%;">
+  <!-- 输入框 -->
   <view class="search-header">
     <view class="input-box">
       <image class="icon" src="http://nos.netease.com/mailpub/hxm/yanxuan-wap/p/20150730/style/img/icon-normal/search2-2fb94833aa.png"></image>
-      <!-- TODO 输入辅助 -->
-      <!-- <input name="input" class="keywrod" focus="true" value="{{keyword}}" confirm-type="search" bindinput="inputChange" bindfocus="inputFocus" bindconfirm="onKeywordConfirm" confirm-type="search" placeholder="{{defaultKeyword}}" /> -->
-            <input name="input" class="keywrod" focus="true" value="{{keyword}}" confirm-type="search" bindinput="inputChange" bindfocus="inputFocus" bindconfirm="onKeywordConfirm" confirm-type="search" placeholder="{{defaultKeyword}}" />
-            <!-- <input name="input" class="keywrod" focus="true" value="{{keyword}}"  bindfocus="inputFocus" bindconfirm="onKeywordConfirm" confirm-type="search" placeholder="{{defaultKeyword}}" /> -->
+      <input name="input" class="keywrod" focus="true" value="{{keyword}}" confirm-type="search" bindinput="inputChange" bindfocus="inputFocus" bindconfirm="onKeywordConfirm" confirm-type="search" placeholder="{{defaultKeyword}}" />
       <image class="del" wx:if="{{keyword}}" bindtap="clearKeyword" src="http://nos.netease.com/mailpub/hxm/yanxuan-wap/p/20150730/style/img/icon-normal/clearIpt-f71b83e3c2.png"></image>
     </view>
     <view class="right" bindtap="closeSearch">取消</view>
   </view>
+
+  <!-- 热门关键字,历史搜索,搜索辅助 -->
   <view class="no-search" wx:if="{{ !searchStatus}}">
     <view class="serach-keywords search-history" wx:if="{{!keyword && historyKeyword.length}}">
       <view class="h">
@@ -33,26 +33,10 @@
     </view>
   </view>
 
+  <!-- 搜索结果 -->
   <view class="search-result" wx:if="{{ searchStatus && goodsList.length}}">
 
-    <!-- <view class="sort">
-      <view class="sort-box">
-        <view class="item {{currentSortType == 'default' ? 'active' : ''}}" bindtap="openSortFilter" id="defaultSort">
-          <text class="txt">综合</text>
-        </view>
-        <view class="item by-price {{currentSortType == 'price' ? 'active' : ''}} {{currentSortOrder == 'asc'  ? 'asc' : 'desc'}}" bindtap="openSortFilter" id="priceSort">
-          <text class="txt">价格</text>
-        </view>
-        <view class="item {{currentSortType == 'category' ? 'active' : ''}}" bindtap="openSortFilter" id="categoryFilter">
-          <text class="txt">分类</text>
-        </view>
-      </view>
-      <view class="sort-box-category" wx-if="{{categoryFilter}}">
-        <view class="item {{item.checked ? 'active' : ''}}" wx:for="{{filterCategory}}" wx:key="cate-{{item.id}}" data-category-index="{{index}}" bindtap="selectCategory">{{item.name}}</view>
-      </view>
-    </view> -->
-    
-    <view class="cate-item">
+    <view class="result-item">
       <view class="b">
         <navigator class="item {{(iindex + 1) % 2 == 0 ? 'item-b' : ''}}" url="/pages/goods/goods?id={{iitem.id}}" wx:for="{{goodsList}}" wx:for-item="iitem" wx:for-index="iindex">
           <image class="img" src="{{iitem.primaryPicUrl}}" background-size="cover"></image>
@@ -63,6 +47,7 @@
     </view>
   </view>
 
+  <!-- 搜索结果为空 -->
   <view class="search-result-empty" wx:if="{{!goodsList.length && searchStatus}}">
     <image class="icon" src="http://yanxuan.nosdn.127.net/hxm/yanxuan-wap/p/20161201/style/img/icon-normal/noSearchResult-7572a94f32.png"></image>
     <text class="text">没有您寻找的商品</text>

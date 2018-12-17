@@ -131,7 +131,7 @@ function backendLogin(detail) {
 }
 
 /**
- * 调用微信登录
+ * 调用微信登录,获取jscode
  */
 function login() {
   let that = this
@@ -155,7 +155,9 @@ function login() {
   });
 }
 
-
+/**
+ * 获取userInfo,只有已经授权的用户能使用这个接口
+ */
 function getUserInfo() {
   return new Promise(function(resolve, reject) {
     wx.getUserInfo({
@@ -171,21 +173,6 @@ function getUserInfo() {
   });
 }
 
-function redirect(url) {
-
-  //判断页面是否需要登录
-  if (false) {
-    wx.redirectTo({
-      url: '/pages/auth/login/login'
-    });
-    return false;
-  } else {
-    wx.redirectTo({
-      url: url
-    });
-  }
-}
-
 function showErrorToast(msg) {
   wx.showToast({
     title: msg,
@@ -196,7 +183,6 @@ function showErrorToast(msg) {
 module.exports = {
   formatTime,
   request,
-  redirect,
   showErrorToast,
   checkSession,
   login,

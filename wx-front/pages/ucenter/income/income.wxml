@@ -2,7 +2,6 @@
 
 
   <view class="income-list">
-  
 
     <view class="item all">
       <view class="tag">总收入</view>
@@ -16,7 +15,7 @@
       </view>
     </view>
 
-     <view class="item change">
+    <view class="item change">
       <view class="tag change-tag">零钱包</view>
       <view class="content">
         <view class="left">
@@ -28,6 +27,6 @@
       </view>
     </view>
   </view>
-<view class="help">提现说明</view>
+  <view class="help">提现说明</view>
 
 </view>

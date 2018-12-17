@@ -45,19 +45,9 @@ module.exports = {
   //认证
   AuthLoginByWeixin: ApiRootUrl + 'auth/loginByWeixin', //微信登录
 
-
-
-
-
+  //消息
   ChatIndex: ApiRootUrl + 'chat/index', //消息一览
   ChatForm: ApiRootUrl + 'chat/form', //消息框
   ChatFlushUnread: ApiRootUrl + 'chat/flushUnread', //把所有未读设为已读
   ChatWs: WebSocktUrl + 'ws', //消息WebSocket连接
-
-
-
-  
-  
-
-
 };

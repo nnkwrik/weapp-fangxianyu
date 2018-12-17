@@ -1,9 +1,8 @@
-// pages/auth/auth.js
 var app = getApp();
 var api = require('../../config/api.js');
 var util = require('../../utils/util.js');
 var websocket = require('../../services/websocket.js');
-  
+
 Page({
 
   /**
@@ -13,20 +12,13 @@ Page({
     userInfo: app.globalData.userInfo,
     hasUserInfo: false,
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
-    load:false
-  },
-
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function(options) {
-
+    load: false
   },
 
   startLogin: function(e) {
     console.log(e);
     this.setData({
-      load:true
+      load: true
     })
     util.backendLogin(e.detail).then((userInfo) => {
       this.setData({
@@ -36,11 +28,18 @@ Page({
       websocket.wsConnect()
     });
   },
-  
-  goback: function () {
+
+  goback: function() {
     wx.navigateBack({
       delta: 1
     })
+  },
+
+  /**
+   * 生命周期函数--监听页面加载
+   */
+  onLoad: function(options) {
+
   },
 
   /**

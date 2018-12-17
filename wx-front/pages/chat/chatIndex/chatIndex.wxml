@@ -10,11 +10,9 @@
   </view>
 
 
-
-
   <view class="result-list" wx:if="{{chatList.length > 0}}">
 
-    <view class="chat" bindtap='navForm' data-id='{{item.lastChat.chatId}}' data-index='{{index}}'  wx:for="{{chatList}}" wx:key="{{index}}">
+    <view class="chat" bindtap='navForm' data-id='{{item.lastChat.chatId}}' data-index='{{index}}' wx:for="{{chatList}}" wx:key="{{index}}">
       <view class="item">
         <view class='avatar-item'>
           <image class="avatar" mode='aspectFill' src="{{item.otherSide.avatarUrl}}"></image>
@@ -35,7 +33,6 @@
         <image class="img" mode='aspectFill' src="{{item.goods.primaryPicUrl}}"></image>
       </view>
     </view>
-    
 
   </view>
   <view class="result-empty" wx:else>

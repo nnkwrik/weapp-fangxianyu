@@ -14,7 +14,7 @@ Page({
     userInfo: {},
     historyList: null,
     soldCount: 0,
-    userDates:0
+    userDates: 0
   },
   getUserPage() {
     let that = this;
@@ -25,7 +25,7 @@ Page({
       if (res.errno === 0) {
         console.log(res.data);
 
-        if (res.data.userHistory){
+        if (res.data.userHistory) {
           for (var list in res.data.userHistory) {
             for (var i = 0; i < res.data.userHistory[list].length; i++) {
               var goods = res.data.userHistory[list][i];
@@ -46,7 +46,6 @@ Page({
           })
         }
 
-
         //计算卖家来平台第几天
         let registerTime = res.data.user.registerTime
         registerTime = registerTime.replace('T', ' ').replace(/-/g, '/').split(".")[0];
@@ -65,10 +64,10 @@ Page({
     });
   },
 
-  preview: function(event){
+  preview: function(event) {
     let url = event.currentTarget.dataset.url
-    url = url.slice(0,-3)+0 //浏览头像大图
-    
+    url = url.slice(0, -3) + 0 //浏览头像大图,分辨率
+
     wx.previewImage({
       urls: [url] // 需要预览的图片http链接列表
     })

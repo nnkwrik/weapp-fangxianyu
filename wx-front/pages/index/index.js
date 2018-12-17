@@ -11,13 +11,6 @@ Page({
     indexGoods: [],
     page: 1,
     size: 10,
-    // newGoods: [],
-    // hotGoods: [],
-    // topics: [],
-    // brands: [],
-    // floorGoods: [],
-    // banner: [],
-    // channel: []
   },
   onShareAppMessage: function() {
     return {
@@ -31,15 +24,8 @@ Page({
     let that = this;
     util.request(api.IndexUrl).then(function(res) {
       console.log(res.data)
-      // console.log(res.data.hotGoodsList)
-      // console.log(res.data.categoryList)
       if (res.errno === 0) {
         that.setData({
-          // newGoods: res.data.newGoodsList,
-          // hotGoods: res.data.hotGoodsList,
-          // topics: res.data.topicList,
-          // brand: res.data.brandList,
-          // floorGoods: res.data.categoryList,
           indexGoods: res.data.indexGoodsList,
           banner: res.data.banner,
           channel: res.data.channel

@@ -1,0 +1,32 @@
+page, .container {
+  height: 100%;
+  background: #f4f4f4;
+}
+
+.region {
+  margin: 30rpx 30rpx 0 30rpx;
+  width: 690rpx;
+  height: auto;
+  overflow: hidden;
+  padding: 0 30rpx 0 30rpx;
+  background: #fff;
+}
+
+.region .element {
+  display: flex;
+  height: 70rpx;
+  border-bottom: 1rpx solid #eee;
+  margin-top: 30rpx;
+}
+
+.region .lable {
+  line-height: 60rpx;
+  margin-left: 10px;
+  width: 600rpx;
+}
+
+.region .i {
+  float: right;
+  width: 45rpx;
+  height: 45rpx;
+}

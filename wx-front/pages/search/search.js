@@ -9,17 +9,10 @@ Page({
     goodsList: [],
     helpKeyword: [],
     historyKeyword: [],
-    // categoryFilter: false,
-    // currentSortType: 'default',
-    // currentSortOrder: '',
-    // filterCategory: [],
     defaultKeyword: '输入关键字',
     hotKeyword: [],
     page: 1,
     size: 10,
-    // currentSortType: 'id',
-    // currentSortOrder: 'desc',
-    // categoryId: 0
   },
   //事件处理函数
   closeSearch: function() {
@@ -55,9 +48,9 @@ Page({
     });
     this.getHelpKeyword();
   },
+  //借用淘宝的输入辅助api
   getHelpKeyword: function() {
     let that = this;
-    // 'https://suggest.taobao.com/sug?code=utf-8&q=a'
     util.request('https://suggest.taobao.com/sug', {
       code: 'utf-8',
       q: that.data.keyword
@@ -101,8 +94,6 @@ Page({
           searchStatus: true,
           categoryFilter: false,
           goodsList: that.data.goodsList.concat(res.data),
-          // page: res.data.currentPage,
-          // size: res.data.numsPerPage
         });
       }
 
@@ -125,59 +116,6 @@ Page({
 
     this.getGoodsList();
   },
-  // openSortFilter: function (event) {
-  //   let currentId = event.currentTarget.id;
-  //   switch (currentId) {
-  //     case 'categoryFilter':
-  //       this.setData({
-  //         'categoryFilter': !this.data.categoryFilter,
-  //         'currentSortOrder': 'asc'
-  //       });
-  //       break;
-  //     case 'priceSort':
-  //       let tmpSortOrder = 'asc';
-  //       if (this.data.currentSortOrder == 'asc') {
-  //         tmpSortOrder = 'desc';
-  //       }
-  //       this.setData({
-  //         'currentSortType': 'price',
-  //         'currentSortOrder': tmpSortOrder,
-  //         'categoryFilter': false
-  //       });
-
-  //       this.getGoodsList();
-  //       break;
-  //     default:
-  //       //综合排序
-  //       this.setData({
-  //         'currentSortType': 'default',
-  //         'currentSortOrder': 'desc',
-  //         'categoryFilter': false
-  //       });
-  //       this.getGoodsList();
-  //   }
-  // },
-  // selectCategory: function (event) {
-  //   let currentIndex = event.target.dataset.categoryIndex;
-  //   let filterCategory = this.data.filterCategory;
-  //   let currentCategory = null;
-  //   for (let key in filterCategory) {
-  //     if (key == currentIndex) {
-  //       filterCategory[key].selected = true;  //checked?
-  //       currentCategory = filterCategory[key];
-  //     } else {
-  //       filterCategory[key].selected = false;
-  //     }
-  //   }
-  //   this.setData({
-  //     'filterCategory': filterCategory,
-  //     'categoryFilter': false,
-  //     categoryId: currentCategory.id,
-  //     page: 1,
-  //     goodsList: []
-  //   });
-  //   this.getGoodsList();
-  // },
   onKeywordConfirm(event) {
     this.getSearchResult(event.detail.value);
   },

@@ -1,5 +1,5 @@
 <view class="container">
-  <view class="collect-list" wx:if='{{postedList.length}}'>
+  <view class="list" wx:if='{{postedList.length}}'>
     <view class="item" bindtap="openGoods" wx:for="{{postedList}}" wx:key="{{item.id}}" data-index="{{index}}">
       <image class="img" src="{{item.primaryPicUrl}}" mode='aspectFill'></image>
       <view class="info">

@@ -8,6 +8,8 @@ page {
   min-height: 100%;
 }
 
+/* 用户信息 */
+
 .top {
   height: 350rpx;
   border-bottom: 1rpx solid #e1e1e1;
@@ -15,7 +17,7 @@ page {
 }
 
 .bg {
-  filter: blur(1px) ;
+  filter: blur(1px);
   width: 100%;
   height: 345rpx;
   position: absolute;
@@ -41,15 +43,13 @@ page {
 }
 
 .profile-info .avatar {
-display:block;
-height:150rpx;
-width:150rpx;
-border-radius:50%;
-margin-left:auto;
-margin-right:auto;
-border:5rpx solid #fff;
-
-  
+  display: block;
+  height: 150rpx;
+  width: 150rpx;
+  border-radius: 50%;
+  margin-left: auto;
+  margin-right: auto;
+  border: 5rpx solid #fff;
 }
 
 .profile-info .info {
@@ -71,6 +71,8 @@ border:5rpx solid #fff;
   color: #555;
 }
 
+/* 用户历史 */
+
 .userhis {
   height: auto;
   overflow: hidden;
@@ -78,14 +80,14 @@ border:5rpx solid #fff;
   border-top: 1px solid #e1e1e1;
 }
 
-.day-item {
+.userhis .day-item {
   height: auto;
   overflow: hidden;
   width: 100%;
   margin-bottom: 20rpx;
 }
 
-.day-hd {
+.userhis .day-hd {
   height: 94rpx;
   width: 100%;
   line-height: 94rpx;
@@ -95,7 +97,7 @@ border:5rpx solid #fff;
   font-size: 28rpx;
 }
 
-.day-list {
+.userhis .day-list {
   width: 100%;
   height: auto;
   overflow: hidden;
@@ -104,7 +106,7 @@ border:5rpx solid #fff;
   border-top: 1px solid #e1e1e1;
 }
 
-.item {
+.userhis .item {
   height: 212rpx;
   width: 720rpx;
   background: #fff;
@@ -112,17 +114,17 @@ border:5rpx solid #fff;
   border-bottom: 1px solid #e1e1e1;
 }
 
-.item:last-child {
+.userhis .item:last-child {
   border-bottom: 1px solid #fff;
 }
 
-.item .img {
+.userhis .item .img {
   float: left;
   width: 150rpx;
   height: 150rpx;
 }
 
-.item .info {
+.userhis .item .info {
   float: right;
   width: 540rpx;
   height: 150rpx;
@@ -132,20 +134,17 @@ border:5rpx solid #fff;
   padding-left: 20rpx;
 }
 
-.item .info .name {
+.userhis .item .info .name {
   font-size: 28rpx;
   color: #333;
   line-height: 40rpx;
 }
 
-.item .info .subtitle {
-  margin-top: 8rpx;
-  font-size: 24rpx;
-  color: #888;
-  line-height: 40rpx;
+.userhis .item .info .flex {
+  display: flex;
 }
 
-.item .info .price {
+.userhis .item .info .price {
   margin-top: 8rpx;
   font-size: 28rpx;
   color: #f94b4b;
@@ -153,11 +152,7 @@ border:5rpx solid #fff;
   width: 160rpx;
 }
 
-.item .info .flex {
-  display: flex;
-}
-
-.item .info .msg {
+.userhis .item .info .msg {
   display: flex;
   align-items: center;
   padding: 0 10rpx;
@@ -169,10 +164,12 @@ border:5rpx solid #fff;
   margin-left: 100rpx;
 }
 
+/* 用户历史为空 */
+
 .result-empty {
   width: 100%;
   height: 76vh;
-  padding-top:200rpx;
+  padding-top: 200rpx;
   background: #fff;
   overflow: hidden;
 }

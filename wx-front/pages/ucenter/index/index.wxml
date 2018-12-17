@@ -1,5 +1,5 @@
 <view class="container">
-
+  <!-- 用户信息 -->
   <view class="profile-info" op bindtap="goLogin">
     <image class="avatar" src="{{userInfo.avatarUrl}}"></image>
     <view class="info">
@@ -10,6 +10,7 @@
     </view>
   </view>
 
+  <!-- 菜单 -->
   <view class="user-menu">
 
     <view class="item">
@@ -46,7 +47,7 @@
       </navigator>
     </view>
 
-        <view class="item ">
+    <view class="item no-border">
       <navigator url="/pages/undone/undone" class="a">
         <text class="icon order"></text>
         <text class="txt">我的订单</text>
@@ -71,6 +72,4 @@
     </view>
 
   </view>
-
-  <!--<view class="logout" bindtap="exitLogin">退出登录</view>-->
 </view>

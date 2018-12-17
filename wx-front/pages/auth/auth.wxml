@@ -9,8 +9,8 @@
     </view>
 
     <!-- 不能用 open-type="getUserInfo" 的版本 -->
-    <button wx:if="{{!canIUse}}" class="btn" disabled="true" >微信版本过低,请更新后再尝试授权</button>
-    
+    <button wx:if="{{!canIUse}}" class="btn" disabled="true">微信版本过低,请更新后再尝试授权</button>
+
     <button wx:elif="{{!hasUserInfo}}" class="btn" open-type="getUserInfo" bindgetuserinfo="startLogin">{{load?'请稍等..':'授权登录'}}</button>
     <button wx:else disabled="true" class="btn">授权成功</button>
 

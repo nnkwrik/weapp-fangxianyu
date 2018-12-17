@@ -15,11 +15,9 @@
 </view>
 
 
-
 <view class='news'>
-  <scroll-view scroll-y="true" bindscrolltoupper="more" scroll-top="{{scrollTop}}" wx:key='' class='scroll' >
+  <scroll-view scroll-y="true" bindscrolltoupper="more" scroll-top="{{scrollTop}}" wx:key='' class='scroll'>
     <view class="historycon">
-      <!-- <view id="hei"></view> -->
 
       <view wx:for="{{historyList}}" wx:key="{{index}}">
 
@@ -57,11 +55,8 @@
       </view>
       <view id="hei"></view>
     </view>
-
-
   </scroll-view>
 </view>
-
 
 
 <view class="input-pop-box">
@@ -70,8 +65,7 @@
     <view class="input">
 
       <view class="content">
-        <input class='' confirm-hold="true" placeholder="" maxlength='800' confirm-type="done" bindconfirm='done' value='{{typing}}' bindinput="inputChange" bindconfirm='sendMsg'/>
-
+        <input class='' confirm-hold="true" placeholder="" maxlength='800' confirm-type="done" bindconfirm='done' value='{{typing}}' bindinput="inputChange" bindconfirm='sendMsg' />
       </view>
       <view class='send' bindtap='sendMsg'>发送</view>
     </view>

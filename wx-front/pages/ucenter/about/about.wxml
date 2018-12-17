@@ -7,7 +7,7 @@
 这是我第一次尝试用SpringCloud搭建的微信小程序。今后会不定期更新，逐步完善功能。
 如果你觉得这个项目有不足的地方或意见，欢迎在issue中给我留言，也可以通过下面的微信二维码找到我。
 </text>
-  <image class="i" src="../../../static/images/qr.jpg" mode="aspectFit"></image>
+  <image class="i" src="/static/images/qr.jpg" mode="aspectFit"></image>
   <text class='txt'>
 另外，我还写过很多有趣的项目托管在Github上。
 今后打算专注写框架和中间件之类的，也会把平时学到的一些原理知识推到Github和博客，如果能给个Follow，我会非常开心。

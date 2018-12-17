@@ -12,6 +12,8 @@ page {
   overflow: hidden;
 }
 
+/* 顶上的提示 */
+
 .top {
   margin-top: 10rpx;
   background: #ffde57;
@@ -42,36 +44,7 @@ page {
   color: #000;
 }
 
-.result-empty {
-  width: 100%;
-  height: auto;
-  margin: 0 auto;
-}
-
-.result-empty .c {
-  width: 100%;
-  height: auto;
-  margin-top: 280rpx;
-}
-
-.result-empty .c image {
-  margin: 0 auto;
-  display: block;
-  text-align: center;
-  width: 180rpx;
-  height: 180rpx;
-}
-
-.result-empty .c text {
-  margin: 30rpx auto;
-  display: block;
-  width: 258rpx;
-  height: 29rpx;
-  line-height: 29rpx;
-  text-align: center;
-  font-size: 29rpx;
-  color: #999;
-}
+/* 消息列表 */
 
 .result-list {
   width: 100%;
@@ -97,7 +70,6 @@ page {
 
 .result-list .item .avatar-item {
   float: left;
-  /* width:190rpx; */
 }
 
 .result-list .item .avatar {
@@ -130,14 +102,6 @@ page {
   font-weight: bold;
   width: 30rpx;
   line-height: 13px;
-}
-
-.result-list .item .img {
-  float: right;
-  height: 130rpx;
-  width: 130rpx;
-  background: #f4f4f4;
-  margin: 19.5rpx 18rpx 19.5rpx 25rpx;
 }
 
 .result-list .item .info {
@@ -184,4 +148,45 @@ page {
   float: left;
   color: #666;
   font-size: 27rpx;
+}
+
+.result-list .item .img {
+  float: right;
+  height: 130rpx;
+  width: 130rpx;
+  background: #f4f4f4;
+  margin: 19.5rpx 18rpx 19.5rpx 25rpx;
+}
+
+/* 没有记录 */
+
+.result-empty {
+  width: 100%;
+  height: auto;
+  margin: 0 auto;
+}
+
+.result-empty .c {
+  width: 100%;
+  height: auto;
+  margin-top: 280rpx;
+}
+
+.result-empty .c image {
+  margin: 0 auto;
+  display: block;
+  text-align: center;
+  width: 180rpx;
+  height: 180rpx;
+}
+
+.result-empty .c text {
+  margin: 30rpx auto;
+  display: block;
+  width: 258rpx;
+  height: 29rpx;
+  line-height: 29rpx;
+  text-align: center;
+  font-size: 29rpx;
+  color: #999;
 }

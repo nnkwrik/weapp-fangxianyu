@@ -94,11 +94,10 @@ function sendMessage(data) {
   })
 }
 
-
-
-
+/**
+ * 监听websocket,接收到消息时改变badge
+ */
 function listenBadge() {
-  // return new Promise(function (resolve, reject) {
   wx.onSocketMessage(onMessage => {
     var res = JSON.parse(onMessage.data)
     if (res.errno === 0) {
@@ -141,7 +140,6 @@ function listenBadge() {
       reject(res)
     }
   })
-  // })
 }
 
 /**
@@ -154,13 +152,9 @@ function listenChatForm(chatId) {
       if (res.errno === 0) {
         if (res.data.messageType == 1 && res.data.chatId == chatId) {
           console.log("消息Form监听到新消息 : " + res.data.messageBody)
-          // var newMsg = res.data
-          // newMsgList.push(newMsg)
-          // console.log(newMsgList)
-          //test
           util.request(api.ChatFlushUnread + '/' + chatId, {}, "POST").then((res) => {
             if (res.errno == 0) {
-              console.log("把unread刷入数据库成功")
+              console.log("把实时获取的消息设为已读")
 
             } else {
               console.log(res)
@@ -175,23 +169,6 @@ function listenChatForm(chatId) {
     })
   })
 }
-
-// /**
-//  * 关闭对form页的监听,其实就是把期间收到的消息刷入数据库
-//  */
-// function stopListenForm(chatId) {
-//   if (newMsgList.length > 0) {
-//     newMsgList = []
-//     util.request(api.ChatFlushUnread + '/' + chatId, {}, "POST").then((res) => {
-//       if (res.errno == 0) {
-//         console.log("把unread刷入数据库成功")
-
-//       } else {
-//         console.log(res)
-//       }
-//     })
-//   }
-// }
 
 /**
  * 消息列表页监听消息
@@ -242,5 +219,4 @@ module.exports = {
   lessBadge,
   listenBadge,
   wsClose,
-  // stopListenForm,
 };

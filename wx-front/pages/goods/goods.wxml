@@ -1,4 +1,5 @@
 <view class="container">
+  <!-- 图片 -->
   <swiper class="goodsimgs" indicator-dots="true" autoplay="true" interval="3000" duration="1000">
     <swiper-item wx:for="{{gallery}}" wx:key="{{item.id}}">
       <image bindtap='preview' data-url="{{item.imgUrl}}" src="{{item.imgUrl}}" mode='aspectFill' background-size="cover"></image>
@@ -8,6 +9,7 @@
     <view class="icon time">最后编辑:{{goods.lastEdit}}</view>
     <view class="icon location">地点:{{goods.region}}</view>
   </view>
+  <!-- 商品详情 -->
   <view class="goods-info">
     <view class="c">
       <text class="name">{{goods.name}}</text>
@@ -21,6 +23,7 @@
 
     </view>
   </view>
+  <!-- 标签 -->
   <view class="section-nav section-act">
     <view class="t" wx:if='{{goods.ableExpress||goods.ableMeet||goods.ableSelfTake}}'>
       <view class="tag r" wx:if="{{goods.ableExpress}}">{{!goods.postage?'包邮':'邮费:'+goods.postage+'元'}}</view>
@@ -36,6 +39,7 @@
     </view>
   </view>
 
+  <!-- 卖家信息 -->
   <navigator url="/pages/user/user?userId={{seller.openId}}" class="seller-nav section-act">
     <view class="seller-t">
       <image class="seller-avatar" src="{{seller.avatarUrl}}"></image>
@@ -49,6 +53,7 @@
     <image class="i" src="../../static/images/address_right.png" background-size="cover"></image>
   </navigator>
 
+  <!-- 评论 -->
   <view class="comments" wx:if="{{comment.length > 0}}">
     <view class="h">
       <text class="t">留言</text>
@@ -87,17 +92,16 @@
             </view>
           </view>
 
-          <!-- reoly-end -->
+          <!-- reply-end -->
         </view>
         <!-- comment-end -->
       </view>
-
     </view>
 
   </view>
 
 
-
+  <!-- 相关商品 -->
   <view class="related-goods" wx:if="{{relatedGoods.length > 0}}">
     <view class="h">
       <view class="line"></view>
@@ -115,21 +119,16 @@
   </view>
 </view>
 
-
-
-<view class="attr-pop-box" hidden="{{!openComment}}">
-  <view class="attr-pop">
-    <!-- <view class="close" bindtap="closeComment">
-      <image class="icon" src="/static/images/clear_input.png"></image>
-    </view> -->
-    <view class="post-comment">
+<!-- 评论弹框 -->
+<view class="pop-box" hidden="{{!openComment}}">
+  <view class="pop">
+    <view class="comment-pop">
       <view class="title" wx:if="{{replyUserName}}">
         回复@{{replyUserName}}：
       </view>
       <view class="title" wx:else>
         发表留言：
       </view>
-
       <view class="content">
         <input id='comment-input' class='' focus='{{showInput}}' placeholder="输入文本" maxlength='100' bindblur='closeComment' bindconfirm='postComment' value='{{commentContent}}' />
       </view>
@@ -138,8 +137,8 @@
   </view>
 </view>
 
-
-<view class="attr-pop-box" hidden="{{!openDelete}}">
+<!-- 删除弹框 -->
+<view class="pop-box" hidden="{{!openDelete}}">
   <view class="delete-pop ">
     <view class="close" bindtap="closeDelete">
       <image class="icon" src="/static/images/clear_input.png"></image>
@@ -148,7 +147,7 @@
   </view>
 </view>
 
-
+<!-- 底部按钮 -->
 <view class="bottom-btn">
   <view class="l" bindtap="addCannelCollect">
     <image class="icon" src="{{ collectBackImage }}"></image>
@@ -158,17 +157,6 @@
     <image class="icon" src="/static/images/ic_menu_chat_nor.png"></image>
     留言
   </view>
-  <!-- <view class="l" >
-    <image class="icon" src="/static/images/ic_menu_chat_nor.png"></image>
-    留言
-  </view> -->
-  <!-- <view class="l l-cart">
-    <view class="box">
-      <text class="cart-count">{{cartGoodsCount}}</text>
-      <image bindtap="openCartPage" class="icon" src="/static/images/ic_menu_shoping_nor.png"></image>
-    </view>
-  </view> -->
-  <!-- <view class="c">立即购买</view> -->
   <view class="r" wx:if='{{!goods.isSelling}}' bindtap="addToCart">该商品已出售</view>
   <view class="r" wx:elif="{{isSeller && !goods.isDelete && goods.isSelling}}" bindtap="switchDeletetPop">删除该商品</view>
   <view class="r" wx:else bindtap="want">想要</view>

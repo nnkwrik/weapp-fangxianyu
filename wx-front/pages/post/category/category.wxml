@@ -1,0 +1,13 @@
+<view class="container">
+
+  <view class="cate">
+    <view wx:for="{{cateList}}" wx:for-index="index" wx:for-item="item" wx:key="{{item.id}}">
+      <view class="element" bindtap="tapCate" data-id="{{item.id}}" data-name="{{item.name}}">
+        <view class="lable">{{item.name}}</view>
+        <image background-size="cover" class="i" src="/static/images/address_right.png"></image>
+      </view>
+    </view>
+
+  </view>
+
+</view>

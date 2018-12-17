@@ -20,7 +20,6 @@ Page({
     offsetTime: null,
     size: 10,
     scrollHeight: 0,
-    newScrollHeight: 0,
     noMore: false,
     input: '',
     typing: '',
@@ -59,13 +58,13 @@ Page({
           offsetTime: res.data.offsetTime+"",
         });
         
-
         if (res.data.historyList.length < that.data.size) {
           that.setData({
             noMore: true
           })
         }
         if (that.data.historyList.length < 11) {
+          //首次加载
           wx.setNavigationBarTitle({
             title: that.data.otherSide.nickName
           })
@@ -108,7 +107,6 @@ Page({
       }]
       that.addHistoryList(newHistory)
       that.openListen()
-
     })
   },
   toGoods: function(event) {
@@ -131,7 +129,7 @@ Page({
       query.select('#hei').boundingClientRect()
       query.selectViewport().scrollOffset()
       query.exec(function(res) {
-        console.log("异步设置ScrollHeight" + res[0].top)
+        console.log("ScrollHeight " + res[0].top)
         resolve(res[0].top);
       })
     });

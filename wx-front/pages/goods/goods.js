@@ -15,7 +15,6 @@ Page({
     sellerDates: 0,
     sellerHistory: 0,
     relatedGoods: [],
-    cartGoodsCount: 0,
     userHasCollect: 0,
 
     openComment: false,
@@ -47,13 +46,13 @@ Page({
           }, 1000)
           return
         }
-        
+
         //计算卖家来平台第几天
         let registerTime = res.data.seller.registerTime
         registerTime = registerTime.replace('T', ' ').replace(/-/g, '/').split(".")[0];
         let duration = new Date().getTime() - new Date(registerTime).getTime();
         let dates = parseInt(Math.floor(duration) / (1000 * 60 * 60 * 24));
-        console.log("dates " + dates)
+
         that.setData({
           goods: res.data.info,
           gallery: res.data.gallery,
@@ -129,21 +128,9 @@ Page({
       onLoadOption: options,
       id: parseInt(options.id),
       commentContent: ''
-
-      // id: 1181000
     });
 
-    var that = this;
     this.getGoodsInfo();
-
-    // util.request(api.CartGoodsCount).then(function (res) {
-    //   if (res.errno === 0) {
-    //     that.setData({
-    //       cartGoodsCount: res.data.cartTotal.goodsCount
-    //     });
-
-    //   }
-    // });
   },
   onReady: function() {
     // 页面渲染完成
@@ -298,17 +285,18 @@ Page({
     })
     console.log(url)
   },
+
   want: function() {
     util.request(api.GoodsWant + '/' + this.data.id + '/' + this.data.seller.openId, {}, "POST")
-    .then(function(res) {
-      if (res.errno == 0) {
-        wx.navigateTo({
-          url: '/pages/chat/chatForm/chatForm?id=' + res.data,
-        })
-      }else{
-        console.log(res)
-      }
-    })
+      .then(function(res) {
+        if (res.errno == 0) {
+          wx.navigateTo({
+            url: '/pages/chat/chatForm/chatForm?id=' + res.data,
+          })
+        } else {
+          console.log(res)
+        }
+      })
   },
 
   onReachBottom: function() {

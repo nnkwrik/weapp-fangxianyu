@@ -8,6 +8,7 @@ page{
   background-color: #f4f4f4;
 }
 
+/* 输入框 */
 .search-header{
     position: fixed;
     top: 0;
@@ -69,6 +70,7 @@ page{
     float: right;
 }
 
+/* 热门关键字,历史搜索 */
 .no-search{
     height: auto;
     overflow: hidden;
@@ -131,6 +133,7 @@ page{
     border: 1px solid #f94b4b;
 }
 
+/* 搜索辅助 */
 .shelper-list{
     width: 750rpx;
     height: auto;
@@ -149,130 +152,24 @@ page{
 }
 
 
-.sort{
-    position: fixed;
-    top: 91rpx;
-    background: #fff;
-    width: 100%;
-    height: 78rpx;
-}
-
-.sort-box{
-    background: #fff;
-    width: 100%;
-    height: 78rpx;
-    overflow: hidden;
-    padding: 0 30rpx;
-    display: flex;
-    border-bottom: 1px solid #d9d9d9;
-}
-
-.sort-box .item{
-    height: 78rpx;
-    line-height: 78rpx;
-    text-align: center;
-    flex:1;
-    color: #333;
-    font-size: 30rpx;
-}
-
-.sort-box .item .txt{
-    display: block;
-    width: 100%;
-    height: 100%;
-    color: #333;
-}
-
-.sort-box .item.active .txt{
-    color: #b4282d;
-}
-
-.sort-box .item.by-price{
-    background: url(//yanxuan.nosdn.127.net/hxm/yanxuan-wap/p/20161201/style/img/icon-normal/no-3127092a69.png) 155rpx center no-repeat;
-    background-size: 15rpx 21rpx;
-}
-
-.sort-box .item.by-price.active.asc{
-    background: url(http://yanxuan.nosdn.127.net/hxm/yanxuan-wap/p/20161201/style/img/icon-normal/up-636b92c0a5.png) 155rpx center no-repeat;
-    background-size: 15rpx 21rpx;
-}
-
-.sort-box .item.by-price.active.desc{
-    background: url(http://yanxuan.nosdn.127.net/hxm/yanxuan-wap/p/20161201/style/img/icon-normal/down-95e035f3e5.png) 155rpx center no-repeat;
-    background-size: 15rpx 21rpx;
-}
-
-.sort-box-category{
-    background: #fff;
-    width: 100%;
-    height: auto;
-    overflow: hidden;
-    padding: 40rpx 40rpx 0 0;
-    border-bottom: 1px solid #d9d9d9;
-}
-
-.sort-box-category .item{
-    height: 54rpx;
-    line-height: 54rpx;
-    text-align: center;
-    float: left;
-    padding: 0 16rpx;
-    margin: 0 0 40rpx 40rpx;
-    border: 1px solid #666;
-    color: #333;
-    font-size: 24rpx;
-}
-
-.sort-box-category .item.active{
-    color: #b4282d;
-    border: 1px solid #b4282d;
-}
-
-.cate-item{
+/* 搜索结果 */
+.result-item{
     margin-top: 100rpx;
     height: auto;
     overflow: hidden;
 }
 
-.cate-item .h{
-    height: 145rpx;
-    width: 750rpx;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
 
-.cate-item .h .name{
-    display: block;
-    height: 35rpx;
-    margin-bottom: 18rpx;
-    font-size: 30rpx;
-    color: #333;
-}
-
-.cate-item .h .desc{
-    display: block;
-    height: 24rpx;
-    font-size: 24rpx;
-    color: #999;
-}
-
-.cate-item .b{
+.result-item .b{
   width: 750rpx;
   padding: 0 6.25rpx;
   height: auto;
   overflow: hidden;
 }
 
-.cate-item .list-filter{
-    height: 80rpx;
-    width: 100%;
-    background: #fff;
-    margin-bottom: 6.25rpx;
-}
 
-.cate-item .b .item{
+
+.result-item .b .item{
   float: left;
   background: #fff;
   width: 365rpx;
@@ -283,16 +180,16 @@ page{
   text-align: center;
 }
 
-.cate-item .b .item-b{
+.result-item .b .item-b{
   margin-left: 6.25rpx;
 }
 
-.cate-item .item .img{
+.result-item .item .img{
   width: 302rpx;
   height: 302rpx;
 }
 
-.cate-item .item .name{
+.result-item .item .name{
   display: block;
   width: 365.625rpx;
   height: 35rpx;
@@ -304,7 +201,7 @@ page{
   color: #333;
 }
 
-.cate-item .item .price{
+.result-item .item .price{
   display: block;
   width: 365.625rpx;
   height: 30rpx;
@@ -313,6 +210,7 @@ page{
   color: #f94b4b;
 }
 
+/* 无搜索结果 */
 .search-result-empty{
     width: 100%;
     height: 100%;

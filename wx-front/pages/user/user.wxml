@@ -1,23 +1,24 @@
 <view class="container">
-<view class='top'>
-  <view class='bg' style="background-image: url('https://i.postimg.cc/bwmqpKjL/watercolour-1336856-640.jpg)">   </view>
+  <!-- 用户信息 -->
+  <view class='top'>
+    <view class='bg' style="background-image: url('https://i.postimg.cc/bwmqpKjL/watercolour-1336856-640.jpg)"> </view>
     <view class="profile-info">
       <view class='img'>
         <image bindtap='preview' data-url="{{userInfo.avatarUrl}}" class="avatar" src="{{userInfo.avatarUrl}}"></image>
       </view>
       <view class="info">
-      <text class="name">{{userInfo.nickName}}</text>
-      <text class='desc'>加入平台第{{userDates}}天,卖出过{{soldCount}}件宝贝</text>
-    </view>
- 
-  </view>
-  </view>
+        <text class="name">{{userInfo.nickName}}</text>
+        <text class='desc'>加入平台第{{userDates}}天,卖出过{{soldCount}}件宝贝</text>
+      </view>
 
+    </view>
+  </view>
+  <!-- 用户历史 -->
   <view class="userhis" wx:if='{{historyList}}'>
     <view class="day-item" wx:for="{{historyList}}" wx:key="{{index}}">
       <view class="day-hd">{{index}}</view>
       <view class="day-list">
-        <view class="item" bindtap="openGoods" data-id="{{iitem.id}}"  wx:for="{{item}}" wx:for-item="iitem" wx:key="{{iitem.id}}">
+        <view class="item" bindtap="openGoods" data-id="{{iitem.id}}" wx:for="{{item}}" wx:for-item="iitem" wx:key="{{iitem.id}}">
           <image class="img" src="{{iitem.primaryPicUrl}}" mode='aspectFill'></image>
           <view class="info">
             <view class="name">{{iitem.name}}</view>
@@ -32,7 +33,6 @@
     </view>
   </view>
   <view class="result-empty" wx:else>
-    <!-- <image class="icon" src="http://yanxuan.nosdn.127.net/hxm/yanxuan-wap/p/20161201/style/img/icon-normal/noSearchResult-7572a94f32.png"></image> -->
     <text class="text">该用户还没发布过宝贝</text>
   </view>
 </view>
