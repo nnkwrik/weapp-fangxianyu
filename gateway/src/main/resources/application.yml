@@ -1,0 +1,63 @@
+server:
+  port: 8080
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8801/eureka/
+
+spring:
+  application:
+    name: cloud-gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+
+      - id: auth
+        uri: lb://AUTH-SERVICE
+        predicates:
+        - Path=/auth/**
+
+      - id: chat
+        uri: lb://IM-SERVICE
+        predicates:
+        - Path=/chat/**
+      - id: ws
+        uri: lb:ws://IM-SERVICE #websocket
+        predicates:
+        - Path=/ws/**
+
+      - id: index
+        uri: lb://GOODS-SERVICE
+        predicates:
+        - Path=/index/**
+      - id: goods
+        uri: lb://GOODS-SERVICE
+        predicates:
+        - Path=/goods/**
+      - id: catalog
+        uri: lb://GOODS-SERVICE
+        predicates:
+        - Path=/catalog/**
+      - id: catalog
+        uri: lb://GOODS-SERVICE
+        predicates:
+        - Path=/catalog/**
+      - id: search
+        uri: lb://GOODS-SERVICE
+        predicates:
+        - Path=/search/**
+      - id: post
+        uri: lb://GOODS-SERVICE
+        predicates:
+        - Path=/post/**
+      - id: goodsUser
+        uri: lb://GOODS-SERVICE
+        predicates:
+        - Path=/goodsUser/**
+
+logging:
+  level:
+    org.springframework.cloud.gateway: debug
