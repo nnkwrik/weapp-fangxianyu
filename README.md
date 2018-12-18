@@ -1,9 +1,27 @@
-<p align="center"><img src="assets/top2.png" width="800"/>
+<p align="center"><img src="assets/top.png" width="800"/>
 </p>
+
 
 一款高质量仿闲鱼开源交易平台。
 
 Power By `微信小程序`,`JWT`, `Java8`,`Maven`,`SpringBoot`,`SpringCloud`,`MySQL`,`Redis`,`RabbitMQ`,`Docker`
+
+# 🗃 目录
+
+- [功能](https://github.com/nnkwrik/weapp-fangxianyu#-%E5%8A%9F%E8%83%BD)
+- [后端服务拆分](https://github.com/nnkwrik/weapp-fangxianyu#-%E5%90%8E%E7%AB%AF%E6%9C%8D%E5%8A%A1%E6%8B%86%E5%88%86)
+- [预览](https://github.com/nnkwrik/weapp-fangxianyu#-%E9%A2%84%E8%A7%88)
+- [快速开始](https://github.com/nnkwrik/weapp-fangxianyu#-%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B)
+  - [前端](https://github.com/nnkwrik/weapp-fangxianyu#%E5%89%8D%E7%AB%AF)
+  - [后端](https://github.com/nnkwrik/weapp-fangxianyu#%E5%90%8E%E7%AB%AF)
+  - [真机调试](https://github.com/nnkwrik/weapp-fangxianyu#%E7%9C%9F%E6%9C%BA%E8%B0%83%E8%AF%95)
+  - [移除docker搭建的镜像](https://github.com/nnkwrik/weapp-fangxianyu#%E7%A7%BB%E9%99%A4docker%E6%90%AD%E5%BB%BA%E7%9A%84%E9%95%9C%E5%83%8F)
+- [非docker-compose部署](https://github.com/nnkwrik/weapp-fangxianyu#-%E9%9D%9Edocker-compose%E9%83%A8%E7%BD%B2)
+- [端口](https://github.com/nnkwrik/weapp-fangxianyu#-%E7%AB%AF%E5%8F%A3)
+  - [docker-compose环境下](https://github.com/nnkwrik/weapp-fangxianyu#docker-compose%E7%8E%AF%E5%A2%83%E4%B8%8B)
+  - [非docker-compose环境下](https://github.com/nnkwrik/weapp-fangxianyu#%E9%9D%9Edocker-compose%E7%8E%AF%E5%A2%83%E4%B8%8B)
+- [JWT](https://github.com/nnkwrik/weapp-fangxianyu#-jwt)
+- [最后](https://github.com/nnkwrik/weapp-fangxianyu#%E6%9C%80%E5%90%8E)
 
 # 🌀 功能
 
