@@ -11,8 +11,5 @@
 
 # other
 dev/mysql/data/*
-dev/mysql/log/*
 dev/redis/data/*
 auth-service/src/main/resources/application-secret.yml
-**/*.key
-**/*.pub

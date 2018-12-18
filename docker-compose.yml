@@ -11,6 +11,9 @@ services:
     volumes:
     - ./dev/mysql/conf:/etc/mysql/conf.d
     - ./dev/mysql/data:/var/lib/mysql
+    #/dev/mysql/data为空(首次启动)时会执行/docker-entrypoint-initdb.d下的sql
+#    - ./dev/mysql/dump/1_schema.sql:/docker-entrypoint-initdb.d/1_schema.sql  #只导入schema
+    - ./dev/mysql/dump:/docker-entrypoint-initdb.d  #schema+所有测试数据
     restart: always
 
   rebbitmq:
