@@ -1,3 +1,4 @@
+# zuul不支持websocket，所以用spring-cloud-gateway代替
 spring:
   application:
     name: cloud-gateway

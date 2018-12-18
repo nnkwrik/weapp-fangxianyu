@@ -69,7 +69,7 @@
         </dependency>
 
         <dependency>
-            <groupId>fangxianyu</groupId>
+            <groupId>io.github.nnkwrik</groupId>
             <artifactId>inner-api</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>

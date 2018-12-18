@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface JWT {
 
-    boolean required() default false;
+    boolean required() default false;   //验证没通过时是否拒绝访问
 
-    boolean checkExpired() default true;
+    boolean checkExpired() default true;    //是否允许过期
 }
