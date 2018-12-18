@@ -11,7 +11,14 @@
     <modules>
         <module>common</module>
         <module>inner-api</module>
+        <module>eureka</module>
+        <module>gateway</module>
+        <module>auth-service</module>
+        <module>user-service</module>
+        <module>goods-service</module>
+        <module>im-service</module>
     </modules>
+
     <packaging>pom</packaging>
 
     <name>fangxianyu</name>

@@ -1,0 +1,54 @@
+version: '3'
+services:
+
+  mysql:
+    image: mysql:5.7
+    container_name: fangxianyu-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+    ports:
+    - "3306:3306"
+    volumes:
+    - ./dev/mysql/conf:/etc/mysql/conf.d
+    - ./dev/mysql/data:/var/lib/mysql
+    - ./dev/mysql/log:/var/log/mysql
+    restart: always
+
+  rebbitmq:
+    image: rabbitmq:3.7.8-management
+    container_name: fangxianyu-rabbitmq
+    ports:
+    - "5672:5672"
+    - "15672:15672"
+    hostname: my-rabbit-mq
+    restart: always
+
+  redis:
+    image: redis:3.2
+    container_name: fangxianyu-redis
+    volumes:
+    - ./dev/redis/data:/data
+    ports:
+    - "6379:6379"
+
+#  eureka:
+#    build: ./eureka
+#    container_name: fangxianyu-eureka
+#    restart: always
+#  zuul:
+#    build: ./zuul
+#    container_name: fangxianyu-zuul
+#    restart: always
+#    depends_on:
+#    - eureka
+#  auth-service:
+#    build: ./auth-service
+#    container_name: fangxianyu-auth-service
+#    restart: always
+#    depends_on:
+#    - eureka
+#    - mysql
+#  goods-service:
+#    build: ./goods-service
+#    container_name: fangxianyu-goods-service
+#    restart: always
