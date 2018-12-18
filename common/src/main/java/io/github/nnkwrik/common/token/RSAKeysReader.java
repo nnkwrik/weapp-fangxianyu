@@ -2,9 +2,12 @@ package io.github.nnkwrik.common.token;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.util.FileCopyUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.security.KeyFactory;
 import java.security.PrivateKey;
@@ -72,10 +75,11 @@ public class RSAKeysReader {
 
     private static String getData(String fileName) {
         String data = "";
+        ClassPathResource cpr = new ClassPathResource(fileName);
         try {
-            File file = new ClassPathResource(fileName).getFile();
-            log.info("试图读取秘钥文件, 文件路径 : [{}]", file.getPath());
-            data = new String(Files.readAllBytes(file.toPath()));
+            byte[] bdata = FileCopyUtils.copyToByteArray(cpr.getInputStream());
+            log.info("试图读取秘钥文件, 文件路径 : [{}]", cpr.getPath());
+            data = new String(bdata, StandardCharsets.UTF_8);
         } catch (IOException e) {
             log.info("文件读取失败");
             e.printStackTrace();

@@ -1,0 +1,18 @@
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8801/eureka/
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/user_service
+    username: root
+    password: 1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+
+server:
+  port: 8802

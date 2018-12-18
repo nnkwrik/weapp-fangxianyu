@@ -1,28 +1,15 @@
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:8801/eureka/
-
-
 spring:
   application:
     name: auth-service
   profiles:
-    include: secret
-  rabbitmq:
-    host: localhost
-    port: 5672
-    username: guest
-    password: guest
+    include: secret #删掉这行!
+    active: ${SPRING_PROFILE_ACTIVE:dev}
   cloud:
     stream:
       bindings:
         register-output:
           destination: register
           content-type: application/json
-
-server:
-  port: 8803
 
 #写入你的小程序信息
 wx:

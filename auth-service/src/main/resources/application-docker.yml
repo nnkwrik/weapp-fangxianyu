@@ -1,0 +1,10 @@
+eureka:
+  client:
+    service-url:
+      defaultZone: http://fangxianyu-eureka:8080/eureka/
+spring:
+  rabbitmq:
+    host: fangxianyu-rabbitmq
+    port: 5672
+    username: guest
+    password: guest

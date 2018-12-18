@@ -1,27 +1,13 @@
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:8801/eureka/
 spring:
   application:
     name: im-service
-  datasource:
-    url: jdbc:mysql://localhost:3306/im_service
-    username: root
-    password: 1234
-    driver-class-name: com.mysql.cj.jdbc.Driver
-  redis:
-    port: 6379
-    host: localhost
-    timeout: 30s
   jackson:
     default-property-inclusion: non_null  #如果值为null,构造json时不加入
     date-format: yyyy-MM-dd HH:mm    #指定Json中Date对象的传输格式.对于DTO还是使用以往的方式
     locale: zh_CN
     time-zone: Asia/Shanghai
-
-server:
-  port: 8805
+  profiles:
+    active: ${SPRING_PROFILE_ACTIVE:dev}
 
 mybatis:
   configuration:

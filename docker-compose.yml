@@ -11,7 +11,6 @@ services:
     volumes:
     - ./dev/mysql/conf:/etc/mysql/conf.d
     - ./dev/mysql/data:/var/lib/mysql
-    - ./dev/mysql/log:/var/log/mysql
     restart: always
 
   rebbitmq:
@@ -31,24 +30,55 @@ services:
     ports:
     - "6379:6379"
 
-#  eureka:
-#    build: ./eureka
-#    container_name: fangxianyu-eureka
-#    restart: always
-#  zuul:
-#    build: ./zuul
-#    container_name: fangxianyu-zuul
-#    restart: always
-#    depends_on:
-#    - eureka
-#  auth-service:
-#    build: ./auth-service
-#    container_name: fangxianyu-auth-service
-#    restart: always
-#    depends_on:
-#    - eureka
-#    - mysql
-#  goods-service:
-#    build: ./goods-service
-#    container_name: fangxianyu-goods-service
-#    restart: always
+  eureka:
+    build: ./eureka
+    container_name: fangxianyu-eureka
+    restart: always
+  user-service:
+    build: ./user-service
+    container_name: fangxianyu-user-service
+    restart: always
+    depends_on:
+    - mysql
+    - rebbitmq
+    - eureka
+  auth-service:
+    build: ./auth-service
+    container_name: fangxianyu-auth-service
+    restart: always
+    depends_on:
+    - mysql
+    - rebbitmq
+    - eureka
+    - user-service
+  goods-service:
+    build: ./goods-service
+    container_name: fangxianyu-goods-service
+    restart: always
+    depends_on:
+    - mysql
+    - eureka
+    - user-service
+  im-service:
+    build: ./im-service
+    container_name: fangxianyu-im-service
+    restart: always
+    depends_on:
+    - mysql
+    - redis
+    - eureka
+    - user-service
+    - goods-service
+  gateway:
+    build: ./gateway
+    container_name: fangxianyu-gateway
+    ports:
+    - "8080:8080"
+    restart: always
+    depends_on:
+    - eureka
+    - user-service
+    - auth-service
+    - goods-service
+    - im-service
+

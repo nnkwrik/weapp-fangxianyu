@@ -1,27 +1,14 @@
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:8801/eureka/
-
 spring:
   application:
     name: user-service
-  datasource:
-    url: jdbc:mysql://localhost:3306/user_service
-    username: root
-    password: 1234
-    driver-class-name: com.mysql.cj.jdbc.Driver
-  rabbitmq:
-    host: localhost
-    port: 5672
-    username: guest
-    password: guest
   cloud:
     stream:
       bindings:
         register-input:
           destination: register
           group: registerGroup
+  profiles:
+    active: ${SPRING_PROFILE_ACTIVE:dev}
 
 mybatis:
   configuration:
@@ -31,6 +18,3 @@ logging:
   level:
     org.springframework.web: info
     io.github.nnkwrik.userservice: debug
-
-server:
-  port: 8802

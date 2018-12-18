@@ -1,13 +1,8 @@
-server:
-  port: 8080
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:8801/eureka/
-
 spring:
   application:
     name: cloud-gateway
+  profiles:
+    active: ${SPRING_PROFILE_ACTIVE:dev}
   cloud:
     gateway:
       discovery:
