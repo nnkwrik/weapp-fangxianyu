@@ -16,12 +16,12 @@ services:
     - ./dev/mysql/dump:/docker-entrypoint-initdb.d  #schema+所有测试数据
     restart: always
 
-  rebbitmq:
+  rabbitmq:
     image: rabbitmq:3.7.8-management
     container_name: fangxianyu-rabbitmq
     ports:
     - "5672:5672"
-    - "15672:15672"
+    - "15672:15672" #管理界面 ： 账号密码都是guest
     hostname: my-rabbit-mq
     restart: always
 
@@ -43,7 +43,7 @@ services:
     restart: always
     depends_on:
     - mysql
-    - rebbitmq
+    - rabbitmq
     - eureka
   auth-service:
     build: ./auth-service
@@ -51,7 +51,7 @@ services:
     restart: always
     depends_on:
     - mysql
-    - rebbitmq
+    - rabbitmq
     - eureka
     - user-service
   goods-service:
