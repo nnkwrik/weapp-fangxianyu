@@ -141,21 +141,13 @@ $ docker rmi $(docker images | grep fangxianyu |  awk '{print $3}')
 ### 非docker-compose环境下
 
 - MySQL : 3306
-
 - Redis ： 6379
-
 - Rabbit MQ ： 5672 （管理界面：15672）
-
 - gateway ： 8080
-
 - eureka ：8801
-
 - user-service ： 8802
-
 - auth-service ： 8803
-
 - goods-service ：8804
-
 - im-service ：8805
 
 
@@ -181,12 +173,12 @@ jwt:
 # 最后
 
 - **别忘记Star！**
-- 前端参考了[nideshop-mini-program](https://github.com/tumobi/nideshop-mini-program)，非常感谢
+- 后端调用微信api认证的部分用到了[微信Java开发工具包](https://github.com/Wechat-Group/weixin-java-tools)的`weixin-java-miniapp`，非常感谢
+- 前端参考了[NideShop商城](https://github.com/tumobi/nideshop-mini-program)小程序，非常感谢
 - 订单和支付没有完成，随缘开发。
-  [nideshop-mini-program](https://github.com/tumobi/nideshop-mini-program)里好像已经有支付和订单的页面，有兴趣做二次开发的话可以参考一下
+  [NideShop商城](https://github.com/tumobi/nideshop-mini-program)里好像已经有支付和订单的页面，有兴趣做二次开发的话可以参考一下
 - 这次开发过程中遇到的坑都有在博客中做记录，可以看一下
   - [Spring Cloud中使用RabbitMQ的两种方式](https://nnkwrik.github.io/2018/11/19/20181119/)
   - [Guava的Cache](https://nnkwrik.github.io/2018/11/20/20181120/)
   - [万能的Jackson](https://nnkwrik.github.io/2018/11/30/20181130/)
-
 - 有问题吗？微信号：nnkwrik
