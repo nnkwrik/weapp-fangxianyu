@@ -8,6 +8,7 @@ import java.util.List;
 
 /**
  * redis client
+ * 存储未读消息。key=ChatId，Value=List<WsMessage>
  *
  * @author nnkwrik
  * @date 18/12/06 15:08
