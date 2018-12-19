@@ -1,6 +1,21 @@
 <p align="center"><img src="assets/top.png" width="800"/>
 </p>
+<p align="center">
+     <a href="https://travis-ci.com/nnkwrik/weapp-fangxianyu">
+        <img src="https://travis-ci.com/nnkwrik/weapp-fangxianyu.svg?branch=master"/>
+    </a>
+    <a href="https://spring.io/projects/spring-boot">
+    	<img src="https://img.shields.io/badge/power%20by-Spring%20Boot%202.1.0-yellowgreen.svg"/>
+    </a>
+    <a href="https://opensource.org/licenses/Apache-2.0">
+    	<img src="https://img.shields.io/badge/License-Apache%202.0-lightgrey.svg"/>
+    </a>  
+    <a href="#">
+    	<img src="https://img.shields.io/github/stars/nnkwrik/weapp-fangxianyu.svg"/>
+    </a>
+</p>
 
+​    
 
 一款高质量仿闲鱼开源交易平台。
 
@@ -20,7 +35,7 @@ Power By `微信小程序`,`JWT`, `Java8`,`Maven`,`SpringBoot`,`SpringCloud`,`My
 - [端口](https://github.com/nnkwrik/weapp-fangxianyu#-%E7%AB%AF%E5%8F%A3)
   - [docker-compose环境下](https://github.com/nnkwrik/weapp-fangxianyu#docker-compose%E7%8E%AF%E5%A2%83%E4%B8%8B)
   - [非docker-compose环境下](https://github.com/nnkwrik/weapp-fangxianyu#%E9%9D%9Edocker-compose%E7%8E%AF%E5%A2%83%E4%B8%8B)
-- [JWT](https://github.com/nnkwrik/weapp-fangxianyu#-jwt)
+- [关于JWT](https://github.com/nnkwrik/weapp-fangxianyu#-关于JWT)
 - [最后](https://github.com/nnkwrik/weapp-fangxianyu#%E6%9C%80%E5%90%8E)
 
 # 🌀 功能
@@ -40,7 +55,7 @@ Power By `微信小程序`,`JWT`, `Java8`,`Maven`,`SpringBoot`,`SpringCloud`,`My
 
 后端基于Spring Cloud搭建,拆分为`认证`,`用户`,`消息`,`商品`,`服务发现`,`网关`6个服务
 
-![1545121316436](assets/1545121316436.png)
+![1545185932747](assets/1545185932747.png)
 
 
 
@@ -96,7 +111,7 @@ $ docker-compose build
 $ docker-compose up
 ```
 
-部署完成后稍等片刻（网关完全启动比较耗时），打开你的小程序开发工具，点击上方的`编译`就可以看到主页了。
+部署完成后稍等片刻（网关完全启动比较耗时），打开你的小程序开发工具，点击上方的`编译`就可以看到首页了。
 
 ![1545124207261](assets/1545124207261.png)
 
@@ -151,7 +166,7 @@ $ docker rmi $(docker images | grep fangxianyu |  awk '{print $3}')
 - im-service ：8805
 
 
-# 🔑 JWT
+# 🔑 关于JWT
 
 后端API基于Header中的JWT Token进行认证。如果你还不了解JWT的话可以先了解下，微服务认证的神器。
 
@@ -168,17 +183,28 @@ jwt:
 
 如果你想改成新的秘钥，`io.github.nnkwrik.authservice.token.RSAKeysGenerator`中提供了RSA密钥对生成器。运行后会在`auth-service/src/main/resources`下生成新的秘钥对（.key和.pub）。把公钥（.pub）复制到需要JWT验证的服务（`goods-service`,`im-service`）的resource下，就能替换成新的秘钥了。
 
+`auth-service`的test里面提供了生成Token的方法，方便生产环境下使用。
+
 
 
 # 最后
 
 - **别忘记Star！**
 - 后端调用微信api认证的部分用到了[微信Java开发工具包](https://github.com/Wechat-Group/weixin-java-tools)的`weixin-java-miniapp`，非常感谢
+
 - 前端参考了[NideShop商城](https://github.com/tumobi/nideshop-mini-program)小程序，非常感谢
+
+- 图床用的是免费的[SMMS](https://sm.ms/)，一小时内能上传的图片数有上限，需要注意一下。
+
 - 订单和支付没有完成，随缘开发。
-  [NideShop商城](https://github.com/tumobi/nideshop-mini-program)里好像已经有支付和订单的页面，有兴趣做二次开发的话可以参考一下
+  [NideShop商城](https://github.com/tumobi/nideshop-mini-program)里好像已经有支付和订单的页面，有兴趣做二次开发的话可以参考
+
 - 这次开发过程中遇到的坑都有在博客中做记录，可以看一下
+
   - [Spring Cloud中使用RabbitMQ的两种方式](https://nnkwrik.github.io/2018/11/19/20181119/)
+  
   - [Guava的Cache](https://nnkwrik.github.io/2018/11/20/20181120/)
+  
   - [万能的Jackson](https://nnkwrik.github.io/2018/11/30/20181130/)
+  
 - 有问题吗？微信号：nnkwrik
