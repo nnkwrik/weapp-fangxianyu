@@ -7,13 +7,14 @@
     <a href="https://spring.io/projects/spring-boot">
     	<img src="https://img.shields.io/badge/power%20by-Spring%20Boot%202.1.0-yellowgreen.svg"/>
     </a>
-    <a href="https://opensource.org/licenses/Apache-2.0">
-    	<img src="https://img.shields.io/badge/License-Apache%202.0-lightgrey.svg"/>
+    <a href="https://opensource.org/licenses/MIT">
+    	<img src="https://img.shields.io/badge/License-MIT-lightgrey.svg"/>
     </a>  
     <a href="#">
     	<img src="https://img.shields.io/github/stars/nnkwrik/weapp-fangxianyu.svg"/>
     </a>
 </p>
+
 
 ​    
 
