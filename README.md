@@ -207,5 +207,3 @@ jwt:
   - [Guava的Cache](https://nnkwrik.github.io/2018/11/20/20181120/)
   
   - [万能的Jackson](https://nnkwrik.github.io/2018/11/30/20181130/)
-  
-- 有问题吗？微信号：nnkwrik
